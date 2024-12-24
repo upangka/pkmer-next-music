@@ -6,6 +6,20 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "peerDependencies": {
+    "react": "catalog:react19",
+    "react-dom": "catalog:react19"
+  },
+  "devDependencies": {
+    "@rollup/plugin-alias": "^5.1.1",
+    "@rollup/plugin-node-resolve": "^16.0.0",
+    "@types/react": "catalog:react19",
+    "@types/react-dom": "catalog:react19",
+    "esbuild": "^0.24.2",
+    "rollup": "^4.29.0",
+    "rollup-plugin-esbuild": "^6.1.1",
+    "typescript": "^5.7.2"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC"

@@ -18,7 +18,7 @@ function useCarouselItem() {
   onMounted(() => {
     context.addChild({
       uid: instance.uid,
-      translateItem,
+      translateItem
     })
   })
 
@@ -105,7 +105,7 @@ function useCarouselItem() {
     active,
     isCardType,
     cardScale: context.cardScale,
-    showInContainer,
+    showInContainer
   }
 }
 

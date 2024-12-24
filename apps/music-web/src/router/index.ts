@@ -3,5 +3,5 @@ import routes from '@router/routes'
 
 export default createRouter({
   history: createMemoryHistory(),
-  routes,
+  routes
 })

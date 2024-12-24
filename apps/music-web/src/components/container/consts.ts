@@ -4,6 +4,6 @@
 const ContainerCompNames = {
   header: 'PkmerHeader',
   footer: 'PkmerFooter',
-  main: 'PkmerMain',
+  main: 'PkmerMain'
 }
 export default ContainerCompNames

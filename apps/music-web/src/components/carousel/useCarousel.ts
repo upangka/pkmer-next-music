@@ -18,7 +18,7 @@ function useCarousel(props: CarouselProps) {
     children,
     addChild,
     isCardType,
-    cardScale: props.cardScale!,
+    cardScale: props.cardScale!
   })
 
   onMounted(() => {
@@ -30,7 +30,7 @@ function useCarousel(props: CarouselProps) {
         // 触发每个元素translate的入口
         doCarousel(oldIndex)
       },
-      { immediate: true },
+      { immediate: true }
     )
     // 定时器启动的入口
     startTimer()
@@ -112,7 +112,7 @@ function useCarousel(props: CarouselProps) {
     addChild,
     updateActiveIndex: handleClick,
     handleMouseEnter,
-    handleMouseLeave,
+    handleMouseLeave
   }
 }
 
