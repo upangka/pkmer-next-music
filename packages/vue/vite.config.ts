@@ -3,6 +3,7 @@ import { resolve } from 'node:path'
 import { readdirSync } from 'node:fs'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
+import dts from 'vite-plugin-dts'
 
 function getComponentEntries() {
   // 获取 src/components 目录下的所有子目录（组件）
@@ -13,7 +14,8 @@ function getComponentEntries() {
 
   // 动态生成入口文件配置
   const entries: Record<string, string> = {
-    index: resolve(__dirname, 'src/index.ts')
+    index: resolve(__dirname, 'src/index.ts'),
+    components: resolve(__dirname, 'src/components/index.ts')
   }
 
   componentDirs.forEach(component => {
@@ -26,7 +28,15 @@ function getComponentEntries() {
 export default defineConfig(() => {
   const [entries, componentDirs] = getComponentEntries()
   return {
-    plugins: [vue(), vueJsx()],
+    plugins: [
+      vue(),
+      vueJsx(),
+      dts({
+        tsconfigPath: resolve(__dirname, 'tsconfig.json'),
+        outDir: 'dist/types',
+        cleanVueFileName: true
+      })
+    ],
     resolve: {
       dedupe: ['vue', '@vue/runtime-core']
     },

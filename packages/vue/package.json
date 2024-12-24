@@ -14,10 +14,28 @@
     "vue": "catalog:vue3"
   },
   "devDependencies": {
-    "vite": "catalog:vue3",
-    "vue-tsc": "catalog:vue3",
+    "@types/node": "catalog:node",
     "@vitejs/plugin-vue": "catalog:vue3",
     "@vitejs/plugin-vue-jsx": "catalog:vue3",
-    "@types/node": "catalog:node"
+    "vite": "catalog:vue3",
+    "vue-tsc": "catalog:vue3",
+    "vite-plugin-dts": "^4.4.0",
+    "@tsconfig/node22": "^22.0.0",
+    "@vue/tsconfig": "^0.7.0",
+    "prettier": "^3.3.3"
+  },
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/types/index.d.ts",
+        "default": "./dist/esm/index.js"
+      }
+    },
+    "./HelloWorld": {
+      "import": {
+        "types": "./dist/types/components/HelloWorld/index.d.ts",
+        "default": "./dist/esm/components/HelloWorld/index.js"
+      }
+    }
   }
 }

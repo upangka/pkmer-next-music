@@ -13,6 +13,7 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@pkmer-music-ui/vue": "workspace:*",
     "iconify-icon": "^2.1.0",
     "pinia": "catalog:vue3",
     "vue": "catalog:vue3",

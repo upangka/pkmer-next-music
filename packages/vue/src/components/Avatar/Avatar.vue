@@ -6,7 +6,7 @@ function handleClick() {
 
 <template>
   <div class="hello-world">
-    hello world
+    Avatar
     <button @click="handleClick">click Me</button>
   </div>
 </template>
