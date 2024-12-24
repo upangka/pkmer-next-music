@@ -1,10 +1,11 @@
 {
   "name": "@pkmer-music-ui/react",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "type": "module",
+  "description": "Music React UI Components",
+  "main": "./dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "rollup -c && tsc --project tsconfig.json"
   },
   "peerDependencies": {
     "react": "catalog:react19",
@@ -22,5 +23,17 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/types/index.d.ts"
+    },
+    "./avatar": {
+      "import": {
+        "types": "./dist/types/components/avatar/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    }
+  }
 }
