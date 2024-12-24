@@ -11,7 +11,8 @@
   "dependencies": {
     "react": "catalog:react19",
     "react-dom": "catalog:react19",
-    "next": "catalog:react19"
+    "next": "catalog:react19",
+    "@pkmer-music-ui/react": "workspace:*"
   },
   "devDependencies": {
     "typescript": "^5",

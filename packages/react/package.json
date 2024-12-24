@@ -5,6 +5,7 @@
   "description": "Music React UI Components",
   "main": "./dist/index.js",
   "scripts": {
+    "dev": "rollup -c -w && tsc --project tsconfig.json",
     "build": "rollup -c && tsc --project tsconfig.json"
   },
   "peerDependencies": {

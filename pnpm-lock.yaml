@@ -52,6 +52,9 @@ importers:
 
   apps/music-management:
     dependencies:
+      '@pkmer-music-ui/react':
+        specifier: workspace:*
+        version: link:../../packages/react
       next:
         specifier: catalog:react19
         version: 15.1.2(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(sass@1.83.0)
