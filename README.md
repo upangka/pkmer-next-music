@@ -4,8 +4,8 @@
 
 相关组件抽离在
 
-- Vue相关组件抽离在[.packages/vue](./packages/vue/)包中
-- React相关组件抽离在[.packages/react](./packages/react/)包中
+- Vue相关组件抽离在[packages/vue](./packages/vue/)包中
+- React相关组件抽离在[packages/react](./packages/react/)包中
 
 # 用户界面
 
