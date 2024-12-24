@@ -8,5 +8,15 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "peerDependencies": {
+    "vue": "catalog:vue3"
+  },
+  "devDependencies": {
+    "vite": "catalog:vue3",
+    "vue-tsc": "catalog:vue3",
+    "@vitejs/plugin-vue": "catalog:vue3",
+    "@vitejs/plugin-vue-jsx": "catalog:vue3",
+    "@types/node": "catalog:node"
+  }
 }
