@@ -7,14 +7,13 @@ import { useSlots, computed } from 'vue'
 import ContainerCompNames from './consts'
 
 const slots = useSlots()
-
 /**
  * 如果容器中有header或者footer，就是垂直布局
  * 否则水平
  */
 const isVertial = computed(() => {
   if (slots && slots.default) {
-    const vnodes: VNode[] = slots.default()
+    const vnodes: VNode[] = slots.default({})
     return vnodes.some(checkIsHeaderOrFooter)
   }
 

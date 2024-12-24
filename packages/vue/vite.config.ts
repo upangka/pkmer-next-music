@@ -4,6 +4,8 @@ import { readdirSync } from 'node:fs'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import dts from 'vite-plugin-dts'
+import tailwind from 'tailwindcss'
+import autoprefixer from 'autoprefixer'
 
 function getComponentEntries() {
   // 获取 src/components 目录下的所有子目录（组件）
@@ -37,6 +39,11 @@ export default defineConfig(() => {
         cleanVueFileName: true
       })
     ],
+    css: {
+      postcss: {
+        plugins: [tailwind(), autoprefixer()]
+      }
+    },
     resolve: {
       dedupe: ['vue', '@vue/runtime-core']
     },

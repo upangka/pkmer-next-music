@@ -5,10 +5,12 @@
     "build": "turbo build",
     "dev": "turbo dev",
     "lint": "turbo lint",
+    "dev:vue": "pnpm dev --filter=@pkmer-music-ui/vue --filter=music-web",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
     "prettier": "^3.2.5",
+    "prettier-plugin-tailwindcss": "^0.6.9",
     "turbo": "^2.3.3",
     "typescript": "5.5.4"
   },
