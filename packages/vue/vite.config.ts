@@ -32,7 +32,7 @@ export default defineConfig(() => {
       vue(),
       vueJsx(),
       dts({
-        tsconfigPath: resolve(__dirname, 'tsconfig.json'),
+        tsconfigPath: resolve(__dirname, 'tsconfig.build.json'),
         outDir: 'dist/types',
         cleanVueFileName: true
       })
@@ -46,6 +46,9 @@ export default defineConfig(() => {
         fileName: (_format, name) => {
           if (componentDirs.includes(name)) {
             return `components/${name}/index.js`
+          }
+          if (name === 'components') {
+            return `components/index.js`
           }
           return `${name}.js`
         },

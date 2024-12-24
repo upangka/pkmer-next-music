@@ -9,7 +9,18 @@ import autoprefixer from 'autoprefixer'
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [vue(), vueJsx(), vueDevTools()],
+  plugins: [
+    vue({
+      template: {
+        compilerOptions: {
+          // treat all tags with a dash as custom elements
+          isCustomElement: tag => tag.includes('iconify-icon')
+        }
+      }
+    }),
+    vueJsx(),
+    vueDevTools()
+  ],
   css: {
     postcss: {
       plugins: [tailwind(), autoprefixer()]

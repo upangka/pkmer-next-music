@@ -14,3 +14,10 @@ Vue3 + Vite开发
 # 管理端
 
 React + NextJS开发
+
+# 常用命令
+
+```sh
+# 启动vue
+pnpm dev --filter=@pkmer-music-ui/vue --filter=music-web
+```
