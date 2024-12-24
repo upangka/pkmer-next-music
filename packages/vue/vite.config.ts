@@ -7,6 +7,9 @@ import dts from 'vite-plugin-dts'
 import tailwind from 'tailwindcss'
 import autoprefixer from 'autoprefixer'
 
+/**
+ * 生成组件的动态入口文件配置
+ */
 function getComponentEntries() {
   // 获取 src/components 目录下的所有子目录（组件）
   const componentsDir = resolve(__dirname, 'src/components')
