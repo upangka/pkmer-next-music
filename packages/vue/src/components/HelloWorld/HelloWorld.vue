@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-
 const props = defineProps<{
   msg?: string,
   name: 'pkmer' | 'hzz'
@@ -8,7 +7,6 @@ const props = defineProps<{
 function handleClick() {
   console.log("更新了吗???")
 }
-
 </script>
 
 <template>

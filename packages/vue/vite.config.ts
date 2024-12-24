@@ -39,7 +39,7 @@ export default defineConfig(() => {
       dts({
         tsconfigPath: resolve(__dirname, 'tsconfig.build.json'),
         outDir: 'dist/types',
-        cleanVueFileName: true
+        cleanVueFileName: true // 清除 .vue 后缀
       })
     ],
     css: {
