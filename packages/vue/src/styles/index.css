@@ -1,0 +1,4 @@
+/* 不打包tailwindcss中的Preflight包括了重置（reset）和基础（base）样式 */
+/* @tailwind base; */
+@tailwind components;
+@tailwind utilities;

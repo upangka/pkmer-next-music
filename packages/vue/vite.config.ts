@@ -67,7 +67,13 @@ export default defineConfig(() => {
           {
             dir: 'dist/esm',
             format: 'esm',
-            preserveModules: true
+            preserveModules: true,
+            assetFileNames(chunkInfo) {
+              if (chunkInfo.names[0] === 'vue.css') {
+                return 'index.css'
+              }
+              return 'assets/[name].[hash][extname]'
+            }
           }
         ]
       },

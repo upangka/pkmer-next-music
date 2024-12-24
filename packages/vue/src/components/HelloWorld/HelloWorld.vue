@@ -13,7 +13,7 @@ function handleClick() {
 
 <template>
   <div class="hello-world">
-    hello world {{ props.msg }} 1
+    <span class="text-green-600">hello world</span> {{ props.msg }} {{ props.name }}
     <button @click="handleClick">click Me</button>
   </div>
 </template>
