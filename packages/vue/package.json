@@ -11,6 +11,9 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "dependencies": {
+    "@pkmer/libs": "workspace:*"
+  },
   "peerDependencies": {
     "vue": "catalog:vue3"
   },
@@ -39,6 +42,18 @@
       "import": {
         "types": "./dist/types/components/HelloWorld/index.d.ts",
         "default": "./dist/esm/components/HelloWorld/index.js"
+      }
+    },
+    "./container": {
+      "import": {
+        "types": "./dist/types/components/container/index.d.ts",
+        "default": "./dist/esm/components/container/index.js"
+      }
+    },
+    "./carsourel": {
+      "import": {
+        "types": "./dist/types/components/carsourel/index.d.ts",
+        "default": "./dist/esm/components/carsourel/index.js"
       }
     }
   }

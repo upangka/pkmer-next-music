@@ -21,3 +21,9 @@ React + NextJS开发
 # 启动vue
 pnpm dev --filter=@pkmer-music-ui/vue --filter=music-web
 ```
+
+# packages
+
+- [libs](./packages/libs/) 公共库
+- [react](./packages/react/) react组件库
+- [vue](./packages/vue/) vue组件库

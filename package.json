@@ -5,7 +5,7 @@
     "build": "turbo build",
     "dev": "turbo dev",
     "lint": "turbo lint",
-    "dev:vue": "pnpm dev --filter=@pkmer-music-ui/vue --filter=music-web",
+    "dev:vue": "pnpm dev --filter=@pkmer-music-ui/vue --filter=music-web --filter=@pkmer/libs",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {

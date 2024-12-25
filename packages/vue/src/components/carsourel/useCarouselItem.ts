@@ -1,7 +1,7 @@
 import { inject, ref, getCurrentInstance, onMounted, unref } from 'vue'
 import { carouseContextKey } from './constants'
 import type { TranslateItem } from './types'
-import { isUndefined } from '@utils'
+import { isUndefined } from '@pkmer/libs'
 
 function useCarouselItem() {
   const instance = getCurrentInstance()!
@@ -24,7 +24,9 @@ function useCarouselItem() {
 
   const translateItem: TranslateItem = (index, activeIndex, oldIndex) => {
     if (!isUndefined(oldIndex)) {
-      handleAnimating(index, activeIndex, oldIndex)
+      if (typeof oldIndex === 'number') {
+        handleAnimating(index, activeIndex, oldIndex)
+      }
     }
     active.value = index === activeIndex
     index = processIndex(index, activeIndex)

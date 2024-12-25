@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-import { PkmerCarousel, PkmerCarouselItem, PlayList } from '@/components'
+import { PlayList } from '@/components'
+import { PkmerCarousel, PkmerCarouselItem } from "@pkmer-music-ui/vue/carsourel"
 import songs from '@/assets/songs.json'
 </script>
 

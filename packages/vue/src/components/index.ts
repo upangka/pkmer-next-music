@@ -1,2 +1,2 @@
 export * from './HelloWorld'
-export * from './Avatar'
+export * from './container'

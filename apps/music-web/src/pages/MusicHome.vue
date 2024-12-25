@@ -2,11 +2,16 @@
 import {
   MusicHeader,
   MusicFooter,
+
+} from '@components'
+
+import {
   PkmerContainer,
   PkmerMain,
   PkmerFooter,
-  PkmerHeader,
-} from '@components'
+  PkmerHeader
+} from "@pkmer-music-ui/vue/container"
+
 </script>
 
 <template>

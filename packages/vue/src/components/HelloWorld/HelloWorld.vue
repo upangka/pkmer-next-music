@@ -5,7 +5,7 @@ const props = defineProps<{
 }>()
 
 function handleClick() {
-  console.log("更新了吗???")
+  console.log("更新了吗")
 }
 </script>
 

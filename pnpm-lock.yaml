@@ -223,6 +223,30 @@ importers:
         specifier: ^8.15.0
         version: 8.18.2(eslint@9.17.0(jiti@1.21.7))(typescript@5.7.2)
 
+  packages/libs:
+    devDependencies:
+      '@rollup/plugin-alias':
+        specifier: ^5.1.1
+        version: 5.1.1(rollup@4.29.1)
+      '@rollup/plugin-node-resolve':
+        specifier: ^16.0.0
+        version: 16.0.0(rollup@4.29.1)
+      '@types/node':
+        specifier: catalog:node
+        version: 20.17.10
+      esbuild:
+        specifier: ^0.24.2
+        version: 0.24.2
+      rollup:
+        specifier: ^4.29.0
+        version: 4.29.1
+      rollup-plugin-esbuild:
+        specifier: ^6.1.1
+        version: 6.1.1(esbuild@0.24.2)(rollup@4.29.1)
+      typescript:
+        specifier: ^5.7.2
+        version: 5.7.2
+
   packages/react:
     dependencies:
       react:
@@ -261,6 +285,9 @@ importers:
 
   packages/vue:
     dependencies:
+      '@pkmer/libs':
+        specifier: workspace:*
+        version: link:../libs
       vue:
         specifier: catalog:vue3
         version: 3.5.13(typescript@5.7.2)

@@ -1,0 +1,41 @@
+{
+  "name": "@pkmer/libs",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "公共工具库",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "rollup -c -w && tsc --project tsconfig.json",
+    "build": "rollup -c && tsc --project tsconfig.json"
+  },
+  "devDependencies": {
+    "@rollup/plugin-alias": "^5.1.1",
+    "@rollup/plugin-node-resolve": "^16.0.0",
+    "esbuild": "^0.24.2",
+    "rollup": "^4.29.0",
+    "rollup-plugin-esbuild": "^6.1.1",
+    "typescript": "^5.7.2",
+    "@types/node": "catalog:node"
+  },
+  "keywords": [],
+  "author": "pkmer",
+  "license": "ISC",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/types/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    },
+    "./utils": {
+      "import": {
+        "types": "./dist/types/utils/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    }
+  }
+}

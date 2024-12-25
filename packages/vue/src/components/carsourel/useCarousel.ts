@@ -1,7 +1,7 @@
 import { ref, watch, shallowRef, provide, onMounted, onBeforeUnmount, computed } from 'vue'
 import type { CarouselItem, CarouselProps } from './types'
 import { carouseContextKey, THROTTLE_TIME } from './constants'
-import { debounce, isUndefined } from '@utils'
+import { debounce } from '@pkmer/libs'
 
 function useCarousel(props: CarouselProps) {
   // 当前轮播图片
@@ -45,7 +45,7 @@ function useCarousel(props: CarouselProps) {
    */
   function startTimer() {
     if (props.autoplay) {
-      timer.value = setInterval(() => {
+      timer.value = window.setInterval(() => {
         doUpdateActiveIndex(activeIndex.value + 1)
       }, 3000)
     }
