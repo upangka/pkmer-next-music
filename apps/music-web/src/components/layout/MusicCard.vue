@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { Song } from '@/assets/types'
+import type { Song } from '@pkmer-music/web/assets/types'
 interface Props {
   card: Song
 }
