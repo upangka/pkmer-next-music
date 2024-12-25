@@ -1,5 +1,5 @@
 import type { RouteRecordRaw } from 'vue-router'
-import { MusicHome, MusicMain } from '@pages'
+import { MusicHome, MusicMain } from '@pkmer-music/web/pages'
 
 const routes: RouteRecordRaw[] = [
   {

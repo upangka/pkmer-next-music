@@ -3,7 +3,7 @@ import {
   MusicHeader,
   MusicFooter,
 
-} from '@components'
+} from '@pkmer-music/web/components'
 
 import {
   PkmerContainer,

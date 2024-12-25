@@ -1,5 +1,5 @@
 <script lang="ts">
-import type { Song } from '@/assets/types'
+import type { Song } from '@pkmer-music/web/assets/types'
 interface Props {
   title?: string
   path: string
@@ -8,7 +8,7 @@ interface Props {
 </script>
 
 <script lang="ts" setup>
-import { MusicCard } from '@components'
+import { MusicCard } from '@pkmer-music/web/components'
 
 const props = withDefaults(defineProps<Props>(), {
   playList: () => [],
