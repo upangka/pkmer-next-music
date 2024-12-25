@@ -1,6 +1,8 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
+import { RouterLink } from 'vue-router';
 const inputFocusStatus = ref(true)
+
 </script>
 
 <template>
@@ -27,8 +29,7 @@ const inputFocusStatus = ref(true)
     <!-- 左边end -->
     <!-- 右边start -->
     <section class="flex justify-start gap-5">
-      <span>登录</span>
-      <span>注册</span>
+      <RouterLink to="/login">登录</RouterLink>
     </section>
     <!-- 右边end -->
   </div>

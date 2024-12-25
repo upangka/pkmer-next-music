@@ -16,6 +16,9 @@ import songs from '@pkmer-music/web/assets/songs.json'
   <!-- 幻灯片end -->
 
   <!-- 歌单start -->
-  <PlayList title="歌 单 推 荐" path="/xxx" :play-list="songs" />
+  <PlayList title="歌 单 推 荐" path="/xxx" :play-list="songs.slice(0, 5)" />
   <!-- 歌单end -->
+  <!-- 歌手start -->
+  <PlayList title="歌 手 推 荐" path="/xxx" :play-list="songs.slice(5, 10)" />
+  <!-- 歌手end -->
 </template>
