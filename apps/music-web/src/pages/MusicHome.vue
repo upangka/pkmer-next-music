@@ -1,17 +1,7 @@
 <script lang="ts" setup>
-import {
-  MusicHeader,
-  MusicFooter,
+import { MusicHeader, MusicFooter } from '@pkmer-music/web/components'
 
-} from '@pkmer-music/web/components'
-
-import {
-  PkmerContainer,
-  PkmerMain,
-  PkmerFooter,
-  PkmerHeader
-} from "@pkmer-music-ui/vue/container"
-
+import { PkmerContainer, PkmerMain, PkmerFooter, PkmerHeader } from '@pkmer-music-ui/vue/container'
 </script>
 
 <template>

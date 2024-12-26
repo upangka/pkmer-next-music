@@ -11,7 +11,7 @@ interface Props {
 import { MusicCard } from '@pkmer-music/web/components'
 
 const props = withDefaults(defineProps<Props>(), {
-  playList: () => [],
+  playList: () => []
 })
 </script>
 

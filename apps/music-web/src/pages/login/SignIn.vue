@@ -1,8 +1,9 @@
 <script lang="ts" setup>
-import bgs from "./bgs"
+import bgs from './bgs'
 import { computed, ref, type CSSProperties } from 'vue'
+import FormInput from './FormInput.vue'
+import FormButton from './FormButton.vue'
 const isLogin = ref(true)
-
 
 const loginBg = bgs[Math.floor(Math.random() * bgs.length)]
 
@@ -25,28 +26,46 @@ const overlayMoveStyle = computed<CSSProperties>(() => {
     transform: `translateX(${isLogin.value ? '0' : '-100%'})`
   }
 })
-
 </script>
 
 <template>
-  <div :style="bgStyle" class="h-[600px] flex justify-center items-center">
+  <div :style="bgStyle" class="flex h-[550px] items-center justify-center">
     <div :class="['form-container__wrapper', isLogin ? '' : 'move-to__right']">
-      <!-- 登录表达start -->
-      <section :style="formMoveStyle" class="move-transition relative w-1/2 h-fit">
-        <div class="login-container absolute w-full h-[300px] bg-red-400 z-2">登录</div>
-        <div class="signup-container absolute w-full h-[300px] bg-green-400 opacity-0 z-1">注册</div>
+      <!-- 表单start -->
+      <section :style="formMoveStyle" class="move-transition relative h-fit w-1/2">
+        <!-- 登录表单start -->
+        <form class="login-container absolute h-[600px] w-full  ">
+          <h1 class="p-4 text-center text-xl">登录</h1>
+          <FormInput icon="uil:user" placeholder="用户名" />
+          <FormInput icon="formkit:password" placeholder=" 密码" type="password" />
+          <div class="flex justify-center">
+            <FormButton>登录</FormButton>
+          </div>
+        </form>
+        <!-- 登录表单end -->
+        <!-- 注册表单start -->
+        <form class="signup-container absolute h-[600px] w-full opacity-0">
+          <h1 class="p-4 text-center text-xl">注册</h1>
+          <FormInput icon="uil:user" placeholder="用户名" />
+          <FormInput icon="iconamoon:email-thin" placeholder="邮箱" />
+          <FormInput icon="formkit:password" placeholder=" 密码" type="password" />
+          <div class="flex justify-center">
+            <FormButton>注册</FormButton>
+          </div>
+        </form>
+        <!-- 注册表单end -->
       </section>
       <!-- 登录表达end -->
       <!-- overlay start -->
       <section :style="[overlayMoveStyle]"
-        class="move-transition over-container absolute left-1/2 w-[50%] h-full overflow-hidden">
-        <div :style="bgStyle" class="inner-overlay__container relative w-[200%] bg-transparent h-full">
-          <div class="absolute w-1/2 h-full ">
+        class="move-transition over-container absolute left-1/2 h-full w-[50%] overflow-hidden">
+        <div :style="bgStyle" class="inner-overlay__container relative h-full w-[200%] bg-transparent">
+          <div class="absolute h-full w-1/2">
             <div v-if="isLogin" class="register-btn__container">
-              <button @click="isLogin = false">注册</button>
+              <FormButton @click="isLogin = false">注册</FormButton>
             </div>
             <div v-else className="login-btn__container">
-              <button @click="isLogin = true">登录</button>
+              <FormButton @click="isLogin = true">登录</FormButton>
             </div>
           </div>
         </div>
@@ -54,20 +73,29 @@ const overlayMoveStyle = computed<CSSProperties>(() => {
       <!-- overlay end -->
     </div>
   </div>
-
 </template>
 
 <style lang="scss" scoped>
+$bgColor: #e9e9e9;
+
 .form-container__wrapper {
   margin: 10px auto;
   position: relative;
   width: 650px;
-  height: 300px;
+  height: 400px;
   background-color: transparent;
-  background-color: aliceblue;
+  background-color: $bgColor;
+  overflow: hidden;
+
+  .login-container {
+    z-index: 2;
+    background-color: $bgColor;
+  }
 
   .signup-container {
     animation: hidden-signup 0.6s;
+    z-index: 1;
+    background-color: $bgColor;
 
     @keyframes hidden-signup {
 
@@ -138,16 +166,6 @@ const overlayMoveStyle = computed<CSSProperties>(() => {
       @extend .bth__container;
       left: 0%;
     }
-  }
-
-
-
-  button {
-    background-color: antiquewhite;
-    border: 1px solid black;
-    color: black;
-    padding: 10px 20px;
-    border-radius: 15px;
   }
 }
 

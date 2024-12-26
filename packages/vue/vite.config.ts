@@ -34,7 +34,14 @@ export default defineConfig(() => {
   const [entries, componentDirs] = getComponentEntries()
   return {
     plugins: [
-      vue(),
+      vue({
+        template: {
+          compilerOptions: {
+            // treat all tags with a dash as custom elements
+            isCustomElement: tag => tag.includes('iconify-icon')
+          }
+        }
+      }),
       vueJsx(),
       dts({
         tsconfigPath: resolve(__dirname, 'tsconfig.build.json'),

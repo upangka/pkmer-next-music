@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { PlayList } from '@pkmer-music/web/components'
-import { PkmerCarousel, PkmerCarouselItem } from "@pkmer-music-ui/vue/carsourel"
+import { PkmerCarousel, PkmerCarouselItem } from '@pkmer-music-ui/vue/carsourel'
 import songs from '@pkmer-music/web/assets/songs.json'
 </script>
 
@@ -8,7 +8,11 @@ import songs from '@pkmer-music/web/assets/songs.json'
   <section class="flex h-4/5 justify-center">
     <!-- 幻灯片start -->
     <PkmerCarousel type="card" :autoplay="true" arrow="hover">
-      <PkmerCarouselItem v-for="i in 3" :key="i" class="flex h-full justify-center text-2xl text-white">
+      <PkmerCarouselItem
+        v-for="i in 3"
+        :key="i"
+        class="flex h-full justify-center text-2xl text-white"
+      >
         {{ i }}
       </PkmerCarouselItem>
     </PkmerCarousel>
