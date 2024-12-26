@@ -19,6 +19,7 @@ const formMoveStyle = computed<CSSProperties>(() => {
 })
 
 const overlayMoveStyle = computed<CSSProperties>(() => {
+
   return {
     transform: `translateX(${isLogin.value ? '0' : '-100%'})`
   }
@@ -28,15 +29,17 @@ const overlayMoveStyle = computed<CSSProperties>(() => {
 
 <template>
   <div :style="bgStyle" class="bg-red-500 h-[600px] flex justify-center items-center">
-    <div class="form-container__wrapper">
-      <section :style="formMoveStyle" class="relative w-1/2 h-fit z-10">
-        <div v-if="isLogin" class="login-container absolute w-full h-[300px] bg-red-400">登录</div>
-        <div v-else class="absolute w-full h-[300px] bg-green-400">注册</div>
+    <div :class="['form-container__wrapper', isLogin ? '' : 'move-to__right']">
+      <!-- 登录表达start -->
+      <section :style="formMoveStyle" class="move-transition relative w-1/2 h-fit">
+        <div class="login-container absolute w-full h-[300px] bg-red-400 z-2">登录</div>
+        <div class="signup-container absolute w-full h-[300px] bg-green-400 opacity-0 z-1">注册</div>
       </section>
-
+      <!-- 登录表达end -->
       <!-- overlay start -->
-      <section :style="overlayMoveStyle" class="over-container absolute left-1/2 w-[50%] h-full">
-        <div class="relative w-[200%] bg-blue-500 h-full">
+      <section :style="[overlayMoveStyle]"
+        class="move-transition over-container absolute left-1/2 w-[50%] h-full overflow-hidden">
+        <div :style="bgStyle" class="relative w-[200%] bg-transparent h-full">
           <div class="w-1/2 h-full flex justify-center items-center">
             <button v-if="isLogin" @click="isLogin = false">注册</button>
             <button v-else @click="isLogin = true">登录</button>
@@ -55,8 +58,53 @@ const overlayMoveStyle = computed<CSSProperties>(() => {
   position: relative;
   width: 650px;
   height: 300px;
-  background-color: #ccc;
-  overflow: hidden;
+  background-color: transparent;
+
+  .signup-container {
+    animation: hidden-signup 0.6s;
+
+    @keyframes hidden-signup {
+
+      0%,
+      49.99% {
+        opacity: 1;
+        z-index: 5;
+      }
+
+      50%,
+      100% {
+        opacity: 0;
+        z-index: 1;
+      }
+    }
+  }
+
+  &.move-to__right {
+    .signup-container {
+      opacity: 1;
+      z-index: 5;
+      animation: show 0.6s;
+
+      @keyframes show {
+        0% {
+          opacity: 0;
+          z-index: 1;
+        }
+
+        49.99% {
+          opacity: 0;
+          z-index: 1;
+        }
+
+        50%,
+        100% {
+          opacity: 1;
+          z-index: 5;
+        }
+      }
+    }
+  }
+
 
 
   button {
@@ -66,5 +114,9 @@ const overlayMoveStyle = computed<CSSProperties>(() => {
     padding: 10px 20px;
     border-radius: 15px;
   }
+}
+
+.move-transition {
+  transition: all 0.6s ease-in-out;
 }
 </style>
