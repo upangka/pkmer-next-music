@@ -1,8 +1,11 @@
 <script lang="ts" setup>
-import loginBg from "@pkmer-music/web/assets/imgs/login-bg.jpg"
+import bgs from "./bgs"
+// import loginBg from "@pkmer-music/web/assets/imgs/login-bg.jpg"
 import { computed, ref, type CSSProperties } from 'vue'
 const isLogin = ref(true)
 
+
+const loginBg = bgs[Math.floor(Math.random() * bgs.length)]
 
 const bgStyle = {
   backgroundImage: `url(${loginBg})`,
