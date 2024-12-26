@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import bgs from "./bgs"
-// import loginBg from "@pkmer-music/web/assets/imgs/login-bg.jpg"
 import { computed, ref, type CSSProperties } from 'vue'
 const isLogin = ref(true)
 
@@ -22,7 +21,6 @@ const formMoveStyle = computed<CSSProperties>(() => {
 })
 
 const overlayMoveStyle = computed<CSSProperties>(() => {
-
   return {
     transform: `translateX(${isLogin.value ? '0' : '-100%'})`
   }
@@ -31,7 +29,7 @@ const overlayMoveStyle = computed<CSSProperties>(() => {
 </script>
 
 <template>
-  <div :style="bgStyle" class="bg-red-500 h-[600px] flex justify-center items-center">
+  <div :style="bgStyle" class="h-[600px] flex justify-center items-center">
     <div :class="['form-container__wrapper', isLogin ? '' : 'move-to__right']">
       <!-- 登录表达start -->
       <section :style="formMoveStyle" class="move-transition relative w-1/2 h-fit">
@@ -42,10 +40,14 @@ const overlayMoveStyle = computed<CSSProperties>(() => {
       <!-- overlay start -->
       <section :style="[overlayMoveStyle]"
         class="move-transition over-container absolute left-1/2 w-[50%] h-full overflow-hidden">
-        <div :style="bgStyle" class="relative w-[200%] bg-transparent h-full">
-          <div class="w-1/2 h-full flex justify-center items-center">
-            <button v-if="isLogin" @click="isLogin = false">注册</button>
-            <button v-else @click="isLogin = true">登录</button>
+        <div :style="bgStyle" class="inner-overlay__container relative w-[200%] bg-transparent h-full">
+          <div class="absolute w-1/2 h-full ">
+            <div v-if="isLogin" class="register-btn__container">
+              <button @click="isLogin = false">注册</button>
+            </div>
+            <div v-else className="login-btn__container">
+              <button @click="isLogin = true">登录</button>
+            </div>
           </div>
         </div>
       </section>
@@ -62,6 +64,7 @@ const overlayMoveStyle = computed<CSSProperties>(() => {
   width: 650px;
   height: 300px;
   background-color: transparent;
+  background-color: aliceblue;
 
   .signup-container {
     animation: hidden-signup 0.6s;
@@ -105,6 +108,35 @@ const overlayMoveStyle = computed<CSSProperties>(() => {
           z-index: 5;
         }
       }
+    }
+
+    .inner-overlay__container {
+      transform: translateX(0%);
+    }
+  }
+
+  .inner-overlay__container {
+    transform: translateX(-50%);
+    transition: all 0.6s ease-in-out;
+
+    .bth__container {
+      position: absolute;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .register-btn__container {
+      @extend .bth__container;
+      right: -100%;
+    }
+
+    .login-btn__container {
+      @extend .bth__container;
+      left: 0%;
     }
   }
 
