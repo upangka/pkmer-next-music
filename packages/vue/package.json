@@ -12,7 +12,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@pkmer/libs": "workspace:*"
+    "@pkmer/libs": "workspace:*",
+    "iconify-icon": "^2.1.0"
   },
   "peerDependencies": {
     "vue": "catalog:vue3"
@@ -54,6 +55,12 @@
       "import": {
         "types": "./dist/types/components/carsourel/index.d.ts",
         "default": "./dist/esm/components/carsourel/index.js"
+      }
+    },
+    "./icon": {
+      "import": {
+        "types": "./dist/types/components/icon/index.d.ts",
+        "default": "./dist/esm/components/icon/index.js"
       }
     }
   }

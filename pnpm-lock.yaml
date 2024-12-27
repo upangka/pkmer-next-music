@@ -244,6 +244,9 @@ importers:
       '@pkmer/libs':
         specifier: workspace:*
         version: link:../libs
+      iconify-icon:
+        specifier: ^2.1.0
+        version: 2.2.0
       vue:
         specifier: catalog:vue3
         version: 3.5.13(typescript@5.7.2)

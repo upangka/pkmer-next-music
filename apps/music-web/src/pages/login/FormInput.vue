@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-
+import { PkmerIcon } from "@pkmer-music-ui/vue/icon"
 interface Props {
   width?: number,
   height?: number,
@@ -23,8 +23,8 @@ const props = withDefaults(defineProps<Props>(), {
 <template>
   <div class="mb-[30px] flex justify-center items-center px-5">
     <label class="relative w-full flex justify-center items-center">
-      <iconify-icon :width="props.width" :height="props.height" :icon="props.icon"
-        class="absolute left-1 top-1/2 -translate-y-1/2"></iconify-icon>
+      <PkmerIcon :width="props.width" :height="props.height" :icon="props.icon"
+        class="absolute left-1 top-1/2 -translate-y-1/2" />
       <input :name="props.name" :type="props.type" class="input" required />
       <span class="absolute left-[30px] top-1/2 -translate-y-1/2 text-black">
         {{ props.placeholder }}</span>
