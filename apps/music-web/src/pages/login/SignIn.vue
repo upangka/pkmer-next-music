@@ -65,8 +65,7 @@ const overlayMoveStyle = computed<CSSProperties>(() => {
       </section>
       <!-- 登录表达end -->
       <!-- overlay start -->
-      <section :style="[overlayMoveStyle]"
-        class="move-transition over-container absolute left-1/2 h-full w-[50%] overflow-hidden">
+      <section :style="[overlayMoveStyle]" class="move-transition over-container">
         <div :style="bgStyle" class="inner-overlay__container">
           <div class="absolute h-full w-1/2">
             <div v-if="isLogin" class="register-btn__container">
@@ -152,7 +151,42 @@ $formHeight: 600px;
       }
     }
 
+    .over-container {
+      position: absolute;
+      left: 50%;
+      width: 50%;
+      height: 100%;
+      overflow: hidden;
 
+      .inner-overlay__container {
+        position: relative;
+        height: 100%;
+        width: 200%;
+        background-color: transparent;
+        transform: translateX(-50%);
+        transition: all 0.6s ease-in-out;
+
+        .bth__container {
+          position: absolute;
+          top: 0;
+          width: 100%;
+          height: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+
+        .register-btn__container {
+          @extend .bth__container;
+          right: -100%;
+        }
+
+        .login-btn__container {
+          @extend .bth__container;
+          left: 0%;
+        }
+      }
+    }
 
     &.move-to__right {
       .signup-container {
@@ -185,34 +219,7 @@ $formHeight: 600px;
     }
 
 
-    .inner-overlay__container {
-      position: relative;
-      height: 100%;
-      width: 200%;
-      background-color: transparent;
-      transform: translateX(-50%);
-      transition: all 0.6s ease-in-out;
 
-      .bth__container {
-        position: absolute;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-
-      .register-btn__container {
-        @extend .bth__container;
-        right: -100%;
-      }
-
-      .login-btn__container {
-        @extend .bth__container;
-        left: 0%;
-      }
-    }
   }
 
   .move-transition {

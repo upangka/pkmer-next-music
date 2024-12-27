@@ -33,7 +33,7 @@ const props = withDefaults(defineProps<Props>(), {
 .input {
   padding: 4px 8px 6px 0px;
   width: 80%;
-  background: transparent;
+  background: transparent !important;
   border-bottom: 1px solid black;
   outline: none;
 
