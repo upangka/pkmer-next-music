@@ -6,7 +6,8 @@ interface Props {
   placeholder: string,
   icon: string,
   type?: string,
-  require?: boolean
+  require?: boolean,
+  name: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -24,7 +25,7 @@ const props = withDefaults(defineProps<Props>(), {
     <label class="relative w-full flex justify-center items-center">
       <iconify-icon :width="props.width" :height="props.height" :icon="props.icon"
         class="absolute left-1 top-1/2 -translate-y-1/2"></iconify-icon>
-      <input :type="props.type" class="input" required />
+      <input :name="props.name" :type="props.type" class="input" required />
       <span class="absolute left-[30px] top-1/2 -translate-y-1/2 text-black">
         {{ props.placeholder }}</span>
     </label>

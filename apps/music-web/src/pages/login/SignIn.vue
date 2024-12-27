@@ -44,8 +44,8 @@ const overlayMoveStyle = computed<CSSProperties>(() => {
         <!-- 登录表单start -->
         <form class="login-container">
           <h1 class="p-4 text-center text-xl">登录</h1>
-          <FormInput icon="uil:user" placeholder="用户名" />
-          <FormInput icon="formkit:password" placeholder=" 密码" type="password" />
+          <FormInput icon="uil:user" placeholder="用户名" name="username" />
+          <FormInput icon="formkit:password" placeholder=" 密码" type="password" name="password" />
           <div class="flex justify-center">
             <FormButton>登录</FormButton>
           </div>
@@ -54,9 +54,9 @@ const overlayMoveStyle = computed<CSSProperties>(() => {
         <!-- 注册表单start -->
         <form :style="{ animationDuration: firstTimeLoad ? '0s' : '0.6s' }" class="signup-container">
           <h1 class="title">注册</h1>
-          <FormInput icon="uil:user" placeholder="用户名" />
-          <FormInput icon="iconamoon:email-thin" placeholder="邮箱" />
-          <FormInput icon="formkit:password" placeholder=" 密码" type="password" />
+          <FormInput icon="uil:user" placeholder="用户名" name="username" />
+          <FormInput icon="iconamoon:email-thin" placeholder="邮箱" name="email" />
+          <FormInput icon="formkit:password" placeholder=" 密码" type="password" name="password" />
           <div class="flex justify-center">
             <FormButton>注册</FormButton>
           </div>
