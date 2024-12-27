@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { ref } from "vue";
-const showAssider = ref(true);
+const showAssider = ref(false);
 </script>
 
 <template>
