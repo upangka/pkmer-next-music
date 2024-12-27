@@ -1,20 +1,35 @@
 <script lang="ts" setup>
+import { ref } from "vue";
+const showAssider = ref(true);
 </script>
 
 <template>
-  <section class="assider-container">
-    <h1 class="title">当前播放</h1>
-    <p class="total">共0首</p>
-    <ul class="songs-list gap-2">
-      <li class="playing">月亮里的阿妹 (DJ村长版|DJ版)
-      </li>
-      <li>黄昏DJ</li>
-    </ul>
-  </section>
+  <Transition name="fade">
+    <section v-if="showAssider" class="assider-container">
+      <h1 class="title">当前播放</h1>
+      <p class="total">共0首</p>
+      <ul class="songs-list gap-2">
+        <li class="playing">月亮里的阿妹 (DJ村长版|DJ版)
+        </li>
+        <li>黄昏DJ</li>
+      </ul>
+    </section>
+  </Transition>
+
 </template>
 
 <style lang="scss" scoped>
 @import "@pkmer-music/web/assets/styles/__variables.scss";
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: transform 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  transform: translateX(100%)
+}
 
 .assider-container {
   position: fixed;
@@ -25,6 +40,7 @@
   background-color: white;
   width: 300px;
   z-index: $music-assider-z-index;
+
 
   .title {
     text-align: center;
