@@ -98,6 +98,7 @@ $formHeight: 600px;
     position: relative;
     width: 650px;
     height: 400px;
+    border-radius: 8px;
     background-color: transparent;
     background-color: $bgColor;
     overflow: hidden;
