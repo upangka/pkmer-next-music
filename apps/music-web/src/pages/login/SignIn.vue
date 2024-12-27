@@ -1,11 +1,19 @@
 <script lang="ts" setup>
 import bgs from './bgs'
-import { computed, ref, type CSSProperties } from 'vue'
+import { computed, ref, type CSSProperties, watch } from 'vue'
 import FormInput from './FormInput.vue'
 import FormButton from './FormButton.vue'
 const isLogin = ref(true)
-
+const firstTimeLoad = ref(true)
 const loginBg = bgs[Math.floor(Math.random() * bgs.length)]
+
+
+const stopWatch = watch(isLogin, () => {
+  if (firstTimeLoad.value) {
+    firstTimeLoad.value = false
+    stopWatch()
+  }
+})
 
 const bgStyle = {
   backgroundImage: `url(${loginBg})`,
@@ -29,12 +37,12 @@ const overlayMoveStyle = computed<CSSProperties>(() => {
 </script>
 
 <template>
-  <div :style="bgStyle" class="flex h-[550px] items-center justify-center">
+  <div :style="bgStyle" class="login-and-sign__container">
     <div :class="['form-container__wrapper', isLogin ? '' : 'move-to__right']">
       <!-- 表单start -->
-      <section :style="formMoveStyle" class="move-transition relative h-fit w-1/2">
+      <section :style="formMoveStyle" class="move-transition form-container">
         <!-- 登录表单start -->
-        <form class="login-container absolute h-[600px] w-full  ">
+        <form class="login-container">
           <h1 class="p-4 text-center text-xl">登录</h1>
           <FormInput icon="uil:user" placeholder="用户名" />
           <FormInput icon="formkit:password" placeholder=" 密码" type="password" />
@@ -44,8 +52,8 @@ const overlayMoveStyle = computed<CSSProperties>(() => {
         </form>
         <!-- 登录表单end -->
         <!-- 注册表单start -->
-        <form class="signup-container absolute h-[600px] w-full opacity-0">
-          <h1 class="p-4 text-center text-xl">注册</h1>
+        <form :style="{ animationDuration: firstTimeLoad ? '0s' : '0.6s' }" class="signup-container">
+          <h1 class="title">注册</h1>
           <FormInput icon="uil:user" placeholder="用户名" />
           <FormInput icon="iconamoon:email-thin" placeholder="邮箱" />
           <FormInput icon="formkit:password" placeholder=" 密码" type="password" />
@@ -59,7 +67,7 @@ const overlayMoveStyle = computed<CSSProperties>(() => {
       <!-- overlay start -->
       <section :style="[overlayMoveStyle]"
         class="move-transition over-container absolute left-1/2 h-full w-[50%] overflow-hidden">
-        <div :style="bgStyle" class="inner-overlay__container relative h-full w-[200%] bg-transparent">
+        <div :style="bgStyle" class="inner-overlay__container">
           <div class="absolute h-full w-1/2">
             <div v-if="isLogin" class="register-btn__container">
               <FormButton @click="isLogin = false">注册</FormButton>
@@ -77,99 +85,138 @@ const overlayMoveStyle = computed<CSSProperties>(() => {
 
 <style lang="scss" scoped>
 $bgColor: #e9e9e9;
+$formHeight: 600px;
 
-.form-container__wrapper {
-  margin: 10px auto;
-  position: relative;
-  width: 650px;
-  height: 400px;
-  background-color: transparent;
-  background-color: $bgColor;
-  overflow: hidden;
+.login-and-sign__container {
 
-  .login-container {
-    z-index: 2;
+  display: flex;
+  height: 550px;
+  justify-content: center;
+  align-items: center;
+
+  .form-container__wrapper {
+    margin: 10px auto;
+    position: relative;
+    width: 650px;
+    height: 400px;
+    background-color: transparent;
     background-color: $bgColor;
-  }
+    overflow: hidden;
 
-  .signup-container {
-    animation: hidden-signup 0.6s;
-    z-index: 1;
-    background-color: $bgColor;
+    .form-container {
+      position: relative;
+      height: fit-content;
+      width: 50%;
 
-    @keyframes hidden-signup {
+      .container-share {
+        position: absolute;
+        height: $formHeight;
+        width: 100%;
 
-      0%,
-      49.99% {
+        .title {
+          padding: 16px;
+          text-align: center;
+          font-size: 20px;
+          line-height: 28px;
+        }
+      }
+
+      .login-container {
+        @extend .container-share;
+        z-index: 2;
+        background-color: $bgColor;
+      }
+
+      .signup-container {
+        @extend .container-share;
+        opacity: 0;
+        // 初始状态加载，通过js控制时间
+        animation: hidden-signup;
+        z-index: 1;
+        background-color: $bgColor;
+
+        @keyframes hidden-signup {
+
+          0%,
+          49.99% {
+            opacity: 1;
+            z-index: 5;
+          }
+
+          50%,
+          100% {
+            opacity: 0;
+            z-index: 1;
+          }
+        }
+      }
+    }
+
+
+
+    &.move-to__right {
+      .signup-container {
         opacity: 1;
         z-index: 5;
+        animation: show 0.6s;
+
+        @keyframes show {
+          0% {
+            opacity: 0;
+            z-index: 1;
+          }
+
+          49.99% {
+            opacity: 0;
+            z-index: 1;
+          }
+
+          50%,
+          100% {
+            opacity: 1;
+            z-index: 5;
+          }
+        }
       }
 
-      50%,
-      100% {
-        opacity: 0;
-        z-index: 1;
-      }
-    }
-  }
-
-  &.move-to__right {
-    .signup-container {
-      opacity: 1;
-      z-index: 5;
-      animation: show 0.6s;
-
-      @keyframes show {
-        0% {
-          opacity: 0;
-          z-index: 1;
-        }
-
-        49.99% {
-          opacity: 0;
-          z-index: 1;
-        }
-
-        50%,
-        100% {
-          opacity: 1;
-          z-index: 5;
-        }
+      .inner-overlay__container {
+        transform: translateX(0%);
       }
     }
+
 
     .inner-overlay__container {
-      transform: translateX(0%);
-    }
-  }
-
-  .inner-overlay__container {
-    transform: translateX(-50%);
-    transition: all 0.6s ease-in-out;
-
-    .bth__container {
-      position: absolute;
-      top: 0;
-      width: 100%;
+      position: relative;
       height: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
+      width: 200%;
+      background-color: transparent;
+      transform: translateX(-50%);
+      transition: all 0.6s ease-in-out;
 
-    .register-btn__container {
-      @extend .bth__container;
-      right: -100%;
-    }
+      .bth__container {
+        position: absolute;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
 
-    .login-btn__container {
-      @extend .bth__container;
-      left: 0%;
+      .register-btn__container {
+        @extend .bth__container;
+        right: -100%;
+      }
+
+      .login-btn__container {
+        @extend .bth__container;
+        left: 0%;
+      }
     }
   }
-}
 
-.move-transition {
-  transition: all 0.6s ease-in-out;
+  .move-transition {
+    transition: all 0.6s ease-in-out;
+  }
 }
 </style>
