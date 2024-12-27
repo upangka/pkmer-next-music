@@ -40,6 +40,7 @@ const props = withDefaults(defineProps<Props>(), {
   border-bottom: 1px solid black;
   outline: none;
 
+  /* https://stackoverflow.com/questions/2781549/removing-input-background-colour-for-chrome-autocomplete */
   /* 针对 autofill 的处理 */
   &:-webkit-autofill {
     // 5000s大约83分钟，让用户无法察觉背景颜色的变化

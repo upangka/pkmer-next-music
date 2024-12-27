@@ -89,7 +89,7 @@ $formHeight: 600px;
 .login-and-sign__container {
 
   display: flex;
-  height: 550px;
+  height: $formHeight;
   justify-content: center;
   align-items: center;
 
