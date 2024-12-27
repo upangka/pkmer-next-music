@@ -25,6 +25,5 @@ import { PkmerContainer, PkmerMain, PkmerFooter, PkmerHeader } from '@pkmer-musi
 
 .main {
   margin-top: $header-height;
-  padding-top: 10px;
 }
 </style>
