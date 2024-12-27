@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { MusicHeader, MusicFooter, MusicPlayer } from '@pkmer-music/web/components'
+import { MusicHeader, MusicFooter, PlayAssider, PlayBar } from '@pkmer-music/web/components'
 
 import { PkmerContainer, PkmerMain, PkmerFooter, PkmerHeader } from '@pkmer-music-ui/vue/container'
 </script>
@@ -12,7 +12,8 @@ import { PkmerContainer, PkmerMain, PkmerFooter, PkmerHeader } from '@pkmer-musi
 
     <PkmerMain class="main">
       <RouterView />
-      <MusicPlayer />
+      <PlayAssider />
+      <PlayBar />
     </PkmerMain>
 
     <PkmerFooter>
