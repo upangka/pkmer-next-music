@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { MusicHeader, MusicFooter } from '@pkmer-music/web/components'
+import { MusicHeader, MusicFooter, MusicPlayer } from '@pkmer-music/web/components'
 
 import { PkmerContainer, PkmerMain, PkmerFooter, PkmerHeader } from '@pkmer-music-ui/vue/container'
 </script>
@@ -10,8 +10,9 @@ import { PkmerContainer, PkmerMain, PkmerFooter, PkmerHeader } from '@pkmer-musi
       <MusicHeader />
     </PkmerHeader>
 
-    <PkmerMain>
+    <PkmerMain class="main">
       <RouterView />
+      <MusicPlayer />
     </PkmerMain>
 
     <PkmerFooter>
@@ -19,3 +20,11 @@ import { PkmerContainer, PkmerMain, PkmerFooter, PkmerHeader } from '@pkmer-musi
     </PkmerFooter>
   </PkmerContainer>
 </template>
+<style lang="scss" scoped>
+@import "@pkmer-music/web/assets/styles/__variables.scss";
+
+.main {
+  margin-top: $header-height;
+  padding-top: 10px;
+}
+</style>

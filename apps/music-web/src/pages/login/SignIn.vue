@@ -25,13 +25,13 @@ const bgStyle = {
 
 const formMoveStyle = computed<CSSProperties>(() => {
   return {
-    transform: `translateX(${isLogin.value ? '0' : '100%'})`
+    transform: `translateX(${isLogin.value ? '0' : '101%'})`
   }
 })
 
 const overlayMoveStyle = computed<CSSProperties>(() => {
   return {
-    transform: `translateX(${isLogin.value ? '0' : '-100%'})`
+    transform: `translateX(${isLogin.value ? '0' : '-101%'})`
   }
 })
 </script>
@@ -87,7 +87,6 @@ $bgColor: #e9e9e9;
 $formHeight: 600px;
 
 .login-and-sign__container {
-
   display: flex;
   height: $formHeight;
   justify-content: center;
@@ -218,9 +217,6 @@ $formHeight: 600px;
         transform: translateX(0%);
       }
     }
-
-
-
   }
 
   .move-transition {

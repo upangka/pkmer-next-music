@@ -23,5 +23,4 @@ function insertInitScript() {
   <RouterView #default="{ Component }">
     <component :is="Component" />
   </RouterView>
-  <ExternalFC />
 </template>
