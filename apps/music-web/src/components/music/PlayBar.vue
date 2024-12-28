@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, reactive, watch } from "vue";
+import { ref, reactive, watch, computed } from "vue";
 import { PkmerIcon } from "@pkmer-music-ui/vue/icon"
 import musicDemo from "@pkmer-music/web/assets/audio/黄昏(Dj版) - 刘汉成.mp3"
 const status = reactive({
@@ -9,6 +9,7 @@ const status = reactive({
 })
 
 const audioRef = ref<HTMLAudioElement | null>(null)
+const progressContainerRef = ref<HTMLDivElement | null>(null)
 const progressWidth = ref('0%')
 const iconBtnSize = 30;
 
@@ -20,7 +21,12 @@ watch(() => status.isPlaying, (isCurrentPlaying) => {
   }
 })
 
-
+const progressContainerWidth = computed(() => {
+  if (progressContainerRef.value) {
+    return progressContainerRef.value.clientWidth
+  }
+  return 0;
+})
 
 
 
@@ -53,11 +59,30 @@ function handleToggle() {
   }
 }
 
+/**
+ * 更新音乐播放进度
+ */
 function updateProgress(e: Event) {
   const srcElement = e.target as HTMLMediaElement
   const { currentTime, duration: totalTime } = srcElement
-  progressWidth.value = `${currentTime / totalTime * 100}%`
-  console.log(`currentTime = ${currentTime}, totalTime = ${totalTime} 播放进度:${currentTime / totalTime * 100}%`)
+  const width = `${currentTime / totalTime * 100}%`;
+  progressWidth.value = width
+  // console.log(`currentTime = ${currentTime}, totalTime = ${totalTime} 播放进度:${currentTime / totalTime * 100}%`)
+  if ("100%" === width) {
+    togglePlaying(false, false)
+    progressWidth.value = '0%'
+  }
+}
+
+/**
+ * 跳到指定时间位置
+ */
+function jumpToTime(e: PointerEvent) {
+  const result = e.offsetX / progressContainerWidth.value
+  // console.log(`width: ${result * 100}%`)
+  if (audioRef.value) {
+    audioRef.value.currentTime = audioRef.value.duration * result
+  }
 }
 
 </script>
@@ -81,7 +106,7 @@ function updateProgress(e: Event) {
         <!-- 音乐进度播放start -->
         <div :class="['music-info', (status.showMusicInfo && status.isPlaying) && 'playing']">
           <h1 class="music-title">黄昏(Dj版) - 刘汉成</h1>
-          <div class="progress-container">
+          <div ref="progressContainerRef" class="progress-container" @pointerdown.prevent="jumpToTime">
             <div :style="{
               width: progressWidth
             }" class="progress"></div>
@@ -140,9 +165,7 @@ function updateProgress(e: Event) {
         <!-- 音乐控制面板end -->
       </section>
     </Transition>
-
     <!-- 进度条end -->
-
   </section>
 </template>
 
@@ -185,6 +208,7 @@ $bar-height: 55px;
 
       &.playing {
         opacity: 1;
+        z-index: 2;
         transform: translateY(-100%);
       }
 

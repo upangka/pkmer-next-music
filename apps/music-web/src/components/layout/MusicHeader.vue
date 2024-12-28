@@ -12,7 +12,9 @@ const inputFocusStatus = ref(true)
       <h1 class="text-xl font-bold">Pkmer-Next-Music</h1>
       <nav>
         <ul class="flex items-center justify-start gap-6">
-          <li>首页</li>
+          <li>
+            <RouterLink to="/">首页</RouterLink>
+          </li>
           <li>歌单</li>
           <li>歌手</li>
           <li class="relative">
