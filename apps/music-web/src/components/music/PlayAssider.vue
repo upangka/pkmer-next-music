@@ -1,18 +1,23 @@
 <script lang="ts" setup>
 import { storeToRefs } from "pinia"
 import { useMusicPannelStore } from "@pkmer-music/web/stores";
-const { showAssider } = storeToRefs(useMusicPannelStore())
+
+const musicPannelStore = useMusicPannelStore()
+const { showAssider, currentPlayingSongId } = storeToRefs(musicPannelStore)
+const { songs } = musicPannelStore
 </script>
 
 <template>
   <Transition name="fade">
     <section v-if="showAssider" class="assider-container">
       <h1 class="title">当前播放</h1>
-      <p class="total">共0首</p>
+      <p class="total">共{{ songs.length }}首</p>
       <ul class="songs-list gap-2">
-        <li class="playing">月亮里的阿妹 (DJ村长版|DJ版)
-        </li>
-        <li>黄昏DJ</li>
+        <!-- <li class="playing">月亮里的阿妹 (DJ村长版|DJ版)
+        </li> -->
+        <li v-for="song in songs" :key="song.id" :class="[
+          currentPlayingSongId === song.id && 'playing'
+        ]" @click="() => musicPannelStore.play(song.id)">{{ song.name }}</li>
       </ul>
     </section>
   </Transition>

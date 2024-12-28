@@ -2,16 +2,16 @@
 import { ref, reactive, watch, computed } from "vue";
 import { PkmerIcon } from "@pkmer-music-ui/vue/icon"
 import { formatTime } from "@pkmer-music/web/utils"
-import { songs } from "@pkmer-music/web/assets/audio"
 import { useMusicPannelStore } from "@pkmer-music/web/stores"
 
 const musicPannelStore = useMusicPannelStore()
+const { songs } = musicPannelStore
 
 const status = reactive({
   showPlayBar: true,
   showMusicInfo: false,
   isPlaying: false,
-  currentIndex: 0
+  currentIndex: musicPannelStore.currentPlayingIndex
 })
 
 const audioRef = ref<HTMLAudioElement | null>(null)
@@ -19,8 +19,14 @@ const progressContainerRef = ref<HTMLDivElement | null>(null)
 const progressWidth = ref('0%')
 const iconBtnSize = 30;
 
+/**
+ * 监听当前播放歌曲的index
+ */
+watch(() => musicPannelStore.currentPlayingIndex, (index) => {
+  status.currentIndex = index
+})
+
 watch(() => status.isPlaying, (isCurrentPlaying) => {
-  console.log({ isCurrentPlaying })
   if (isCurrentPlaying) {
     audioRef.value?.play()
   } else {
@@ -33,10 +39,19 @@ watch(() => status.isPlaying, (isCurrentPlaying) => {
  * 然后audio会变化，此时我们在播放音乐。
  */
 watch(() => audioRef.value, (audio) => {
-  if (audio && status.isPlaying) {
-    audio.play()
+  if (audio) {
+    console.log(audio)
+    // 更新store中的当前播放歌曲id
+    musicPannelStore.$patch((state) => {
+      state.currentPlayingSongId = songs[status.currentIndex].id
+    })
+
+    if (status.isPlaying) {
+      audio.play()
+    }
+
   }
-})
+}, { immediate: true })
 
 const progressContainerWidth = computed(() => {
   if (progressContainerRef.value) {
