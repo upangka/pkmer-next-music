@@ -119,7 +119,9 @@ function jumpToTime(e: PointerEvent) {
         <!-- 音乐控制面板start -->
         <div :class="['music-control__container']">
           <div :class="['img-wrapper', status.isPlaying && 'playing']">
-            <img src="https://i.pravatar.cc/300" alt="">
+            <img
+              src="https://music-file.y.qq.com/songlist/u/oiCF7evzoK4zoc/7c1b/eb65d22c05d45783355e1bd2bc53e11181a566a3_359ddf.jpg?imageView2/4/w/300/h/300"
+              alt="音乐封面">
           </div>
 
           <ul class="navigation">
@@ -170,6 +172,7 @@ function jumpToTime(e: PointerEvent) {
 </template>
 
 <style lang="scss" scoped>
+@import "@pkmer-music/web/assets/styles/__variables.scss";
 $bar-height: 55px;
 
 .play-bar__container {
@@ -208,7 +211,7 @@ $bar-height: 55px;
 
       &.playing {
         opacity: 1;
-        z-index: 2;
+        z-index: $music-info-show-z-index;
         transform: translateY(-100%);
       }
 
@@ -247,6 +250,7 @@ $bar-height: 55px;
         overflow: hidden;
         left: 20%;
         top: -50%;
+        z-index: $music-image-z-index;
         animation: rotate 10s linear infinite;
         animation-play-state: paused;
 
