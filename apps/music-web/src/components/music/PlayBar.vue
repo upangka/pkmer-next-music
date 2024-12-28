@@ -2,11 +2,13 @@
 import { ref, reactive, watch, computed } from "vue";
 import { PkmerIcon } from "@pkmer-music-ui/vue/icon"
 import { formatTime } from "@pkmer-music/web/utils"
-import musicDemo from "@pkmer-music/web/assets/audio/黄昏(Dj版) - 刘汉成.mp3"
+import { songs } from "@pkmer-music/web/assets/audio"
+
 const status = reactive({
-  showPlayBar: false,
+  showPlayBar: true,
   showMusicInfo: false,
-  isPlaying: false
+  isPlaying: false,
+  currentIndex: 1
 })
 
 const audioRef = ref<HTMLAudioElement | null>(null)
@@ -15,10 +17,21 @@ const progressWidth = ref('0%')
 const iconBtnSize = 30;
 
 watch(() => status.isPlaying, (isCurrentPlaying) => {
+  console.log({ isCurrentPlaying })
   if (isCurrentPlaying) {
     audioRef.value?.play()
   } else {
     audioRef.value?.pause()
+  }
+})
+
+/**
+ * currentIndex变化的时候，会更新当前的歌曲
+ * 然后audio会变化，此时我们在播放音乐。
+ */
+watch(() => audioRef.value, (audio) => {
+  if (audio && status.isPlaying) {
+    audio.play()
   }
 })
 
@@ -29,6 +42,10 @@ const progressContainerWidth = computed(() => {
   return 0;
 })
 
+
+const currentSong = computed(() => {
+  return songs[status.currentIndex]
+})
 
 
 function togglePlaying(_isPlaying: boolean, isShowMusicInfo: boolean) {
@@ -68,7 +85,7 @@ function updateProgress(e: Event) {
   const { currentTime, duration: totalTime } = srcElement
   const width = `${currentTime / totalTime * 100}%`;
   progressWidth.value = width
-  console.log(`currentTime = ${currentTime}, totalTime = ${totalTime} 播放进度:${currentTime / totalTime * 100}%`)
+  // console.log(`currentTime = ${currentTime}, totalTime = ${totalTime} 播放进度:${currentTime / totalTime * 100}%`)
   if ("100%" === width) {
     togglePlaying(false, false)
     progressWidth.value = '0%'
@@ -86,12 +103,21 @@ function jumpToTime(e: PointerEvent) {
   }
 }
 
+function nextSong() {
+  status.currentIndex = (status.currentIndex + 1) % songs.length
+}
+
+function prevSong() {
+  status.currentIndex = (status.currentIndex - 1 + songs.length) % songs.length
+}
+
 </script>
 
 <template>
   <section class="play-bar__container">
     <!-- 音乐源start -->
-    <audio @timeupdate="updateProgress" :src="musicDemo" ref="audioRef"></audio>
+    <!-- 这里用key来表明这是一个新的元素，和react渲染树差不多 -->
+    <audio :key="currentSong.name" @timeupdate="updateProgress" :src="currentSong.link" ref="audioRef"></audio>
     <!-- 音乐源end -->
     <!-- 显示隐藏按钮start -->
     <button class="icon-btn" @click="handleToggle">
@@ -106,7 +132,7 @@ function jumpToTime(e: PointerEvent) {
       <section class="music-container" v-if="status.showPlayBar">
         <!-- 音乐进度播放start -->
         <div :class="['music-info', (status.showMusicInfo && status.isPlaying) && 'playing']">
-          <h1 class="music-title">黄昏(Dj版) - 刘汉成</h1>
+          <h1 class="music-title">{{ currentSong.name }}</h1>
           <div ref="progressContainerRef" class="progress-container" @pointerdown.prevent="jumpToTime">
             <div :style="{
               width: progressWidth
@@ -124,14 +150,12 @@ function jumpToTime(e: PointerEvent) {
         <!-- 音乐控制面板start -->
         <div :class="['music-control__container']">
           <div :class="['img-wrapper', status.isPlaying && 'playing']">
-            <img
-              src="https://music-file.y.qq.com/songlist/u/oiCF7evzoK4zoc/7c1b/eb65d22c05d45783355e1bd2bc53e11181a566a3_359ddf.jpg?imageView2/4/w/300/h/300"
-              alt="音乐封面">
+            <img :src="currentSong.picture" :alt="currentSong.name">
           </div>
 
           <ul class="navigation">
             <li>
-              <button>
+              <button @click="prevSong">
                 <PkmerIcon icon="tabler:player-track-prev-filled" />
               </button>
             </li>
@@ -145,7 +169,7 @@ function jumpToTime(e: PointerEvent) {
 
             </li>
             <li>
-              <button>
+              <button @click="nextSong">
                 <PkmerIcon icon="tabler:player-track-next-filled" />
               </button>
             </li>
