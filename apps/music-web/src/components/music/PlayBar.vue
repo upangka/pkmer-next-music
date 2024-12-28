@@ -1,16 +1,27 @@
 <script lang="ts" setup>
-import { reactive } from "vue";
+import { ref, reactive, watch } from "vue";
 import { PkmerIcon } from "@pkmer-music-ui/vue/icon"
-
+import musicDemo from "@pkmer-music/web/assets/audio/黄昏(Dj版) - 刘汉成.mp3"
 const status = reactive({
   showPlayBar: false,
   showMusicInfo: false,
   isPlaying: false
 })
-// const showPlayBar = ref(true);
-// const showMusicInfo = ref(false);
-// const isPlaying = ref(false)
+
+const audioRef = ref<HTMLAudioElement | null>(null)
 const iconBtnSize = 30;
+
+watch(() => status.isPlaying, (isCurrentPlaying) => {
+  if (isCurrentPlaying) {
+    audioRef.value?.play()
+  } else {
+    audioRef.value?.pause()
+  }
+})
+
+
+
+
 
 function togglePlaying(_isPlaying: boolean, isShowMusicInfo: boolean) {
   status.isPlaying = _isPlaying
@@ -42,6 +53,9 @@ function handleToggle() {
 
 <template>
   <section class="play-bar__container">
+    <!-- 音乐源start -->
+    <audio :src="musicDemo" ref="audioRef"></audio>
+    <!-- 音乐源end -->
     <!-- 显示隐藏按钮start -->
     <button class="icon-btn" @click="handleToggle">
       <PkmerIcon v-if="status.showPlayBar" icon="icon-park-outline:down-c" style="color: #000" :width="iconBtnSize"
@@ -60,6 +74,7 @@ function handleToggle() {
             <div class="progresss"></div>
           </div>
         </div>
+
 
 
         <!-- 音乐进度播放end -->
