@@ -9,6 +9,7 @@ const status = reactive({
 })
 
 const audioRef = ref<HTMLAudioElement | null>(null)
+const progressWidth = ref('0%')
 const iconBtnSize = 30;
 
 watch(() => status.isPlaying, (isCurrentPlaying) => {
@@ -28,8 +29,11 @@ function togglePlaying(_isPlaying: boolean, isShowMusicInfo: boolean) {
   status.showMusicInfo = isShowMusicInfo
 }
 
-function handleToggle() {
 
+/**
+ * 处理显示和隐藏音乐面板
+ */
+function handleToggle() {
   if (status.showPlayBar) {
     // 处理关闭
     status.showMusicInfo = false
@@ -49,12 +53,19 @@ function handleToggle() {
   }
 }
 
+function updateProgress(e: Event) {
+  const srcElement = e.target as HTMLMediaElement
+  const { currentTime, duration: totalTime } = srcElement
+  progressWidth.value = `${currentTime / totalTime * 100}%`
+  console.log(`currentTime = ${currentTime}, totalTime = ${totalTime} 播放进度:${currentTime / totalTime * 100}%`)
+}
+
 </script>
 
 <template>
   <section class="play-bar__container">
     <!-- 音乐源start -->
-    <audio :src="musicDemo" ref="audioRef"></audio>
+    <audio @timeupdate="updateProgress" :src="musicDemo" ref="audioRef"></audio>
     <!-- 音乐源end -->
     <!-- 显示隐藏按钮start -->
     <button class="icon-btn" @click="handleToggle">
@@ -69,9 +80,11 @@ function handleToggle() {
       <section class="music-container" v-if="status.showPlayBar">
         <!-- 音乐进度播放start -->
         <div :class="['music-info', (status.showMusicInfo && status.isPlaying) && 'playing']">
-          <h1 class="music-title">黄昏DJ</h1>
+          <h1 class="music-title">黄昏(Dj版) - 刘汉成</h1>
           <div class="progress-container">
-            <div class="progresss"></div>
+            <div :style="{
+              width: progressWidth
+            }" class="progress"></div>
           </div>
         </div>
 
@@ -180,6 +193,7 @@ $bar-height: 55px;
         font-size: 18px;
         line-height: 26px;
         padding: 10px 35px;
+        color: green;
       }
 
       .progress-container {
@@ -189,6 +203,11 @@ $bar-height: 55px;
         border: 1px solid gray;
         border-radius: 10px;
 
+        .progress {
+          height: 100%;
+          background-color: green;
+          transition: width 0.1s linear;
+        }
       }
     }
 
