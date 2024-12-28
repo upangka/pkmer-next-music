@@ -84,7 +84,7 @@ const overlayMoveStyle = computed<CSSProperties>(() => {
 
 <style lang="scss" scoped>
 $bgColor: #e9e9e9;
-$formHeight: 600px;
+$formHeight: 650px;
 
 .login-and-sign__container {
   display: flex;
