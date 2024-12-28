@@ -17,8 +17,58 @@ const iconBtnSize = 30;
 
     <!-- 进度条start -->
     <Transition name="fade">
-      <section class="play-bar__content" v-if="showPlayBar">
-        see me
+      <section class="music-container" v-if="showPlayBar">
+        <!-- 音乐进度播放start -->
+        <div class="music-info">
+          <h1 class="music-title">黄昏DJ</h1>
+          <div class="progress-container">
+            <div class="progresss"></div>
+          </div>
+        </div>
+
+        <!-- 音乐进度播放end -->
+        <div class="music-control__container">
+          <div class="img-wrapper">
+            <img src="https://i.pravatar.cc/300" alt="">
+          </div>
+
+          <ul class="navigation">
+            <li>
+              <button>
+                <PkmerIcon icon="tabler:player-track-prev-filled" />
+              </button>
+            </li>
+            <li>
+              <button>
+                <PkmerIcon icon="icon-park-solid:play" :width="40" :height="40" />
+              </button>
+            </li>
+            <li>
+              <button>
+                <PkmerIcon icon="tabler:player-track-next-filled" />
+              </button>
+            </li>
+          </ul>
+
+          <ul class="tools">
+            <li>
+              <button>
+                <PkmerIcon icon="weui:like-outlined" />
+              </button>
+            </li>
+            <li>
+              <button>
+                <PkmerIcon icon="mdi-light:cloud-upload" />
+              </button>
+            </li>
+            <li>
+              <button>
+                <PkmerIcon icon="material-symbols-light:menu-rounded" />
+              </button>
+            </li>
+          </ul>
+        </div>
+
       </section>
     </Transition>
 
@@ -28,14 +78,14 @@ const iconBtnSize = 30;
 </template>
 
 <style lang="scss" scoped>
-$bar-height: 100px;
+$bar-height: 55px;
 
 .play-bar__container {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
-  color: white;
+  color: black;
 
 
   .icon-btn {
@@ -45,9 +95,55 @@ $bar-height: 100px;
     padding: 2px 5px;
   }
 
-  .play-bar__content {
+  .music-container {
+    position: relative;
     height: $bar-height;
-    background-color: black;
+    background-color: #e5e7eb;
+
+    .music-info {
+      position: absolute;
+      opacity: 0;
+    }
+
+    .music-control__container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+
+      .img-wrapper {
+        position: relative;
+        width: 110px;
+        height: 110px;
+        border-radius: 100%;
+        overflow: hidden;
+        left: 20%;
+        top: -50%;
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+      }
+
+
+      .share-layout {
+        height: $bar-height;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 30px;
+      }
+
+      .navigation {
+        @extend .share-layout;
+        grid-column: 2;
+      }
+
+      .tools {
+        @extend .share-layout;
+        grid-column: 3;
+      }
+    }
   }
 }
 
