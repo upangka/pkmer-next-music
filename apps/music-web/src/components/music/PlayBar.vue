@@ -8,7 +8,7 @@ const status = reactive({
   showPlayBar: true,
   showMusicInfo: false,
   isPlaying: false,
-  currentIndex: 1
+  currentIndex: 0
 })
 
 const audioRef = ref<HTMLAudioElement | null>(null)

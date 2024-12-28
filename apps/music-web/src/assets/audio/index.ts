@@ -1,7 +1,8 @@
 import song1 from './黄昏(Dj版) - 刘汉成.mp3'
-import song2 from './Phai Dấu Cuộc Tình (Remix Ver.) - Vicky Nhung.mp3'
-import song3 from './Tình Ta Hai Ngã (Divided Love) - Hard Vina - Kickcheeze.mp3'
-import song4 from './XEM NHƯ ANH CHẲNG MAY (Remix) - Ưng Hoàng Phúc.mp3'
+
+import song2 from './春庭雪 (DJ默涵Wave版) - DJ默涵.mp3'
+import song3 from './Hỷ Bi (Đức Trình Remix) - YLing、Drum7、BMZ.mp3'
+import song4 from './Hoàng Hôn (EDM Remix) - H2O Remix、Kiều Thơ Mellow.mp3'
 import song5 from './月亮里的阿妹 (DJ村长版DJ版) - DJ村长.mp3'
 
 interface Song {
@@ -19,19 +20,19 @@ export const songs = [
   },
   {
     link: song2,
-    name: 'Phai Dấu Cuộc Tình (Remix Ver.) - Vicky Nhung',
+    name: '春庭雪 (DJ默涵Wave版) - DJ默涵',
     picture:
       'https://music-file.y.qq.com/songlist/u/oiSq7K4AowoqNn/743b/d7d68662155e54ad1a22821e6891368a807bb6c8_247193.jpg?imageView2/4/w/300/h/300'
   },
   {
     link: song3,
-    name: 'Tình Ta Hai Ngã (Divided Love) - Hard Vina - Kickcheeze',
+    name: 'Hỷ Bi (Đức Trình Remix) - YLing、Drum7、BMZ',
     picture:
-      'http://qpic.y.qq.com/music_cover/Kfat8dubG9jd2J815HySpm8aUfYTEGQfkd4Wcp46cx1ibaE9bdwr41g/300?n=1'
+      'https://music-file.y.qq.com/songlist/80ae541b64b9e4521f870a05b0336d8fdcadb5f5_19c0c2.jpg?imageView2/4/w/300/h/300'
   },
   {
     link: song4,
-    name: 'XEM NHƯ ANH CHẲNG MAY (Remix) - Ưng Hoàng Phúc',
+    name: 'Hoàng Hôn (EDM Remix) - H2O Remix、Kiều Thơ Mellow',
     picture:
       'https://music-file.y.qq.com/songlist/u/oKo57w6z7evq7v/6bc3/a859a02adf75ed55486c933882fcbf79cd322163_2399f6.jpg?imageView2/4/w/300/h/300'
   },
