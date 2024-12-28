@@ -1,32 +1,69 @@
 <script lang="ts" setup>
-import { ref } from "vue";
+import { reactive } from "vue";
 import { PkmerIcon } from "@pkmer-music-ui/vue/icon"
-const showPlayBar = ref(false);
+
+const status = reactive({
+  showPlayBar: false,
+  showMusicInfo: false,
+  isPlaying: false
+})
+// const showPlayBar = ref(true);
+// const showMusicInfo = ref(false);
+// const isPlaying = ref(false)
 const iconBtnSize = 30;
+
+function togglePlaying(_isPlaying: boolean, isShowMusicInfo: boolean) {
+  status.isPlaying = _isPlaying
+  status.showMusicInfo = isShowMusicInfo
+}
+
+function handleToggle() {
+
+  if (status.showPlayBar) {
+    // 处理关闭
+    status.showMusicInfo = false
+    window.setTimeout(() => {
+      status.showPlayBar = false
+    }, 300)
+  } else {
+    // 处理展开
+    if (status.isPlaying) {
+      status.showPlayBar = true
+      window.setTimeout(() => {
+        status.showMusicInfo = true
+      }, 300)
+    } else {
+      status.showPlayBar = true
+    }
+  }
+}
+
 </script>
 
 <template>
   <section class="play-bar__container">
     <!-- 显示隐藏按钮start -->
-    <button class="icon-btn" @click="showPlayBar = !showPlayBar">
-      <PkmerIcon v-if="showPlayBar" icon="icon-park-outline:down-c" style="color: #000" :width="iconBtnSize"
+    <button class="icon-btn" @click="handleToggle">
+      <PkmerIcon v-if="status.showPlayBar" icon="icon-park-outline:down-c" style="color: #000" :width="iconBtnSize"
         :height="iconBtnSize" />
       <PkmerIcon v-else icon="icon-park-outline:up-c" style="color: #000" :width="iconBtnSize" :height="iconBtnSize" />
     </button>
     <!-- 显示隐藏按钮end -->
 
     <!-- 进度条start -->
-    <Transition name="fade">
-      <section class="music-container" v-if="showPlayBar">
+    <Transition name="expand">
+      <section class="music-container" v-if="status.showPlayBar">
         <!-- 音乐进度播放start -->
-        <div class="music-info">
+        <div :class="['music-info', (status.showMusicInfo && status.isPlaying) && 'playing']">
           <h1 class="music-title">黄昏DJ</h1>
           <div class="progress-container">
             <div class="progresss"></div>
           </div>
         </div>
 
+
         <!-- 音乐进度播放end -->
+        <!-- 音乐控制面板start -->
         <div class="music-control__container">
           <div class="img-wrapper">
             <img src="https://i.pravatar.cc/300" alt="">
@@ -39,9 +76,13 @@ const iconBtnSize = 30;
               </button>
             </li>
             <li>
-              <button>
+              <button v-if="status.showMusicInfo" @click="() => togglePlaying(false, false)">
+                <PkmerIcon icon="gridicons:pause" :width="40" :height="40" />
+              </button>
+              <button v-else @click="() => togglePlaying(true, true)">
                 <PkmerIcon icon="icon-park-solid:play" :width="40" :height="40" />
               </button>
+
             </li>
             <li>
               <button>
@@ -68,7 +109,7 @@ const iconBtnSize = 30;
             </li>
           </ul>
         </div>
-
+        <!-- 音乐控制面板end -->
       </section>
     </Transition>
 
@@ -100,9 +141,40 @@ $bar-height: 55px;
     height: $bar-height;
     background-color: #e5e7eb;
 
+
+
     .music-info {
       position: absolute;
+      padding: 0 20px 10px 30px;
       opacity: 0;
+      z-index: -1;
+      width: 80%;
+      left: 12%;
+      background-color: #e5e7eb;
+      border-top-right-radius: 20px;
+      border-top-left-radius: 20px;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+
+      &.playing {
+        opacity: 1;
+        transform: translateY(-100%);
+      }
+
+
+      .music-title {
+        font-size: 18px;
+        line-height: 26px;
+        padding: 10px 35px;
+      }
+
+      .progress-container {
+        width: 100%;
+        height: 10px;
+        background-color: white;
+        border: 1px solid gray;
+        border-radius: 10px;
+
+      }
     }
 
     .music-control__container {
@@ -148,18 +220,18 @@ $bar-height: 55px;
 }
 
 
-.fade-enter-from,
-.fade-leave-to {
+.expand-enter-from,
+.expand-leave-to {
   max-height: 0;
 }
 
-.fade-enter-to,
-.fade-leave-from {
+.expand-enter-to,
+.expand-leave-from {
   max-height: $bar-height;
 }
 
-.fade-enter-active,
-.fade-leave-active {
+.expand-enter-active,
+.expand-leave-active {
   transition: max-height 0.3s ease;
 }
 </style>
