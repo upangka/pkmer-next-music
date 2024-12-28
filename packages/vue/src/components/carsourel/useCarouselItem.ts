@@ -54,7 +54,7 @@ function useCarouselItem() {
     const prevActive = index === oldIndex
 
     animating.value = isCurrentActive || prevActive
-    console.log('当前元素', index, '是否移动', animating.value)
+    // console.log('当前元素', index, '是否移动', animating.value)
   }
 
   /**

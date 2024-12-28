@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { ref, reactive, watch, computed } from "vue";
 import { PkmerIcon } from "@pkmer-music-ui/vue/icon"
+import { formatTime } from "@pkmer-music/web/utils"
 import musicDemo from "@pkmer-music/web/assets/audio/黄昏(Dj版) - 刘汉成.mp3"
 const status = reactive({
   showPlayBar: false,
@@ -67,7 +68,7 @@ function updateProgress(e: Event) {
   const { currentTime, duration: totalTime } = srcElement
   const width = `${currentTime / totalTime * 100}%`;
   progressWidth.value = width
-  // console.log(`currentTime = ${currentTime}, totalTime = ${totalTime} 播放进度:${currentTime / totalTime * 100}%`)
+  console.log(`currentTime = ${currentTime}, totalTime = ${totalTime} 播放进度:${currentTime / totalTime * 100}%`)
   if ("100%" === width) {
     togglePlaying(false, false)
     progressWidth.value = '0%'
@@ -109,7 +110,11 @@ function jumpToTime(e: PointerEvent) {
           <div ref="progressContainerRef" class="progress-container" @pointerdown.prevent="jumpToTime">
             <div :style="{
               width: progressWidth
-            }" class="progress"></div>
+            }" class="progress">
+            </div>
+            <span class="current-time">
+              {{ formatTime(audioRef?.currentTime || 0) }} / {{ formatTime(audioRef?.duration ||
+                0) }}</span>
           </div>
         </div>
 
@@ -181,7 +186,7 @@ $bar-height: 55px;
   left: 0;
   right: 0;
   color: black;
-
+  z-index: $music-panel-z-index;
 
   .icon-btn {
     position: relative;
@@ -224,6 +229,7 @@ $bar-height: 55px;
       }
 
       .progress-container {
+        position: relative;
         width: 100%;
         height: 10px;
         background-color: white;
@@ -235,6 +241,34 @@ $bar-height: 55px;
           background-color: green;
           transition: width 0.1s linear;
         }
+
+        .current-time {
+          position: absolute;
+          left: 2%;
+          padding-top: 5px;
+          font-style: italic;
+          z-index: $music-time-z-indedx;
+        }
+      }
+    }
+
+    .music-control__container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+
+      .img-wrapper {
+        position: relative;
+        width: 110px;
+        height: 110px;
+        border-radius: 100%;
+        overflow: hidden;
+        left: 20%;
+        top: -50%;
+        z-index: $music-image-z-index;
+        animation: rotate 10s linear infinite;
+        animation-play-state: paused;
+
+        @keyframes rotate {}
       }
     }
 
