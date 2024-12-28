@@ -86,10 +86,10 @@ function updateProgress(e: Event) {
   const width = `${currentTime / totalTime * 100}%`;
   progressWidth.value = width
   // console.log(`currentTime = ${currentTime}, totalTime = ${totalTime} 播放进度:${currentTime / totalTime * 100}%`)
-  if ("100%" === width) {
-    togglePlaying(false, false)
-    progressWidth.value = '0%'
-  }
+  // if ("100%" === width) {
+  //   togglePlaying(false, false)
+  //   progressWidth.value = '0%'
+  // }
 }
 
 /**
@@ -117,7 +117,8 @@ function prevSong() {
   <section class="play-bar__container">
     <!-- 音乐源start -->
     <!-- 这里用key来表明这是一个新的元素，和react渲染树差不多 -->
-    <audio :key="currentSong.name" @timeupdate="updateProgress" :src="currentSong.link" ref="audioRef"></audio>
+    <audio :key="currentSong.name" @ended="nextSong" @timeupdate="updateProgress" :src="currentSong.link"
+      ref="audioRef"></audio>
     <!-- 音乐源end -->
     <!-- 显示隐藏按钮start -->
     <button class="icon-btn" @click="handleToggle">
