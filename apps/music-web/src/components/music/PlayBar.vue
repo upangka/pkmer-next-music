@@ -64,8 +64,8 @@ function handleToggle() {
 
         <!-- 音乐进度播放end -->
         <!-- 音乐控制面板start -->
-        <div class="music-control__container">
-          <div class="img-wrapper">
+        <div :class="['music-control__container']">
+          <div :class="['img-wrapper', status.isPlaying && 'playing']">
             <img src="https://i.pravatar.cc/300" alt="">
           </div>
 
@@ -189,6 +189,22 @@ $bar-height: 55px;
         overflow: hidden;
         left: 20%;
         top: -50%;
+        animation: rotate 10s linear infinite;
+        animation-play-state: paused;
+
+        @keyframes rotate {
+          from {
+            transform: rotate(0deg);
+          }
+
+          to {
+            transform: rotate(360deg);
+          }
+        }
+
+        &.playing {
+          animation-play-state: running;
+        }
 
         img {
           width: 100%;
