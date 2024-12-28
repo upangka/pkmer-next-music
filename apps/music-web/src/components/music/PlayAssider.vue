@@ -1,6 +1,7 @@
 <script lang="ts" setup>
-import { ref } from "vue";
-const showAssider = ref(false);
+import { storeToRefs } from "pinia"
+import { useMusicPannelStore } from "@pkmer-music/web/stores";
+const { showAssider } = storeToRefs(useMusicPannelStore())
 </script>
 
 <template>

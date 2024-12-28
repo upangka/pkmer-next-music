@@ -4,13 +4,13 @@ $header-height: 76px;
 * ================音乐面板层级==============================
 **/
 // 页面头部
-$music-header-z-index: 998;
+$music-header-z-index: 999;
 // 音乐侧边栏
-$music-assider-z-index: 999;
+$music-assider-z-index: 120;
 // 音乐面板-音乐信息展示
-$music-info-show-z-index: 10;
-$music-time-z-indedx: 16;
+$music-info-show-z-index: 100;
+$music-time-z-indedx: 160;
 // 音乐面板-图片
-$music-image-z-index: 20;
+$music-image-z-index: 200;
 // 音乐面板
-$music-panel-z-index: 15;
+$music-panel-z-index: 150;

@@ -3,6 +3,9 @@ import { ref, reactive, watch, computed } from "vue";
 import { PkmerIcon } from "@pkmer-music-ui/vue/icon"
 import { formatTime } from "@pkmer-music/web/utils"
 import { songs } from "@pkmer-music/web/assets/audio"
+import { useMusicPannelStore } from "@pkmer-music/web/stores"
+
+const musicPannelStore = useMusicPannelStore()
 
 const status = reactive({
   showPlayBar: true,
@@ -111,6 +114,16 @@ function prevSong() {
   status.currentIndex = (status.currentIndex - 1 + songs.length) % songs.length
 }
 
+/**
+ * 隐藏和现实asside
+ */
+function toggleMusicAsside() {
+  musicPannelStore.$patch((state) => {
+    state.showAssider = !state.showAssider
+  })
+}
+
+
 </script>
 
 <template>
@@ -188,7 +201,7 @@ function prevSong() {
               </button>
             </li>
             <li>
-              <button>
+              <button @click="toggleMusicAsside">
                 <PkmerIcon icon="material-symbols-light:menu-rounded" />
               </button>
             </li>
