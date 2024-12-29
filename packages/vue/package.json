@@ -62,6 +62,12 @@
         "types": "./dist/types/components/icon/index.d.ts",
         "default": "./dist/esm/components/icon/index.js"
       }
+    },
+    "./navigation": {
+      "import": {
+        "types": "./dist/types/components/navigation/index.d.ts",
+        "default": "./dist/esm/components/navigation/index.js"
+      }
     }
   }
 }

@@ -22,7 +22,7 @@ function getComponentEntries() {
     index: resolve(__dirname, 'src/index.ts'),
     components: resolve(__dirname, 'src/components/index.ts')
   }
-
+  console.log(componentDirs)
   componentDirs.forEach(component => {
     entries[component] = resolve(componentsDir, component, 'index.ts')
   })
