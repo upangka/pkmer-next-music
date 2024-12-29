@@ -1,12 +1,13 @@
 <script lang="ts" setup>
 import { provide, ref, watch } from 'vue'
-import { navigationKey } from './constansts'
+import { navigationKey, initItemGap } from './constansts'
 import type { NavItem } from './types'
 
 /**
   * 当前激活的选项卡
   */
 const currentItem = ref<NavItem | null>(null)
+const itemGap = ref(initItemGap)
 
 watch(currentItem, newNavItem => {
   console.log(newNavItem)
@@ -17,6 +18,7 @@ function updateCurrentActiveItem(activeCurrentItem: NavItem) {
 }
 
 provide(navigationKey, {
+  itemGap,
   currentActiveItem: currentItem,
   updateCurrentActiveItem
 })

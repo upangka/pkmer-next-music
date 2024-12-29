@@ -5,69 +5,41 @@ interface Props {
 </script>
 
 <script lang="ts" setup>
-import { nextTick, onMounted, ref, computed, type CSSProperties } from 'vue';
+import { nextTick, onMounted, ref } from 'vue';
 import type { NavItem } from "./types"
+import { initItemGap } from "./constansts"
 import { useNavContext } from "./useNavContext"
 const context = useNavContext()
 const slotContainerRef = ref<HTMLUListElement | null>(null)
-// 随机给一个很大的容器宽度，防止初始渲染的时候宽度为0
-const containerWidth = ref<number>(9999)
+
+const { itemGap = initItemGap } = defineProps<Props>()
 
 
-const { itemGap = 30 } = defineProps<Props>()
-
-const containerStyle = computed<CSSProperties>(() => {
-  return {
-    width: `${containerWidth.value}px`
-  }
-})
-
-
-
-/**
- * 确保所有子元素DOM渲染完成之后
- * 获取第一个子元素的距离以及宽度
- */
 onMounted(() => {
   nextTick(() => {
-    calcWidth()
+    const length = slotContainerRef.value?.children.length || 0
+    if (slotContainerRef.value && length > 0) {
+      const firstNavItem = slotContainerRef.value.children[0] as HTMLLIElement
+      initIndicator(firstNavItem)
+    }
   })
 })
-
 /**
- * 这里是用space-evenly布局，所以需要计算容器的宽度。才好计算offsetLeft
- * 其实可以采用flex-start来布局，然后间距用作用padding来实现，这样就不需要计算容器的宽度了。
+ * 初始化指示器，因为指示器只有点击具体title之后才会显示
+ * 这里需要提供初始值给它
  */
-function calcWidth() {
-  const length = slotContainerRef?.value?.children.length || 0
-  if (slotContainerRef.value && length > 0) {
-    const firstChild = slotContainerRef.value.children[0] as HTMLLIElement
-    // 统计每个元素的宽度以便确定容器的总宽度
-    const widths: number[] = []
-    for (let i = 0; i < length; i++) {
-      const children = slotContainerRef.value.children[i] as HTMLLIElement
-      widths.push(children.offsetWidth)
-    }
-
-    // 计算容器宽度 gap + width + gap
-    containerWidth.value = itemGap * (widths.length + 1) + widths.reduce((prev, curr) => prev + curr, 0)
-    console.log(widths)
-    console.log({
-      offsetLeft: firstChild.offsetLeft,
-      clientLeft: firstChild.clientLeft,
-      clientWidth: firstChild.clientWidth
-    })
-    context.updateCurrentActiveItem({
-      target: firstChild,
-      width: firstChild.offsetWidth + itemGap,
-      offsetX: itemGap / 2  // 这里不能用firstChildren.offsetLeft,因为我们现在width还没有计算出来。
-    } satisfies NavItem)
-  }
+function initIndicator(firstNavItem: HTMLLIElement) {
+  context.updateCurrentActiveItem({
+    target: firstNavItem,
+    offsetX: firstNavItem.offsetLeft,
+    width: firstNavItem.offsetWidth
+  })
 }
+
 </script>
 
 <template>
-  <ul :style="containerStyle" class="navigation-list" ref="slotContainerRef">
+  <ul class="navigation-list" ref="slotContainerRef">
     <slot></slot>
   </ul>
 </template>
@@ -76,10 +48,11 @@ function calcWidth() {
 .navigation-list {
   position: relative;
   padding: 10px 0px;
+  width: fit-content;
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-evenly;
+  justify-content: flex-start;
   border-bottom: 5px double black;
   border-top: 1px solid black;
 }

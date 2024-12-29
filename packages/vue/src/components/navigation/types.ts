@@ -10,6 +10,7 @@ export interface ActiveCurrentItem {
 }
 
 export type NavContext = {
-  currentActiveItem: Ref<NavItem | null>
-  updateCurrentActiveItem: ActiveCurrentItem
+  itemGap: Ref<number> // 间距
+  currentActiveItem: Ref<NavItem | null> // 当前激活的item
+  updateCurrentActiveItem: ActiveCurrentItem // 更新当前激活的item
 }
