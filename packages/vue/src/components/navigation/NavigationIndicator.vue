@@ -1,10 +1,29 @@
 <script lang="ts" setup>
+import { computed, type CSSProperties } from "vue"
+import { useNavContext } from "./useNavContext"
+
+
+const { currentActiveItem: activeItem } = useNavContext()
+
+const indicatorStyle = computed<CSSProperties>(() => {
+  if (!activeItem.value) return {}
+  return {
+    width: `${activeItem.value.width}px`,
+    transform: `translateX(${activeItem.value.offsetX}px)`,
+  }
+})
 </script>
 
 <template>
-  <div>
-    <slot></slot>
-  </div>
+  <div :style="indicatorStyle" class="indicator "></div>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.indicator {
+  position: absolute;
+  bottom: 0;
+  height: 4px;
+  background-color: #f87171;
+  transition: transform 0.3s linear, width 0.3s linear;
+}
+</style>

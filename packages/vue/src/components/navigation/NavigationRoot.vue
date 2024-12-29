@@ -1,4 +1,26 @@
 <script lang="ts" setup>
+import { provide, ref, watch } from 'vue'
+import { navigationKey } from './constansts'
+import type { NavItem } from './types'
+
+/**
+  * 当前激活的选项卡
+  */
+const currentItem = ref<NavItem | null>(null)
+
+watch(currentItem, newNavItem => {
+  console.log(newNavItem)
+})
+
+function updateCurrentActiveItem(activeCurrentItem: NavItem) {
+  currentItem.value = activeCurrentItem
+}
+
+provide(navigationKey, {
+  currentActiveItem: currentItem,
+  updateCurrentActiveItem
+})
+
 </script>
 
 <template>

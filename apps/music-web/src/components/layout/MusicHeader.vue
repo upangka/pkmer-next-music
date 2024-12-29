@@ -18,7 +18,7 @@ import { NavigationRoot, NavigationList, NavigationItem, NavigationIndicator } f
         <NavigationList>
           <NavigationItem>首页</NavigationItem>
           <NavigationItem>歌单</NavigationItem>
-          <NavigationItem>歌手</NavigationItem>
+          <NavigationItem>歌手杰</NavigationItem>
         </NavigationList>
         <NavigationIndicator />
       </NavigationRoot>
