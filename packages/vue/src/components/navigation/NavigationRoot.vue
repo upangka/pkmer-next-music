@@ -2,9 +2,13 @@
 </script>
 
 <template>
-  <nav>
+  <nav class="navigation-root">
     <slot></slot>
   </nav>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.navigation-root {
+  position: relative;
+}
+</style>

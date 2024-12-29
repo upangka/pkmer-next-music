@@ -4,14 +4,14 @@ interface IconProps {
   height?: number,
   icon: string
 }
-const { width, height, icon } = withDefaults(defineProps<IconProps>(), {
+const props = withDefaults(defineProps<IconProps>(), {
   width: 24,
   height: 24
 })
 </script>
 
 <template>
-  <iconify-icon :icon :width :height></iconify-icon>
+  <iconify-icon :icon="props.icon" :width="props.width" :height="props.height"></iconify-icon>
 </template>
 
 <style lang="scss" scoped></style>

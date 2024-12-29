@@ -1,7 +1,10 @@
 <script lang="ts" setup>
-import { ref } from 'vue'
+// import { ref } from 'vue'
 import { RouterLink } from 'vue-router'
-const inputFocusStatus = ref(true)
+// const inputFocusStatus = ref(true)
+
+import { NavigationRoot, NavigationList, NavigationItem, NavigationIndicator } from "@pkmer-music-ui/vue"
+// import { NavigationRoot } from "@pkmer-music-ui/vue/navigaton"
 </script>
 
 <template>
@@ -10,7 +13,17 @@ const inputFocusStatus = ref(true)
     <section class="flex items-center justify-start gap-3">
       <iconify-icon icon="tdesign:music-rectangle-add-filled" height="36"></iconify-icon>
       <h1 class="text-xl font-bold">Pkmer-Next-Music</h1>
-      <nav>
+
+      <NavigationRoot>
+        <NavigationList>
+          <NavigationItem>首页</NavigationItem>
+          <NavigationItem>歌单</NavigationItem>
+          <NavigationItem>歌手</NavigationItem>
+        </NavigationList>
+        <NavigationIndicator />
+      </NavigationRoot>
+
+      <!-- <nav>
         <ul class="flex items-center justify-start gap-6">
           <li>
             <RouterLink to="/">首页</RouterLink>
@@ -25,7 +38,7 @@ const inputFocusStatus = ref(true)
               class="w-80 rounded-md border border-gray-600 p-0.5 pl-5 focus:outline-none" />
           </li>
         </ul>
-      </nav>
+      </nav> -->
     </section>
     <!-- 左边end -->
     <!-- 右边start -->
@@ -37,7 +50,8 @@ const inputFocusStatus = ref(true)
 </template>
 
 <style lang="scss" scoped>
-@import "@pkmer-music/web/assets/styles/__variables.scss";
+/* @import "@pkmer-music/web/assets/styles/__variables.scss"; */
+@use "@pkmer-music/web/assets/styles/__variables.scss" as *;
 
 .header-container {
   height: $header-height;
