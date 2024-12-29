@@ -6,16 +6,18 @@ interface Props {
 
 <script lang="ts" setup>
 import { nextTick, onMounted, ref } from 'vue';
-import type { NavItem } from "./types"
-import { initItemGap } from "./constansts"
+import { initItemGap as itemGap } from "./constansts"
 import { useNavContext } from "./useNavContext"
 const context = useNavContext()
 const slotContainerRef = ref<HTMLUListElement | null>(null)
 
-const { itemGap = initItemGap } = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), {
+  itemGap: itemGap
+})
 
 
 onMounted(() => {
+  initItemGap()
   nextTick(() => {
     const length = slotContainerRef.value?.children.length || 0
     if (slotContainerRef.value && length > 0) {
@@ -24,6 +26,8 @@ onMounted(() => {
     }
   })
 })
+
+
 /**
  * 初始化指示器，因为指示器只有点击具体title之后才会显示
  * 这里需要提供初始值给它
@@ -34,6 +38,11 @@ function initIndicator(firstNavItem: HTMLLIElement) {
     offsetX: firstNavItem.offsetLeft,
     width: firstNavItem.offsetWidth
   })
+}
+
+
+function initItemGap() {
+  context.updateItemGap(props.itemGap)
 }
 
 </script>

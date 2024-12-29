@@ -230,7 +230,8 @@ function toggleMusicAsside() {
 </template>
 
 <style lang="scss" scoped>
-@import "@pkmer-music/web/assets/styles/__variables.scss";
+/* @import "@pkmer-music/web/assets/styles/__variables.scss"; */
+@use "@pkmer-music/web/assets/styles/__variables.scss" as pkmerVars;
 $bar-height: 55px;
 
 .play-bar__container {
@@ -239,7 +240,7 @@ $bar-height: 55px;
   left: 0;
   right: 0;
   color: black;
-  z-index: $music-panel-z-index;
+  z-index: pkmerVars.$music-panel-z-index;
 
   .icon-btn {
     position: relative;
@@ -269,7 +270,7 @@ $bar-height: 55px;
 
       &.playing {
         opacity: 1;
-        z-index: $music-info-show-z-index;
+        z-index: pkmerVars.$music-info-show-z-index;
         transform: translateY(-100%);
       }
 
@@ -300,7 +301,7 @@ $bar-height: 55px;
           left: 2%;
           padding-top: 5px;
           font-style: italic;
-          z-index: $music-time-z-indedx;
+          z-index: pkmerVars.$music-time-z-indedx;
         }
       }
     }
@@ -317,7 +318,7 @@ $bar-height: 55px;
         overflow: hidden;
         left: 20%;
         top: -50%;
-        z-index: $music-image-z-index;
+        z-index: pkmerVars.$music-image-z-index;
         animation: rotate 10s linear infinite;
         animation-play-state: paused;
 
@@ -337,7 +338,7 @@ $bar-height: 55px;
         overflow: hidden;
         left: 20%;
         top: -50%;
-        z-index: $music-image-z-index;
+        z-index: pkmerVars.$music-image-z-index;
         animation: rotate 10s linear infinite;
         animation-play-state: paused;
 

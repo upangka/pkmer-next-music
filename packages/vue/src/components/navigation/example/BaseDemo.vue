@@ -7,12 +7,14 @@ import NavigationIndicator from "../NavigationIndicator.vue"
 
 <template>
   <NavigationRoot>
-    <NavigationList>
-      <NavigationItem>Home</NavigationItem>
-      <NavigationItem>Profile</NavigationItem>
-      <NavigationItem>Messages</NavigationItem>
-      <NavigationIndicator />
+    <NavigationList :gap="30">
+      <NavigationItem>
+        <a href="/">首页</a>
+      </NavigationItem>
+      <NavigationItem>歌单</NavigationItem>
+      <NavigationItem>歌手杰</NavigationItem>
     </NavigationList>
+    <NavigationIndicator color="black" />
   </NavigationRoot>
 </template>
 

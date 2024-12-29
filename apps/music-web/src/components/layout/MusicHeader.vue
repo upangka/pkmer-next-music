@@ -15,12 +15,14 @@ import { NavigationRoot, NavigationList, NavigationItem, NavigationIndicator } f
       <h1 class="text-xl font-bold">Pkmer-Next-Music</h1>
 
       <NavigationRoot>
-        <NavigationList>
-          <NavigationItem>首页</NavigationItem>
+        <NavigationList :gap="30">
+          <NavigationItem>
+            <RouterLink to="/">首页</RouterLink>
+          </NavigationItem>
           <NavigationItem>歌单</NavigationItem>
           <NavigationItem>歌手杰</NavigationItem>
         </NavigationList>
-        <NavigationIndicator />
+        <NavigationIndicator color="black" />
       </NavigationRoot>
 
       <!-- <nav>

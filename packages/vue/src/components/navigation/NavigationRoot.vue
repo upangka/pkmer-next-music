@@ -17,8 +17,13 @@ function updateCurrentActiveItem(activeCurrentItem: NavItem) {
   currentItem.value = activeCurrentItem
 }
 
+function updateItemGap(newItemGap: number) {
+  itemGap.value = newItemGap
+}
+
 provide(navigationKey, {
   itemGap,
+  updateItemGap,
   currentActiveItem: currentItem,
   updateCurrentActiveItem
 })

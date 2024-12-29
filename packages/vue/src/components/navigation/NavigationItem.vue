@@ -13,7 +13,7 @@ const itemStyle = computed<CSSProperties>(() => {
 })
 
 function calcSize(e: MouseEvent): NavItem {
-  const target = e.target as HTMLElement
+  const target = e.currentTarget as HTMLElement
   return {
     target,
     offsetX: target.offsetLeft,
