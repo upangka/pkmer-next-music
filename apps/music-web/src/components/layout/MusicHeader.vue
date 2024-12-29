@@ -1,7 +1,10 @@
 <script lang="ts" setup>
+import { ref } from "vue"
 import { RouterLink } from 'vue-router'
 import { SearchInput } from '@pkmer-music/web/components';
 import { NavigationRoot, NavigationList, NavigationItem, NavigationIndicator, PkmerIcon } from "@pkmer-music-ui/vue"
+
+const showLoginIndicator = ref(false)
 </script>
 
 <template>
@@ -12,10 +15,9 @@ import { NavigationRoot, NavigationList, NavigationItem, NavigationIndicator, Pk
         <PkmerIcon icon="tdesign:music-rectangle-add-filled" :height="36" :width="36" />
         <h1 class="text-xl font-bold">Pkmer-Next-Music</h1>
       </div>
-
-      <div>
+      <div @click="showLoginIndicator = false">
         <NavigationRoot>
-          <NavigationList :gap="30">
+          <NavigationList :item-gap="30">
             <NavigationItem>
               <RouterLink to="/">首页</RouterLink>
             </NavigationItem>
@@ -25,14 +27,23 @@ import { NavigationRoot, NavigationList, NavigationItem, NavigationIndicator, Pk
               <SearchInput />
             </NavigationItem>
           </NavigationList>
-          <NavigationIndicator color="black" />
+          <NavigationIndicator color="black" v-show="!showLoginIndicator" />
         </NavigationRoot>
       </div>
 
       <!-- 右边start -->
-      <section class="flex justify-start gap-5">
-        <RouterLink to="/login">登录</RouterLink>
-      </section>
+      <NavigationRoot>
+        <NavigationList :item-gap="0">
+          <NavigationItem>
+            <section class="flex justify-start gap-5" @click="showLoginIndicator = !showLoginIndicator">
+              <RouterLink to="/login">登录</RouterLink>
+            </section>
+          </NavigationItem>
+        </NavigationList>
+        <NavigationIndicator color="black" v-show="showLoginIndicator" />
+      </NavigationRoot>
+
+
       <!-- 右边end -->
     </section>
     <!-- 左边end -->
