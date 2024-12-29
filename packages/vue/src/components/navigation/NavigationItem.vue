@@ -36,5 +36,10 @@ function handleClick(e: MouseEvent) {
 <style lang="scss" scoped>
 .nav-item {
   user-select: none;
+  cursor: pointer;
+
+  &:hover {
+    color: green
+  }
 }
 </style>

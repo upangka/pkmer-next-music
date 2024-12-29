@@ -46,6 +46,7 @@ const { songs } = musicPannelStore
   background-color: white;
   width: 300px;
   z-index: $music-assider-z-index;
+  box-shadow: -5px -5px 15px rgba(0, 0, 0, 0.2);
 
 
   .title {

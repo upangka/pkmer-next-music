@@ -241,6 +241,7 @@ $bar-height: 55px;
   right: 0;
   color: black;
   z-index: pkmerVars.$music-panel-z-index;
+  min-width: 1460px;
 
   .icon-btn {
     position: relative;
