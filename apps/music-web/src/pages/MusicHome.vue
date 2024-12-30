@@ -1,19 +1,18 @@
 <script lang="ts" setup>
-import { MusicHeader, MusicFooter, PlayAssider, PlayBar } from '@pkmer-music/web/components'
+import { MusicHeader, MusicFooter, MusicPlayPannel } from '@pkmer-music/web/components'
 
 import { PkmerContainer, PkmerMain, PkmerFooter, PkmerHeader } from '@pkmer-music-ui/vue/container'
 </script>
 
 <template>
-  <PkmerContainer class="min-w-[870px]">
+  <PkmerContainer>
     <PkmerHeader>
       <MusicHeader />
     </PkmerHeader>
 
     <PkmerMain class="main">
       <RouterView />
-      <PlayAssider />
-      <PlayBar />
+      <MusicPlayPannel />
     </PkmerMain>
 
     <PkmerFooter>
