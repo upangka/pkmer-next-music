@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * @author <a href="mailto:1193094618@qq.com">pkmer</a>
  * <br>
- * <a href = "https://gitee.com/developeros/videos-online">Code Repository</a>
  * At 2024/12/31
  */
 @SpringBootApplication
