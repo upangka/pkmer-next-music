@@ -22,7 +22,9 @@ const showLoginIndicator = ref(false)
               <RouterLink to="/">首页</RouterLink>
             </NavigationItem>
             <NavigationItem>歌单</NavigationItem>
-            <NavigationItem>歌手</NavigationItem>
+            <NavigationItem>
+              <RouterLink to="/singers">歌手</RouterLink>
+            </NavigationItem>
             <NavigationItem>
               <SearchInput />
             </NavigationItem>

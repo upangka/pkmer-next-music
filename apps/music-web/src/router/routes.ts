@@ -9,6 +9,11 @@ const routes: RouteRecordRaw[] = [
     children: [
       { path: '/', name: '音乐主体', component: MusicMain },
       {
+        path: '/singers',
+        name: '歌手列表',
+        component: () => import('@pkmer-music/web/pages/singer/SingerStyles.vue')
+      },
+      {
         path: '/login',
         name: '登录注册页面',
         component: () => import('@pkmer-music/web/pages/login/SignIn.vue')
