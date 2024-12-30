@@ -15,7 +15,7 @@ import songs from '@pkmer-music/web/assets/songs.json'
           </NavigationItem>
         </template>
       </NavigationList>
-      <NavigationIndicator color="#ec4899" />
+      <NavigationIndicator color="#eab308" />
     </NavigationRoot>
     <!-- 歌单列表展示start -->
     <section class="mt-3">

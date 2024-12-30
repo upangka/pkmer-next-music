@@ -1,5 +1,5 @@
 export enum SongPlayListEnum {
-  ALL,
+  ALL = 0,
   Chinese,
   Cantonese, // 粤语
   EuropeAndAmerica, // 欧美
