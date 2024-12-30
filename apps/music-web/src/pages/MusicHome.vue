@@ -22,9 +22,9 @@ import { PkmerContainer, PkmerMain, PkmerFooter, PkmerHeader } from '@pkmer-musi
   </PkmerContainer>
 </template>
 <style lang="scss" scoped>
-@import "@pkmer-music/web/assets/styles/__variables.scss";
+@use "@pkmer-music/web/assets/styles/__variables.scss" as PkmerVars;
 
 .main {
-  margin-top: $header-height;
+  margin-top: PkmerVars.$header-height;
 }
 </style>

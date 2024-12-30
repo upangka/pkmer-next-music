@@ -25,7 +25,7 @@ const { songs } = musicPannelStore
 </template>
 
 <style lang="scss" scoped>
-@import "@pkmer-music/web/assets/styles/__variables.scss";
+@use "@pkmer-music/web/assets/styles/__variables.scss" as PkmerVars;
 
 .fade-enter-active,
 .fade-leave-active {
@@ -40,12 +40,12 @@ const { songs } = musicPannelStore
 .assider-container {
   position: fixed;
   padding: 4px 12px;
-  top: $header-height;
+  top: PkmerVars.$header-height;
   bottom: 0;
   right: 0;
   background-color: white;
   width: 300px;
-  z-index: $music-assider-z-index;
+  z-index: PkmerVars.$music-assider-z-index;
   box-shadow: -5px -5px 15px rgba(0, 0, 0, 0.2);
 
 
