@@ -21,9 +21,11 @@ const showLoginIndicator = ref(false)
             <NavigationItem>
               <RouterLink to="/">首页</RouterLink>
             </NavigationItem>
-            <NavigationItem>歌单</NavigationItem>
             <NavigationItem>
-              <RouterLink @click="() => console.log('See me ???')" to="/singers">歌手</RouterLink>
+              <RouterLink to="/songs">歌单</RouterLink>
+            </NavigationItem>
+            <NavigationItem>
+              <RouterLink to="/singers">歌手</RouterLink>
             </NavigationItem>
             <NavigationItem>
               <SearchInput />

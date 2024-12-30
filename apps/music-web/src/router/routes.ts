@@ -8,6 +8,11 @@ const routes: RouteRecordRaw[] = [
     children: [
       { path: '/', name: '音乐主体', component: MusicMain },
       {
+        path: '/songs',
+        name: '歌单',
+        component: () => import('@pkmer-music/web/pages/song/SongPlayList.vue')
+      },
+      {
         path: '/singers',
         name: '歌手列表',
         component: () => import('@pkmer-music/web/pages/singer/SingerList.vue')
