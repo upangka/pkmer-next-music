@@ -66,5 +66,6 @@ const showLoginIndicator = ref(false)
   z-index: $music-header-z-index;
   background-color: white;
   min-width: 1460px;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
 }
 </style>

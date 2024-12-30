@@ -1,6 +1,6 @@
 <script lang="ts">
 interface Props {
-  color?: string
+  color?: string // 指示器颜色
 }
 </script>
 
@@ -32,5 +32,6 @@ const indicatorStyle = computed<CSSProperties>(() => {
   bottom: 0;
   height: 4px;
   transition: transform 0.3s linear, width 0.3s linear;
+  user-select: none;
 }
 </style>
