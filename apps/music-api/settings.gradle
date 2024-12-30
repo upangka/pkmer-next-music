@@ -1,2 +1,25 @@
+pluginManagement {
+    repositories {
+        maven{
+            name '阿里云镜像'
+            url 'https://maven.aliyun.com/repository/gradle-plugin'
+            artifactUrls 'https://maven.aliyun.com/nexus/content/repositories/gradle-plugin'
+        }
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
+dependencyResolutionManagement {
+    repositoriesMode = RepositoriesMode.FAIL_ON_PROJECT_REPOS
+    repositories {
+        maven {
+            name '阿里云镜像仓库'
+            url 'https://maven.aliyun.com/repository/public/'
+        }
+        mavenCentral()
+    }
+}
 rootProject.name = 'music-api'
+include 'music-main'
 

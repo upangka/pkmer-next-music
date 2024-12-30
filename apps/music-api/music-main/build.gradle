@@ -1,0 +1,12 @@
+plugins {
+    id 'base'
+    id 'java'
+    alias(libs.plugins.org.springframework.boot)
+}
+
+
+description "The main entry point of the program"
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+}

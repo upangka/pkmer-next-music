@@ -1,0 +1,10 @@
+[versions]
+org-springframework-boot="3.4.0"
+jjwt="0.12.6"
+lombok="1.18.36"
+
+[libraries]
+jjwt = {module = "io.jsonwebtoken:jjwt",version.ref="jjwt"}
+lombok = {module = "org.projectlombok:lombok",version.ref="lombok"}
+[plugins]
+org-springframework-boot={id = "org.springframework.boot",version.ref = "org-springframework-boot"}
