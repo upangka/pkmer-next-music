@@ -31,5 +31,6 @@ import songs from '@pkmer-music/web/assets/songs.json'
 
 .song-play-list__container {
   @include PkmerMixin.play-list__container();
+  margin-top: 10px;
 }
 </style>
