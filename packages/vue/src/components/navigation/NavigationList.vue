@@ -1,6 +1,7 @@
 <script lang="ts">
 interface Props {
-  itemGap?: number
+  itemGap?: number, // 标题间距
+  showBorder?: boolean  // 是否展示边框
 }
 </script>
 
@@ -12,7 +13,8 @@ const context = useNavContext()
 const slotContainerRef = ref<HTMLUListElement | null>(null)
 
 const props = withDefaults(defineProps<Props>(), {
-  itemGap: itemGap
+  itemGap: itemGap,
+  showBorder: true
 })
 
 
@@ -48,7 +50,7 @@ function initItemGap() {
 </script>
 
 <template>
-  <ul class="navigation-list" ref="slotContainerRef">
+  <ul :class="['navigation-list', props.showBorder && 'show-border']" ref="slotContainerRef">
     <slot></slot>
   </ul>
 </template>
@@ -62,7 +64,10 @@ function initItemGap() {
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
-  border-bottom: 5px double black;
-  border-top: 1px solid black;
+
+  &.show-border {
+    border-bottom: 5px double black;
+    border-top: 1px solid black;
+  }
 }
 </style>

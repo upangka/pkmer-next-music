@@ -4,9 +4,9 @@ import { NavigationIndicator, NavigationItem, NavigationList, NavigationRoot } f
 </script>
 
 <template>
-  <div>
+  <div class="singer-list__container">
     <NavigationRoot>
-      <NavigationList>
+      <NavigationList :show-border="false" :item-gap="10">
         <template v-for="singerStyle in singerStyles" :key="singerStyle.type">
           <NavigationItem>
             {{ singerStyle.name }}
@@ -18,4 +18,11 @@ import { NavigationIndicator, NavigationItem, NavigationList, NavigationRoot } f
   </div>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+@use "@pkmer-music/web/assets/styles/mixins.scss" as PkmerMixin;
+
+.singer-list__container {
+  @include PkmerMixin.play-list__container();
+  height: 100%;
+}
+</style>
