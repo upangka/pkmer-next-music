@@ -10,10 +10,18 @@
 # 用户界面
 
 Vue3 + Vite开发
+[music-web](./apps/music-web/)
 
 # 管理端
 
 React + NextJS开发
+[music-management](./apps/music-management/)
+
+# API 接口
+
+- springboot(3.4.1)
+
+[music api](./apps/music-api/)
 
 # 常用命令
 

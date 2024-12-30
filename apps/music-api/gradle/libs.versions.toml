@@ -1,5 +1,5 @@
 [versions]
-org-springframework-boot="3.4.0"
+org-springframework-boot="3.4.1"
 jjwt="0.12.6"
 lombok="1.18.36"
 
