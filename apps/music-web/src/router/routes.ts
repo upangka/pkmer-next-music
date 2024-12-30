@@ -1,6 +1,5 @@
 import type { RouteRecordRaw } from 'vue-router'
 import { MusicHome, MusicMain } from '@pkmer-music/web/pages'
-
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
@@ -11,7 +10,7 @@ const routes: RouteRecordRaw[] = [
       {
         path: '/singers',
         name: '歌手列表',
-        component: () => import('@pkmer-music/web/pages/singer/SingerStyles.vue')
+        component: () => import('@pkmer-music/web/pages/singer/SingerList.vue')
       },
       {
         path: '/login',

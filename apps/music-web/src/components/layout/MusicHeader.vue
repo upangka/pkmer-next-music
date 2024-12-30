@@ -23,7 +23,7 @@ const showLoginIndicator = ref(false)
             </NavigationItem>
             <NavigationItem>歌单</NavigationItem>
             <NavigationItem>
-              <RouterLink to="/singers">歌手</RouterLink>
+              <RouterLink @click="() => console.log('See me ???')" to="/singers">歌手</RouterLink>
             </NavigationItem>
             <NavigationItem>
               <SearchInput />
