@@ -10,12 +10,13 @@ def javaVersion = JavaVersion.VERSION_17.toString()
 allprojects {
     version = project.version
     group = project.group
+    java.toolchain.languageVersion.set(JavaLanguageVersion.of(javaVersion))
 }
 
 subprojects {
     apply plugin: 'java'
     apply plugin: 'io.spring.dependency-management'
-    java.toolchain.languageVersion.set(JavaLanguageVersion.of(javaVersion))
+
 
     dependencies {
         compileOnly(libs.lombok)

@@ -1,11 +1,27 @@
+buildscript {
+    dependencies {
+        classpath 'org.flywaydb:flyway-mysql:10.20.1'
+        classpath 'mysql:mysql-connector-java:8.0.30'
+    }
+}
+
 plugins {
     id 'java'
     alias(libs.plugins.org.springframework.boot)
+    alias(libs.plugins.flywaydb)
 }
 
 
-description "The main entry point of the program"
+description "The main entry point of the music server"
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
+}
+
+flyway{
+    url = "jdbc:mysql://localhost:3309/pkmer_music?useSSL=false&allowPublicKeyRetrieval=true"
+    driver = "com.mysql.cj.jdbc.Driver"
+    user = "root"
+    password = "Root.123456"
+    locations = ['classpath:db']
 }
