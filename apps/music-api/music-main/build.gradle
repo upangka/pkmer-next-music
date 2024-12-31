@@ -1,7 +1,8 @@
 buildscript {
     dependencies {
+        // 需要指定版本，用springboot管理的版本
         classpath 'org.flywaydb:flyway-mysql:10.20.1'
-        classpath 'mysql:mysql-connector-java:8.0.30'
+        classpath 'com.mysql:mysql-connector-j:9.1.0'
     }
 }
 
@@ -16,12 +17,11 @@ description "The main entry point of the music server"
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    // 使用springboot管理的版本
+    implementation 'org.flywaydb:flyway-mysql'
+    implementation 'com.mysql:mysql-connector-j'
 }
 
 flyway{
-    url = "jdbc:mysql://localhost:3309/pkmer_music?useSSL=false&allowPublicKeyRetrieval=true"
-    driver = "com.mysql.cj.jdbc.Driver"
-    user = "root"
-    password = "Root.123456"
-    locations = ['classpath:db']
+    configFiles = ['flyway.conf']
 }

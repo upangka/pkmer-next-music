@@ -8,3 +8,13 @@ docker compose up
 # 后台启动（静默）
 docker compose up -d
 ```
+
+# docker端口占用
+
+```shell
+net stop winnat
+net start winnat
+
+netstat -ano | findstr "8080"
+taskkill /f /pid id的数字
+```
