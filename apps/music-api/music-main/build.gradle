@@ -8,6 +8,7 @@ buildscript {
 
 plugins {
     id 'java'
+//    id 'java-library'
     alias(libs.plugins.org.springframework.boot)
     alias(libs.plugins.flywaydb)
 }
@@ -20,6 +21,7 @@ dependencies {
     // 使用springboot管理的版本
     implementation 'org.flywaydb:flyway-mysql'
     implementation 'com.mysql:mysql-connector-j'
+    implementation projects.musicFramework.pkmerBootStarterMinio
 }
 
 flyway{

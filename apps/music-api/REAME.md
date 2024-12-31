@@ -18,3 +18,8 @@ net start winnat
 netstat -ano | findstr "8080"
 taskkill /f /pid id的数字
 ```
+
+# 服务
+
+## Minio
+[http://localhost:9001/](http://localhost:9001/)

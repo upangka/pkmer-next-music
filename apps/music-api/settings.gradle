@@ -9,6 +9,10 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
+/**
+ * https://docs.gradle.org/current/userguide/declaring_dependencies_adv.html#sec:type-safe-project-accessors
+ */
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 dependencyResolutionManagement {
     repositoriesMode = RepositoriesMode.FAIL_ON_PROJECT_REPOS
@@ -22,4 +26,7 @@ dependencyResolutionManagement {
 }
 rootProject.name = 'music-api'
 include 'music-main'
+include 'music-framework'
+include 'music-framework:pkmer-boot-starter-minio'
+findProject(':music-framework:pkmer-boot-starter-minio')?.name = 'pkmer-boot-starter-minio'
 

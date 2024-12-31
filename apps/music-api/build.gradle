@@ -16,7 +16,7 @@ allprojects {
 subprojects {
     apply plugin: 'java'
     apply plugin: 'io.spring.dependency-management'
-
+    apply plugin: libs.plugins.org.springframework.boot.get().pluginId
 
     dependencies {
         compileOnly(libs.lombok)

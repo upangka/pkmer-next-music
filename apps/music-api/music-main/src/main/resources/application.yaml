@@ -4,3 +4,8 @@ spring:
       username: root
       password: Root.123456
       driver-class-name: com.mysql.cj.jdbc.Driver
+pkmer:
+  minio:
+    access-key: root
+    secret-key: Root.123456
+    url: http:localhost:9000
