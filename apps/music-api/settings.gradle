@@ -29,4 +29,5 @@ include 'music-main'
 include 'music-framework'
 include 'music-framework:pkmer-boot-starter-minio'
 findProject(':music-framework:pkmer-boot-starter-minio')?.name = 'pkmer-boot-starter-minio'
+include 'music-oss'
 
