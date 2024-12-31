@@ -1,12 +1,13 @@
 package io.gitee.pkmer.service;
 
-import io.minio.BucketExistsArgs;
-import io.minio.MakeBucketArgs;
-import io.minio.MinioClient;
-import io.minio.PutObjectArgs;
+import io.minio.*;
+import io.minio.errors.*;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 
 /**
  * Minio客户端封装
@@ -65,5 +66,21 @@ public class MinioService {
                 .contentType(contentType)
                 .build();
         client.putObject(args);
+    }
+
+
+    /**
+     * 下载资源
+     * @param bucketName 桶的名称
+     * @param objectName 要下载的内容
+     * @throws Exception
+     */
+    public InputStream downFile(String bucketName,String objectName) throws Exception {
+        System.out.printf("%s,%s\n",bucketName,objectName);
+        GetObjectArgs args = GetObjectArgs.builder()
+                .bucket(bucketName)
+                .object(objectName)
+                .build();
+        return client.getObject(args);
     }
 }
