@@ -1,6 +1,7 @@
 package io.gitee.pkmer.autoconfig;
 
 import io.gitee.pkmer.props.PkmerMinioProps;
+import io.gitee.pkmer.service.MinioService;
 import io.minio.MinioClient;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -18,9 +19,22 @@ import org.springframework.context.annotation.Bean;
 @EnableConfigurationProperties(PkmerMinioProps.class)
 public class PkmerMinioAutoConfiguration {
 
+    /**
+     * minio 客户端
+     * @param props minio配置信息
+     */
     @Bean
     public MinioClient minioClient(PkmerMinioProps props){
         return MinioClient.builder().endpoint(props.getUrl())
                 .credentials(props.getAccessKey(), props.getSecretKey()).build();
+    }
+
+    /**
+     * Minio封装类
+     * @param client MinioClient
+     */
+    @Bean
+    public MinioService minioHelper(MinioClient client){
+        return new MinioService(client);
     }
 }

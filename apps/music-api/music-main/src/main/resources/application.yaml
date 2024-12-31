@@ -1,4 +1,8 @@
 spring:
+  servlet:
+    multipart:
+      max-file-size: 60MB
+      max-request-size: 60MB
   datasource:
       url: jdbc:mysql://localhost:3309/pkmer_music?useSSL=false&allowPublicKeyRetrieval=true
       username: root
