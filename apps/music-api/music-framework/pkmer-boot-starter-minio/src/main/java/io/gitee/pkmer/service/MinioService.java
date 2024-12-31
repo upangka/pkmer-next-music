@@ -2,12 +2,17 @@ package io.gitee.pkmer.service;
 
 import io.minio.*;
 import io.minio.errors.*;
+import io.minio.messages.Item;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.stream.Streams;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * Minio客户端封装
@@ -82,5 +87,24 @@ public class MinioService {
                 .object(objectName)
                 .build();
         return client.getObject(args);
+    }
+
+
+    /**
+     * 获取一个桶下的所有文件
+     * @param bucketName 桶名称
+     * @throws Exception
+     */
+    public List<String> listFiles(String bucketName) throws Exception {
+        Iterable<Result<Item>> results = client.listObjects(
+                ListObjectsArgs.builder().bucket(bucketName).recursive(true).build());
+        List<String> files = new ArrayList<>();
+
+        for(Result<Item> r: results){
+            Item item = r.get();
+            if(item.isDir()) continue;
+            files.add(item.objectName());
+        }
+        return files;
     }
 }

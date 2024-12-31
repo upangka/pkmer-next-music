@@ -112,6 +112,14 @@ public class MusicFileController {
         headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_OCTET_STREAM_VALUE);
         return headers;
     }
+
+    /**
+     * 获取一个桶下的所有文件
+     */
+    @GetMapping("/{bucket}/listfiles")
+    public Object listFilesOfBucketName(@PathVariable("bucket") String bucket) throws Exception {
+       return  minioService.listFiles(bucket);
+    }
 }
 
 
