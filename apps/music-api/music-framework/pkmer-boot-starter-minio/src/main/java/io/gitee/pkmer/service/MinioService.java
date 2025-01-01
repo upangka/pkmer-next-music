@@ -2,9 +2,9 @@ package io.gitee.pkmer.service;
 
 import io.minio.*;
 import io.minio.errors.*;
+import io.minio.http.Method;
 import io.minio.messages.Item;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.stream.Streams;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,7 +12,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Minio客户端封装
@@ -106,5 +106,22 @@ public class MinioService {
             files.add(item.objectName());
         }
         return files;
+    }
+
+    /**
+     * 获取一个预签名的下载链接
+     * @param bucketName 桶的名臣
+     * @param objectName 对象名称
+     * @param expires 单位为小时
+     */
+    public String getPresignedObjectUrl(String bucketName,String objectName,Integer expires) throws Exception {
+        GetPresignedObjectUrlArgs args = GetPresignedObjectUrlArgs.builder()
+                .method(Method.GET)
+                .bucket(bucketName)
+                .object(objectName)
+                .expiry(1, TimeUnit.HOURS)
+                .build();
+
+        return client.getPresignedObjectUrl(args);
     }
 }

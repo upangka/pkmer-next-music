@@ -120,6 +120,23 @@ public class MusicFileController {
     public Object listFilesOfBucketName(@PathVariable("bucket") String bucket) throws Exception {
        return  minioService.listFiles(bucket);
     }
+
+    @GetMapping("/getPresignedObjectUrl")
+    public String getPresignedObjectUrl(
+            @RequestParam("bucketName")
+            String bucketName,
+            @RequestParam("objectName")
+            String objectName,
+            @RequestParam(value = "expires",required = false)
+            Integer expires) throws Exception {
+
+        if(expires == null || expires <= 0){
+            log.info("设置默认过期时间1days");
+            expires = 24;
+        }
+
+        return minioService.getPresignedObjectUrl(bucketName,objectName,expires);
+    }
 }
 
 
