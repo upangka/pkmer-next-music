@@ -39,4 +39,5 @@ include 'music-core:music-core-domain'
 findProject(':music-core:music-core-domain')?.name = 'music-core-domain'
 include 'music-core:music-core-infrastructure'
 findProject(':music-core:music-core-infrastructure')?.name = 'music-core-infrastructure'
+include 'music-mpg'
 
