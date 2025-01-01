@@ -17,13 +17,13 @@ description "The main entry point of the music server"
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
     // 使用springboot管理的版本
     implementation 'org.flywaydb:flyway-mysql'
     implementation 'com.mysql:mysql-connector-j'
-    implementation projects.musicOss
     implementation libs.mybatis.plus
     implementation libs.p6spy
+    implementation projects.musicOss
+//    implementation projects.musicCore.musicCoreInfrastructure
 }
 
 flyway{

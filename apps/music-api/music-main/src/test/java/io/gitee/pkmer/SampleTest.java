@@ -1,6 +1,8 @@
 package io.gitee.pkmer;
 
 import com.baomidou.mybatisplus.core.toolkit.Assert;
+import io.gitee.pkmer.entity.Banner;
+import io.gitee.pkmer.mapper.BannerMapper;
 import io.gitee.pkmer.entity.MybatisPlusTestUser;
 import io.gitee.pkmer.mapper.MybatisPlusTestUserMapper;
 import org.junit.jupiter.api.Test;
@@ -17,14 +19,24 @@ import java.util.List;
  */
 @SpringBootTest
 public class SampleTest {
+//    @Autowired
+//    MybatisPlusTestUserMapper mapper;
+
     @Autowired
-    MybatisPlusTestUserMapper mapper;
+    BannerMapper bannerMapper;
+
+//    @Test
+//    public void testSelect() {
+//        System.out.println(("----- selectAll method test ------"));
+//        List<MybatisPlusTestUser> userList = mapper.selectList(null);
+//        Assert.isTrue(5 == userList.size(), "");
+//        userList.forEach(System.out::println);
+//    }
 
     @Test
-    public void testSelect() {
-        System.out.println(("----- selectAll method test ------"));
-        List<MybatisPlusTestUser> userList = mapper.selectList(null);
-        Assert.isTrue(5 == userList.size(), "");
-        userList.forEach(System.out::println);
+    public void testId(){
+        Banner banner = new Banner();
+        banner.setPic("xxx");
+        bannerMapper.insert(banner);
     }
 }

@@ -16,8 +16,6 @@ decorator:
       # 自定义日志类
       logging: custom
       custom-appender-class: io.gitee.pkmer.logger.StdoutLogger
-      log-filter:
-        pattern:
 
 pkmer:
   minio:

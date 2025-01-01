@@ -1,0 +1,6 @@
+
+description "数据服务基础层"
+
+dependencies {
+    implementation libs.mybatis.plus
+}

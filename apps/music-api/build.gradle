@@ -24,11 +24,28 @@ subprojects {
         testCompileOnly(libs.lombok)
         testAnnotationProcessor(libs.lombok)
         annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
         testImplementation platform('org.junit:junit-bom:5.9.1')
         testImplementation 'org.junit.jupiter:junit-jupiter'
     }
 
     test {
         useJUnitPlatform()
+    }
+
+    /**
+     * 排除springboot main 启动类
+     */
+    tasks.named('bootJar') {
+        enabled = false
+    }
+    /**
+     * 处理
+     * pkmer-boot-common-1.1.0.jar
+     * 而是
+     * pkmer-boot-common-1.1.0-plain.jar
+     */
+    tasks.named('jar') {
+        archiveClassifier.set('')
     }
 }
