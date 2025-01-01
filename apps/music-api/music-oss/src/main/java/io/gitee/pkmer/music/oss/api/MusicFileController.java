@@ -1,6 +1,6 @@
 package io.gitee.pkmer.music.oss.api;
 
-import io.gitee.pkmer.service.MinioService;
+import io.gitee.pkmer.service.MinioAdapter;
 import io.minio.MinioClient;
 import io.minio.errors.*;
 import io.minio.messages.Bucket;
@@ -36,7 +36,7 @@ public class MusicFileController {
     @Setter(onMethod_ = @Autowired)
     private MinioClient minioClient;
     @Setter(onMethod_ = @Autowired)
-    private MinioService minioService;
+    private MinioAdapter minioAdapter;
 
     @GetMapping("/listBuckets")
     public Object listBuckets() throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
@@ -56,7 +56,7 @@ public class MusicFileController {
             objectName = uploadFile.getOriginalFilename();
         }
 
-        minioService.uploadFile(
+        minioAdapter.uploadFile(
                 uploadFile.getInputStream(),
                 objectName,
                 bucketName,
@@ -82,7 +82,7 @@ public class MusicFileController {
             @RequestParam("filename") String fileName) {
         // 在springmvc 中已经解码了： Summer Dance & Ya! 现场版 李贞贤.mp3
         log.info("准备下载{}", fileName);
-        try (InputStream inputStream = minioService.downFile(bucketName, fileName)) {
+        try (InputStream inputStream = minioAdapter.downFile(bucketName, fileName)) {
             byte[] content = inputStream.readAllBytes();
             ByteArrayResource resource = new ByteArrayResource(content);
             return ResponseEntity.ok()
@@ -118,7 +118,7 @@ public class MusicFileController {
      */
     @GetMapping("/{bucket}/listfiles")
     public Object listFilesOfBucketName(@PathVariable("bucket") String bucket) throws Exception {
-       return  minioService.listFiles(bucket);
+       return  minioAdapter.listFiles(bucket);
     }
 
     @GetMapping("/getPresignedObjectUrl")
@@ -135,7 +135,7 @@ public class MusicFileController {
             expires = 24;
         }
 
-        return minioService.getPresignedObjectUrl(bucketName,objectName,expires);
+        return minioAdapter.getPresignedObjectUrl(bucketName,objectName,expires);
     }
 }
 

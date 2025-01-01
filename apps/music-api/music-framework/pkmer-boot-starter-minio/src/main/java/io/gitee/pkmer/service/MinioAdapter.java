@@ -1,15 +1,11 @@
 package io.gitee.pkmer.service;
 
 import io.minio.*;
-import io.minio.errors.*;
 import io.minio.http.Method;
 import io.minio.messages.Item;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.IOException;
 import java.io.InputStream;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -22,9 +18,9 @@ import java.util.concurrent.TimeUnit;
  * At 2024/12/31
  */
 @Slf4j
-public class MinioService {
+public class MinioAdapter {
     private final MinioClient client;
-    public MinioService(MinioClient client){
+    public MinioAdapter(MinioClient client){
         this.client = client;
     }
 

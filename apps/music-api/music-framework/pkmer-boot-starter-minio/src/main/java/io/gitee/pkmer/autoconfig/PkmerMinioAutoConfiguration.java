@@ -1,7 +1,7 @@
 package io.gitee.pkmer.autoconfig;
 
 import io.gitee.pkmer.props.PkmerMinioProps;
-import io.gitee.pkmer.service.MinioService;
+import io.gitee.pkmer.service.MinioAdapter;
 import io.minio.MinioClient;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -34,7 +34,7 @@ public class PkmerMinioAutoConfiguration {
      * @param client MinioClient
      */
     @Bean
-    public MinioService minioHelper(MinioClient client){
-        return new MinioService(client);
+    public MinioAdapter minioHelper(MinioClient client){
+        return new MinioAdapter(client);
     }
 }
