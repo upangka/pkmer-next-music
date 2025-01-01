@@ -19,9 +19,17 @@ React + NextJS开发
 
 # API 接口
 
-- springboot(3.4.1)
-
 [music api](./apps/music-api/)
+
+## 技术栈
+
+- springboot(3.4.1)
+- mybatis-plus(3.5.9)
+
+## 基础服务
+
+- mysql
+- minio
 
 # 常用命令
 

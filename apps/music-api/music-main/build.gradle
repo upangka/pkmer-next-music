@@ -21,9 +21,9 @@ dependencies {
     // 使用springboot管理的版本
     implementation 'org.flywaydb:flyway-mysql'
     implementation 'com.mysql:mysql-connector-j'
-    implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.10.0'
     implementation projects.musicOss
     implementation libs.mybatis.plus
+    implementation libs.p6spy
 }
 
 flyway{
