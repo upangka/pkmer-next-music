@@ -1,5 +1,6 @@
 package io.gitee.pkmer;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.RestController;
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
  * At 2024/12/31
  */
 @SpringBootApplication
-@RestController
+@MapperScan("io.gitee.pkmer.mapper")
 public class MusicApplication {
 
     public static void main(String[] args) {
