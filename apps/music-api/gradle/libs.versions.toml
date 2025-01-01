@@ -4,10 +4,12 @@ jjwt="0.12.6"
 lombok="1.18.36"
 flywaydb="11.1.0"
 minio="8.5.11"
+mybatis-plus="3.5.9"
 [libraries]
 jjwt = {module = "io.jsonwebtoken:jjwt",version.ref="jjwt"}
 lombok = {module = "org.projectlombok:lombok",version.ref="lombok"}
 minio={module="io.minio:minio",version.ref="minio"}
+mybatis-plus={module="com.baomidou:mybatis-plus-spring-boot3-starter",version.ref="mybatis-plus"}
 [plugins]
 org-springframework-boot={id = "org.springframework.boot",version.ref = "org-springframework-boot"}
 flywaydb={id = "org.flywaydb.flyway",version.ref="flywaydb"}
