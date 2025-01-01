@@ -8,6 +8,17 @@ spring:
       username: root
       password: Root.123456
       driver-class-name: com.mysql.cj.jdbc.Driver
+decorator:
+  datasource:
+    p6spy:
+      # 日志格式
+      log-format: "\ntime:%(executionTime) || sql:%(sql)\n"
+      # 自定义日志类
+      logging: custom
+      custom-appender-class: io.gitee.pkmer.logger.StdoutLogger
+      log-filter:
+        pattern:
+
 pkmer:
   minio:
     access-key: root
