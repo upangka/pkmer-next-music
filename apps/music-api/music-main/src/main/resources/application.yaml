@@ -22,3 +22,12 @@ pkmer:
     access-key: root
     secret-key: Root.123456
     url: http:localhost:9000
+
+mybatis:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+logging:
+  level:
+    mybatis: DEBUG
+    org.mybatis: DEBUG

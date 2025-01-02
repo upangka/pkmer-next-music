@@ -18,11 +18,13 @@ subprojects {
     apply plugin: 'io.spring.dependency-management'
     apply plugin: libs.plugins.org.springframework.boot.get().pluginId
 
+
     dependencies {
         compileOnly(libs.lombok)
         annotationProcessor(libs.lombok)
         testCompileOnly(libs.lombok)
         testAnnotationProcessor(libs.lombok)
+        implementation platform(libs.pkmer.boot)
         annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
         testImplementation platform('org.junit:junit-bom:5.9.1')

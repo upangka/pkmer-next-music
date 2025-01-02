@@ -1,9 +1,6 @@
 
 description = "使用mybatis plus生成器"
 
-dependencies{
-    implementation libs.mybatis.plus.generator
-    implementation libs.mybatis.plus
-    implementation 'com.mysql:mysql-connector-j'
-    implementation 'org.freemarker:freemarker:2.3.31'
+dependencies {
+    implementation "io.gitee.pkmer:pkmer-boot-starter-mybatis"
 }

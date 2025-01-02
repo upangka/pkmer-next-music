@@ -17,6 +17,10 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 dependencyResolutionManagement {
     repositoriesMode = RepositoriesMode.FAIL_ON_PROJECT_REPOS
     repositories {
+        maven{
+            name '本地仓库'
+            url 'file:///D:/mavenRepository'
+        }
         maven {
             name '阿里云镜像仓库'
             url 'https://maven.aliyun.com/repository/public/'

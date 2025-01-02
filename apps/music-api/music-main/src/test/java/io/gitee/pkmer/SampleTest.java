@@ -1,15 +1,7 @@
 package io.gitee.pkmer;
 
-import com.baomidou.mybatisplus.core.toolkit.Assert;
-import io.gitee.pkmer.entity.Banner;
-import io.gitee.pkmer.mapper.BannerMapper;
-import io.gitee.pkmer.entity.MybatisPlusTestUser;
-import io.gitee.pkmer.mapper.MybatisPlusTestUserMapper;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.List;
+import org.springframework.boot.test.context.SpringBootTest;
 
 /**
  * @author <a href="mailto:1193094618@qq.com">pkmer</a>
@@ -22,8 +14,6 @@ public class SampleTest {
 //    @Autowired
 //    MybatisPlusTestUserMapper mapper;
 
-    @Autowired
-    BannerMapper bannerMapper;
 
 //    @Test
 //    public void testSelect() {
@@ -33,10 +23,4 @@ public class SampleTest {
 //        userList.forEach(System.out::println);
 //    }
 
-    @Test
-    public void testId(){
-        Banner banner = new Banner();
-        banner.setPic("xxx");
-        bannerMapper.insert(banner);
-    }
 }
