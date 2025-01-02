@@ -1,0 +1,8 @@
+plugins{
+    id "java-library"
+}
+
+dependencies {
+    api "io.gitee.pkmer:pkmer-boot-ddd"
+    api projects.musicCore.musicCoreInfrastructure
+}

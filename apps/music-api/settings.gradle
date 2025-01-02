@@ -44,4 +44,6 @@ findProject(':music-core:music-core-domain')?.name = 'music-core-domain'
 include 'music-core:music-core-infrastructure'
 findProject(':music-core:music-core-infrastructure')?.name = 'music-core-infrastructure'
 include 'music-mpg'
+include 'music-core:music-types'
+findProject(':music-core:music-types')?.name = 'music-types'
 
