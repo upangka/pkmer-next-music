@@ -21,8 +21,7 @@ dependencies {
     implementation 'org.flywaydb:flyway-mysql'
     implementation 'com.mysql:mysql-connector-j'
     implementation projects.musicOss
-    implementation projects.musicCore.musicCoreInterface
-    implementation projects.musicCore.musicCoreInfrastructure
+    implementation projects.musicCore.musicInterface.musicInterfaceWeb
 }
 
 flyway{

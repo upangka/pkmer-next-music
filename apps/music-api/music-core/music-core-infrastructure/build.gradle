@@ -1,9 +1,0 @@
-plugins{
-    id "java-library"
-}
-
-description "数据服务基础层"
-
-dependencies {
-    api "io.gitee.pkmer:pkmer-boot-starter-mybatis"
-}

@@ -24,11 +24,16 @@ subprojects {
         annotationProcessor(libs.lombok)
         testCompileOnly(libs.lombok)
         testAnnotationProcessor(libs.lombok)
-        implementation platform(libs.pkmer.boot)
+        implementation libs.mapstruct
+        annotationProcessor libs.mapstruct.processor
         annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
         testImplementation platform('org.junit:junit-bom:5.9.1')
         testImplementation 'org.junit.jupiter:junit-jupiter'
+
+        implementation platform(libs.pkmer.boot)
+        implementation "io.gitee.pkmer:pkmer-boot-convention"
+        implementation "io.gitee.pkmer:pkmer-boot-ddd"
     }
 
     test {

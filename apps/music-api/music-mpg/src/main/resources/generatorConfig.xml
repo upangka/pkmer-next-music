@@ -33,9 +33,9 @@
             <property name="useJSR310Types" value="true" />
         </javaTypeResolver>
 
-        <javaModelGenerator targetPackage="io.gitee.pkmer.core.infrastructure.dao.model.banner" targetProject="src/main/java" />
+        <javaModelGenerator targetPackage="io.gitee.pkmer.core.infrastructure.persistence.banner.mybatis" targetProject="src/main/java" />
         <sqlMapGenerator targetPackage="mapper" targetProject="src/main/resources"/>
-        <javaClientGenerator type="XMLMAPPER" targetPackage="io.gitee.pkmer.core.infrastructure.dao.mapper.banner" targetProject="src/main/java"/>
+        <javaClientGenerator type="XMLMAPPER" targetPackage="io.gitee.pkmer.core.infrastructure.persistence.banner.mybatis" targetProject="src/main/java"/>
 
         <!--        <table tableName="coupon" mapperName="CouponDynamicMapper">-->
         <!--            <columnOverride column="status" javaType="org.hzz.promotions.types.enums.coupon.CouponStatus"/>-->

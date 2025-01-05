@@ -1,0 +1,7 @@
+plugins{
+    id "java-library"
+}
+dependencies {
+    implementation "io.gitee.pkmer:pkmer-boot-starter-mybatis"
+    api projects.musicCore.musicDomain
+}

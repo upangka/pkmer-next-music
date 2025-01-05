@@ -1,0 +1,5 @@
+
+dependencies {
+    implementation projects.musicCore.musicInfrastructure.musicInfrastructurePersistence
+    implementation projects.musicCore.musicDomain
+}
