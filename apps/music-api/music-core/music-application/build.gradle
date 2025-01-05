@@ -1,5 +1,6 @@
 
 dependencies {
+    implementation "org.springframework:spring-tx"
     implementation projects.musicCore.musicInfrastructure.musicInfrastructurePersistence
     implementation projects.musicCore.musicDomain
 }

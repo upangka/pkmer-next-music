@@ -1,5 +1,5 @@
 [versions]
-pkmer-boot="1.3.2"
+pkmer-boot="1.3.3"
 org-springframework-boot="3.4.1"
 lombok="1.18.36"
 flywaydb="11.1.0"
