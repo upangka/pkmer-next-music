@@ -7,7 +7,7 @@ CREATE TABLE `song_list`
     `introduction` text,
     `style`        varchar(10)  DEFAULT '无',
     PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='歌单表';
 
 INSERT INTO `song_list`
 VALUES (1, 'The Good, the Bad and the Ugly', '/img/songListPic/a32415ca9a21f6f9a1d99b2731f224b5d319c424.jpg',

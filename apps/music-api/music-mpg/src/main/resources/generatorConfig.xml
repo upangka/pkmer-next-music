@@ -33,20 +33,12 @@
             <property name="useJSR310Types" value="true" />
         </javaTypeResolver>
 
-        <javaModelGenerator targetPackage="io.gitee.pkmer.core.infrastructure.persistence.banner.mybatis" targetProject="src/main/java" />
+        <javaModelGenerator targetPackage="io.gitee.pkmer.core.infrastructure.persistence.songlist.mybatis" targetProject="src/main/java" />
         <sqlMapGenerator targetPackage="mapper" targetProject="src/main/resources"/>
-        <javaClientGenerator type="XMLMAPPER" targetPackage="io.gitee.pkmer.core.infrastructure.persistence.banner.mybatis" targetProject="src/main/java"/>
+        <javaClientGenerator type="XMLMAPPER" targetPackage="io.gitee.pkmer.core.infrastructure.persistence.songlist.mybatis" targetProject="src/main/java"/>
 
-        <!--        <table tableName="coupon" mapperName="CouponDynamicMapper">-->
-        <!--            <columnOverride column="status" javaType="org.hzz.promotions.types.enums.coupon.CouponStatus"/>-->
-        <!--            <columnOverride column="discount_type" javaType="org.hzz.promotions.types.enums.coupon.DiscountType"/>-->
-        <!--            <columnOverride column="obtain_way" javaType="org.hzz.promotions.types.enums.coupon.ObtainWay"/>-->
-        <!--        </table>-->
-        <!--        <table tableName="coupon_scope" mapperName="CouponScopeDynamicMapper">-->
-        <!--            <columnOverride column="type" javaType="org.hzz.promotions.types.enums.coupon.CouponScopeType"/>-->
-        <!--        </table>-->
-        <!--        <table tableName="points_board"/>-->
-        <table tableName="banner" mapperName="BannerDynamicMapper" />
+<!--        <table tableName="banner" mapperName="BannerDynamicMapper" />-->
+        <table tableName="song_list" mapperName="SongListDynamicMapper" />
     </context>
 
 
