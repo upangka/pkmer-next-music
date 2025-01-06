@@ -2,6 +2,18 @@
 outline: deep
 ---
 
+# 后端技术栈
+
+- Java17
+- SpringBoot3
+- MyBatis Dynamic
+- DDD 四层架构
+- [Knife4j 接口文档](https://doc.xiaominfo.com/)
+- Docker
+- MySQL8
+- Redis
+- Minio
+
 # API接口文档
 
 > [!important]
