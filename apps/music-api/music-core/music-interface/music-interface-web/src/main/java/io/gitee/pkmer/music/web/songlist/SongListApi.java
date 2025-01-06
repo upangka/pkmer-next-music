@@ -1,6 +1,7 @@
 package io.gitee.pkmer.music.web.songlist;
 
 import io.gitee.pkmer.convention.result.Result;
+import io.gitee.pkmer.music.web.songlist.resp.AddSongListReq;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -34,7 +35,7 @@ public interface SongListApi {
      */
     @Operation(summary = "添加歌单")
     @PostMapping
-    Result<Void> addSongList(@RequestBody SongListReq songList);
+    Result<Void> addSongList(@RequestBody AddSongListReq songList);
 
 
 

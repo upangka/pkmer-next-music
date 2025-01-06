@@ -3,7 +3,10 @@ package io.gitee.pkmer.music.web.songlist;
 import io.gitee.pkmer.convention.controller.BaseController;
 import io.gitee.pkmer.convention.result.Result;
 import io.gitee.pkmer.ddd.shared.dispatch.CmdDispatcher;
+import io.gitee.pkmer.music.application.songlist.add.AddSongListCmd;
 import io.gitee.pkmer.music.application.songlist.delete.DeleteSongListCmd;
+import io.gitee.pkmer.music.web.songlist.converter.AddSongListConverter;
+import io.gitee.pkmer.music.web.songlist.resp.AddSongListReq;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,12 +23,14 @@ public class SongListController extends BaseController implements SongListApi{
     @Setter(onMethod_ = @Autowired)
     private CmdDispatcher cmdDispatcher;
 
+    @Setter(onMethod_ = @Autowired)
+    private AddSongListConverter songListConverter;
+
     @Override
     public Result<Void> delete(String id) {
         Long id_ = 0L;
         try{
             id_ = Long.parseLong(id);
-
         }catch (Exception e){
             return Result.error("id不正确");
         }
@@ -35,7 +40,11 @@ public class SongListController extends BaseController implements SongListApi{
     }
 
     @Override
-    public Result<Void> addSongList(SongListReq songList) {
-        return null;
+    public Result<Void> addSongList(AddSongListReq songList) {
+        AddSongListCmd cmd = songListConverter.convertFrom(songList);
+        cmdDispatcher.dispatch(cmd);
+        return success();
     }
+
+
 }

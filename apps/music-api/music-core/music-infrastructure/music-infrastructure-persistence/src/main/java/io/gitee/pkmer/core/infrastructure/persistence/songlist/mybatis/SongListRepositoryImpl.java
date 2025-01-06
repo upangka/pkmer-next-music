@@ -1,14 +1,13 @@
 package io.gitee.pkmer.core.infrastructure.persistence.songlist.mybatis;
 
-import io.gitee.pkmer.music.domain.song.SongListAggregate;
-import io.gitee.pkmer.music.domain.song.SongListBuilder;
-import io.gitee.pkmer.music.domain.song.SongListId;
-import io.gitee.pkmer.music.domain.song.SongListRepository;
+import io.gitee.pkmer.music.domain.song.*;
 import org.mybatis.dynamic.sql.delete.render.DeleteStatementProvider;
 import org.mybatis.dynamic.sql.render.RenderingStrategies;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.mybatis.dynamic.sql.SqlBuilder.deleteFrom;
 import static org.mybatis.dynamic.sql.SqlBuilder.isEqualTo;
@@ -22,8 +21,10 @@ import static io.gitee.pkmer.core.infrastructure.persistence.songlist.mybatis.So
 @Repository
 public class SongListRepositoryImpl implements SongListRepository {
     private final SongListDynamicMapper songListMapper;
-    public SongListRepositoryImpl(SongListDynamicMapper songListDynamicMapper){
+    private final SongListBuilderFactory songListBuilderFactory;
+    public SongListRepositoryImpl(SongListDynamicMapper songListDynamicMapper,SongListBuilderFactory songListBuilderFactory){
         this.songListMapper = songListDynamicMapper;
+        this.songListBuilderFactory = songListBuilderFactory;
     }
 
     @Override
@@ -32,7 +33,7 @@ public class SongListRepositoryImpl implements SongListRepository {
                 c -> c.where(id,isEqualTo(songListId.value())));
         if(optionalSongList.isPresent()){
             SongList songList = optionalSongList.get();
-            SongListAggregate aggregate = SongListBuilder.builder()
+            SongListAggregate aggregate = songListBuilderFactory.createSongListBuilder()
                     .id(songList.getId())
                     .pic(songList.getPic())
                     .title(songList.getTitle())
@@ -49,9 +50,26 @@ public class SongListRepositoryImpl implements SongListRepository {
     @Override
     public void save(SongListAggregate aggregateRoot) {
         switch (aggregateRoot.getChangingStatus()){
+            case NEW -> insertAggregate(aggregateRoot);
             case DELETED -> deleteAggregate(aggregateRoot);
             default -> throw new UnsupportedOperationException("未实现");
         }
+    }
+
+
+    private void insertAggregate(SongListAggregate aggregateRoot){
+        SongList record = new SongList();
+        List<Style> styles = aggregateRoot.getStyles();
+        String style = styles.stream().map(Style::getDesc)
+                .collect(Collectors.joining("-"));
+
+        record.setTitle(aggregateRoot.getTitle());
+        record.setPic(aggregateRoot.getPic());
+        record.setStyle(style);
+        record.setIntroduction(aggregateRoot.getIntroduction());
+
+        // todo 歌曲与歌单的关联
+        songListMapper.insert(record);
     }
 
     private void deleteAggregate(SongListAggregate aggregateRoot){

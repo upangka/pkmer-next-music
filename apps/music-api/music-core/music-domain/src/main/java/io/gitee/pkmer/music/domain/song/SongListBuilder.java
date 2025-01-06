@@ -1,7 +1,13 @@
 package io.gitee.pkmer.music.domain.song;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
 
 /**
  * SongList聚合构建工厂
@@ -11,15 +17,19 @@ import java.util.List;
  * At 2025/1/5
  */
 public class SongListBuilder {
+
+    private final StyleValidator styleValidator;
+
     private Long id;
     private String title;
     private String pic;
     private String styles;
     private String introduction;
 
-    public static SongListBuilder builder(){
-        return new SongListBuilder();
+     SongListBuilder(StyleValidator styleValidator){
+        this.styleValidator = styleValidator;
     }
+
 
     public SongListBuilder id(Long id) {
         this.id = id;
@@ -50,6 +60,8 @@ public class SongListBuilder {
         List<Style> songListStyles = buildStyle();
         SongListId songListId = buildId();
 
+        validate();
+
         return SongListAggregate.builder()
                 .id(songListId)
                 .pic(pic)
@@ -57,6 +69,7 @@ public class SongListBuilder {
                 .styles(songListStyles)
                 .introduction(introduction)
                 .build();
+
     }
 
     private List<Style> buildStyle(){
@@ -71,4 +84,7 @@ public class SongListBuilder {
         return new SongListId(id);
     }
 
+    private void validate(){
+        styleValidator.validate(styles);
+    }
 }

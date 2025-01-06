@@ -1,6 +1,7 @@
 package io.gitee.pkmer.music.domain.song;
 
 import io.gitee.pkmer.ddd.shared.ValueObject;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -20,6 +21,7 @@ public enum Style implements ValueObject {
     BGM("BGM",6),
     Instrumental("器乐",7);
 
+    @Getter
     final String desc;
     final Integer value;
 
