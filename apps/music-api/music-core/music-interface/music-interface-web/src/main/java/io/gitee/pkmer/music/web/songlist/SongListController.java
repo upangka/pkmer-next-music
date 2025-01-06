@@ -22,14 +22,16 @@ public class SongListController extends BaseController implements SongListApi{
 
     @Override
     public Result<Void> delete(String id) {
+        Long id_ = 0L;
         try{
-            Long id_ = Long.parseLong(id);
-            DeleteSongListCmd cmd = DeleteSongListCmd.commandOf(id_);
-            cmdDispatcher.dispatch(cmd);
-            return success();
+            id_ = Long.parseLong(id);
+
         }catch (Exception e){
             return Result.error("id不正确");
         }
+        DeleteSongListCmd cmd = DeleteSongListCmd.commandOf(id_);
+        cmdDispatcher.dispatch(cmd);
+        return success();
     }
 
     @Override

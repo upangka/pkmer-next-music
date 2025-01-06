@@ -1,5 +1,8 @@
-
+plugins{
+    id 'java-library'
+}
 dependencies {
     implementation "org.springframework:spring-web"
     implementation projects.musicCore.musicApplication
+    api libs.knife4j
 }

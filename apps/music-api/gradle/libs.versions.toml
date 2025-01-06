@@ -6,11 +6,12 @@ flywaydb="11.1.0"
 minio="8.5.11"
 mapstruct = "1.6.3"
 mapstruct-processor = "1.6.3"
+knife4j="4.4.0"
 [libraries]
 lombok = {module = "org.projectlombok:lombok",version.ref="lombok"}
 minio={module="io.minio:minio",version.ref="minio"}
 pkmer-boot={module="io.gitee.pkmer:pkmer-boot-dependencies",version.ref="pkmer-boot"}
-
+knife4j={module="com.github.xiaoymin:knife4j-openapi3-jakarta-spring-boot-starter",version.ref="knife4j"}
 mapstruct = {module = "org.mapstruct:mapstruct",version.ref = "mapstruct"}
 mapstruct-processor = {module = "org.mapstruct:mapstruct-processor",version.ref="mapstruct-processor"}
 

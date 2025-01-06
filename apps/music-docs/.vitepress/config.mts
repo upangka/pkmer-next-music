@@ -11,6 +11,7 @@ export default defineConfig({
     sidebar: [
       {
         text: '后端',
+        link: '/server/index.md',
         items: [
           {
             text: 'MyBatis Dynamic SQL',

@@ -1,6 +1,11 @@
 package io.gitee.pkmer.music.web.songlist;
 
 import io.gitee.pkmer.convention.result.Result;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -10,18 +15,24 @@ import org.springframework.web.bind.annotation.*;
  * <a href = "https://gitee.com/developeros/videos-online">Code Repository</a>
  * At 2025/1/5
  */
+@Tag(name = "歌单")
 @RequestMapping("songList")
 public interface SongListApi {
 
     /**
      * 删除歌单
      */
-    @GetMapping("/{id}")
+    @Operation(summary = "删除歌单")
+    @Parameters({
+            @Parameter(name = "id",description = "歌单id",in = ParameterIn.PATH),
+    })
+    @DeleteMapping("/{id}")
     Result<Void> delete(@PathVariable("id") String id);
 
     /**
      * 添加歌单
      */
+    @Operation(summary = "添加歌单")
     @PostMapping
     Result<Void> addSongList(@RequestBody SongListReq songList);
 

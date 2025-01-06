@@ -1,5 +1,6 @@
 package io.gitee.pkmer.music.web.banner.resp;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -12,6 +13,8 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 public class BannerView {
+    @Schema(title = "bannerId",description = "主键id",defaultValue = "1")
     public String id;
+    @Schema(title = "url",description = "图片链接")
     public String url;
 }
