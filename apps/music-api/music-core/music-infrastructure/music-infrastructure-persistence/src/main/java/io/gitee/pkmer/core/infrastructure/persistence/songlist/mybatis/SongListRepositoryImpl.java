@@ -4,10 +4,13 @@ import io.gitee.pkmer.music.domain.song.SongListAggregate;
 import io.gitee.pkmer.music.domain.song.SongListBuilder;
 import io.gitee.pkmer.music.domain.song.SongListId;
 import io.gitee.pkmer.music.domain.song.SongListRepository;
+import org.mybatis.dynamic.sql.delete.render.DeleteStatementProvider;
+import org.mybatis.dynamic.sql.render.RenderingStrategies;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+import static org.mybatis.dynamic.sql.SqlBuilder.deleteFrom;
 import static org.mybatis.dynamic.sql.SqlBuilder.isEqualTo;
 import static io.gitee.pkmer.core.infrastructure.persistence.songlist.mybatis.SongListDynamicSqlSupport.*;
 /**
@@ -53,7 +56,12 @@ public class SongListRepositoryImpl implements SongListRepository {
 
     private void deleteAggregate(SongListAggregate aggregateRoot){
         Long id_ = aggregateRoot.getId().value();
-        songListMapper.delete(c -> c.where(id,isEqualTo(id_)));
+        DeleteStatementProvider deleteProvider = deleteFrom(songList)
+                .where(id, isEqualTo(id_))
+                .build()
+                .render(RenderingStrategies.MYBATIS3);
+        songListMapper.delete(deleteProvider);
+//       // songListMapper.delete(c -> c.where(id,isEqualTo(id_)));
         // todo 关联的歌曲删除
     }
 }
