@@ -1,10 +1,13 @@
 package io.gitee.pkmer.music.config;
 
+import io.gitee.pkmer.convention.result.Result;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
@@ -48,5 +51,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         objectBody.put("Errors", exceptionalErrors);
 
         return new ResponseEntity<>(objectBody, status);
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    public Result<String> handleRuntimeException(HttpServletRequest request, RuntimeException ex) throws Exception {
+        log.error("其他异常 uri : {} -> {}", request.getRequestURI(),ex.getMessage());
+        return Result.error(ex.getMessage());
     }
 }
