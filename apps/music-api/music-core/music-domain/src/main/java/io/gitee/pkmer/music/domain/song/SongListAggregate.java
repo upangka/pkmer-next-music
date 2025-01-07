@@ -25,6 +25,7 @@ public class SongListAggregate extends AuditableEntity implements AggregateRoot 
 
     private String pic;
 
+    @Builder.Default
     private List<Style> styles = Collections.emptyList();
 
     private String introduction;

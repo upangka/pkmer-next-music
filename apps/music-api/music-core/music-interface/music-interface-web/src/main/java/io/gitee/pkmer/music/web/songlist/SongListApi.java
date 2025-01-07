@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -35,7 +36,7 @@ public interface SongListApi {
      */
     @Operation(summary = "添加歌单")
     @PostMapping
-    Result<Void> addSongList(@RequestBody AddSongListReq songList);
+    Result<Void> addSongList(@Valid @RequestBody AddSongListReq songList);
 
 
 
