@@ -1,12 +1,15 @@
 package io.gitee.pkmer.music.web.songlist;
 
 import io.gitee.pkmer.convention.controller.BaseController;
+import io.gitee.pkmer.convention.page.PageResponse;
 import io.gitee.pkmer.convention.result.Result;
 import io.gitee.pkmer.ddd.shared.dispatch.CmdDispatcher;
 import io.gitee.pkmer.music.application.songlist.add.AddSongListCmd;
 import io.gitee.pkmer.music.application.songlist.delete.DeleteSongListCmd;
+import io.gitee.pkmer.music.application.songlist.get.SongListDto;
+import io.gitee.pkmer.music.application.songlist.get.SongListPageQueryCmd;
 import io.gitee.pkmer.music.web.songlist.converter.AddSongListConverter;
-import io.gitee.pkmer.music.web.songlist.resp.AddSongListReq;
+import io.gitee.pkmer.music.web.songlist.req.AddSongListReq;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
@@ -46,5 +49,9 @@ public class SongListController extends BaseController implements SongListApi{
         return success();
     }
 
+    @Override
+    public Result<PageResponse<SongListDto>> pageQuery(SongListPageQueryCmd cmd) {
+        return success(cmdDispatcher.dispatch(cmd));
+    }
 
 }

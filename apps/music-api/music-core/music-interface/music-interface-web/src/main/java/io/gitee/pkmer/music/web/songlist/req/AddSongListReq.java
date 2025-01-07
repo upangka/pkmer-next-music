@@ -1,4 +1,4 @@
-package io.gitee.pkmer.music.web.songlist.resp;
+package io.gitee.pkmer.music.web.songlist.req;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;

@@ -1,7 +1,7 @@
 package io.gitee.pkmer.music.web.songlist.converter;
 
 import io.gitee.pkmer.music.application.songlist.add.AddSongListCmd;
-import io.gitee.pkmer.music.web.songlist.resp.AddSongListReq;
+import io.gitee.pkmer.music.web.songlist.req.AddSongListReq;
 import org.mapstruct.Mapper;
 
 /**
