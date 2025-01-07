@@ -18,6 +18,7 @@ import lombok.EqualsAndHashCode;
 @Data
 public class SongListPage extends PageQuery {
     private String style;
+    private String title;
 
     public long offset(){
         return (long)(super.getPageNo() - 1) * super.getPageSize();

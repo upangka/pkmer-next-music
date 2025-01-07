@@ -93,8 +93,10 @@ public class SongListRepositoryImpl implements SongListRepository {
 
     @Override
     public PageResponse<SongListAggregate> pageLoad(SongListPage songListPage) {
+        // https://mybatis.org/mybatis-dynamic-sql/docs/conditions.html#value-transformation
         WhereApplier whereApplier =
-                where(style, isEqualToWhenPresent(songListPage.getStyle()))
+                where(style, isLikeWhenPresent(songListPage.getStyle()).map(s -> "%"+s+"%"))
+                        .and(title, isLikeWhenPresent(songListPage.getTitle()).map(s -> "%"+s+"%"))
                         .toWhereApplier();
 
         // todo 优化分页抽象类，直接offset

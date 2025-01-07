@@ -21,4 +21,7 @@ import lombok.EqualsAndHashCode;
 public class SongListPageQueryCmd extends PageQuery implements Command {
     @Schema(description = "歌单风格")
     private String style;
+
+    @Schema(description = "歌单标题")
+    private String title;
 }

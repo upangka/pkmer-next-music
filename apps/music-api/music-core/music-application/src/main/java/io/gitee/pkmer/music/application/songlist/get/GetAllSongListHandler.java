@@ -50,6 +50,7 @@ public class GetAllSongListHandler implements CommandHandler<SongListPageQueryCm
                 .setPageNo(cmd.getPageNo())
                 .setPageSize(cmd.getPageSize())
                 .setStyle(cmd.getStyle())
+                .setTitle(cmd.getTitle())
                 .build();
     }
 

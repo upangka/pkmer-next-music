@@ -20,6 +20,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class SongListPageBuilder {
     private String style;
+    private String title;
     private int pageNo;
     private int pageSize;
 
@@ -32,6 +33,7 @@ public class SongListPageBuilder {
         styleValidator.validate(style);
         SongListPage songListPage = new SongListPage();
         songListPage.setStyle(style);
+        songListPage.setTitle(title);
         songListPage.setPageNo(pageNo);
         songListPage.setPageSize(pageSize);
         return songListPage;
