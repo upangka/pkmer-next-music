@@ -29,4 +29,20 @@ public class SongListAggregate extends AuditableEntity implements AggregateRoot 
     private List<Style> styles = Collections.emptyList();
 
     private String introduction;
+
+    public void modifyTitle(String title) {
+        this.title = title;
+    }
+
+    public void modifyPic(String pic) {
+        this.pic = pic;
+    }
+
+    public void modifyStyles(String styles) {
+        this.styles =  Style.toStyles(styles);
+    }
+
+    public void modifyIntroduction(String introduction) {
+        this.introduction = introduction;
+    }
 }

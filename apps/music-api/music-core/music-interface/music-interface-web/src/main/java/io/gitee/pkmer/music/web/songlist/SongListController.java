@@ -8,8 +8,10 @@ import io.gitee.pkmer.music.application.songlist.add.AddSongListCmd;
 import io.gitee.pkmer.music.application.songlist.delete.DeleteSongListCmd;
 import io.gitee.pkmer.music.application.songlist.get.SongListDto;
 import io.gitee.pkmer.music.application.songlist.get.SongListPageQueryCmd;
+import io.gitee.pkmer.music.application.songlist.update.UpdateSongListCmd;
 import io.gitee.pkmer.music.web.songlist.converter.AddSongListConverter;
 import io.gitee.pkmer.music.web.songlist.req.AddSongListReq;
+import jakarta.validation.Validator;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,6 +30,9 @@ public class SongListController extends BaseController implements SongListApi{
 
     @Setter(onMethod_ = @Autowired)
     private AddSongListConverter songListConverter;
+
+    @Setter(onMethod_ = @Autowired)
+    private Validator validator;
 
     @Override
     public Result<Void> delete(String id) {
@@ -51,10 +56,22 @@ public class SongListController extends BaseController implements SongListApi{
 
     @Override
     public Result<PageResponse<SongListDto>> pageQuery(SongListPageQueryCmd cmd) {
-        logger.info("cmd:{}",cmd);
         return success(cmdDispatcher.dispatch(cmd));
     }
 
+    @Override
+    public Result<Void> updateSongListBase(UpdateSongListCmd cmd) {
+        cmd.toBaseInfo();
+        cmdDispatcher.dispatch(cmd);
+        return success();
+    }
+
+    @Override
+    public Result<Void> updateSongListPic(UpdateSongListCmd cmd) {
+        cmd.toUpdatePic();
+        cmdDispatcher.dispatch(cmd);
+        return success();
+    }
 
 
 }

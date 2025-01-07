@@ -1,7 +1,9 @@
 package io.gitee.pkmer.core.infrastructure.persistence.songlist.mybatis;
 
 import io.gitee.pkmer.convention.page.PageResponse;
-import io.gitee.pkmer.music.domain.song.*;
+import io.gitee.pkmer.music.domain.song.SongListAggregate;
+import io.gitee.pkmer.music.domain.song.SongListId;
+import io.gitee.pkmer.music.domain.song.SongListRepository;
 import io.gitee.pkmer.music.domain.song.page.SongListPage;
 import org.mybatis.dynamic.sql.delete.render.DeleteStatementProvider;
 import org.mybatis.dynamic.sql.render.RenderingStrategies;
@@ -10,7 +12,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static io.gitee.pkmer.core.infrastructure.persistence.songlist.mybatis.SongListDynamicSqlSupport.*;
 import static org.mybatis.dynamic.sql.SqlBuilder.*;
@@ -24,11 +25,10 @@ import static org.mybatis.dynamic.sql.SqlBuilder.*;
 @Repository
 public class SongListRepositoryImpl implements SongListRepository {
     private final SongListDynamicMapper songListMapper;
-    private final SongListBuilderFactory songListBuilderFactory;
-
-    public SongListRepositoryImpl(SongListDynamicMapper songListDynamicMapper, SongListBuilderFactory songListBuilderFactory) {
+    private final SongListConverter converter;
+    public SongListRepositoryImpl(SongListDynamicMapper songListDynamicMapper,SongListConverter converter) {
         this.songListMapper = songListDynamicMapper;
-        this.songListBuilderFactory = songListBuilderFactory;
+        this.converter = converter;
     }
 
     @Override
@@ -37,7 +37,7 @@ public class SongListRepositoryImpl implements SongListRepository {
                 c -> c.where(id, isEqualTo(songListId.value())));
         if (optionalSongList.isPresent()) {
             SongList songList = optionalSongList.get();
-            SongListAggregate aggregate = buildAggregate(songList);
+            SongListAggregate aggregate = converter.buildAggregate(songList);
             // todo 歌单绑定的歌曲
             return aggregate;
         } else {
@@ -45,37 +45,20 @@ public class SongListRepositoryImpl implements SongListRepository {
         }
     }
 
-    private SongListAggregate buildAggregate(SongList songList) {
-        // todo 绑定歌单对应的歌曲
-        return songListBuilderFactory.createSongListBuilder()
-                .id(songList.getId())
-                .pic(songList.getPic())
-                .title(songList.getTitle())
-                .styles(songList.getStyle())
-                .introduction(songList.getIntroduction())
-                .build();
-    }
+
 
     @Override
     public void save(SongListAggregate aggregateRoot) {
         switch (aggregateRoot.getChangingStatus()) {
             case NEW -> insertAggregate(aggregateRoot);
             case DELETED -> deleteAggregate(aggregateRoot);
+            case UPDATED -> updateAggregate(aggregateRoot);
             default -> throw new UnsupportedOperationException("未实现");
         }
     }
 
     private void insertAggregate(SongListAggregate aggregateRoot) {
-        SongList record = new SongList();
-        List<Style> styles = aggregateRoot.getStyles();
-        String style = styles.stream().map(Style::getDesc)
-                .collect(Collectors.joining("-"));
-
-        record.setTitle(aggregateRoot.getTitle());
-        record.setPic(aggregateRoot.getPic());
-        record.setStyle(style);
-        record.setIntroduction(aggregateRoot.getIntroduction());
-
+        SongList record = converter.convertFrom(aggregateRoot);
         // todo 歌曲与歌单的关联
         songListMapper.insert(record);
     }
@@ -110,7 +93,7 @@ public class SongListRepositoryImpl implements SongListRepository {
         int total = (int) songListMapper.count(c -> c);
 
         // todo 歌单绑定的歌曲
-        List<SongListAggregate> list = songLists.stream().map(this::buildAggregate).toList();
+        List<SongListAggregate> list = songLists.stream().map(converter::buildAggregate).toList();
 
         PageResponse<SongListAggregate> pageResponse = new PageResponse<>();
         pageResponse.setList(list)
@@ -119,4 +102,15 @@ public class SongListRepositoryImpl implements SongListRepository {
                 .setCurrentPageNo(songListPage.getPageNo());
         return pageResponse;
     }
+
+
+    private void updateAggregate(SongListAggregate aggregateRoot){
+        SongList record = converter.convertFrom(aggregateRoot);
+        songListMapper.updateByPrimaryKeySelective(record);
+
+        // todo 歌曲与歌单的关联
+    }
+
+
+
 }

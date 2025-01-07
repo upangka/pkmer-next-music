@@ -4,6 +4,7 @@ import io.gitee.pkmer.convention.page.PageResponse;
 import io.gitee.pkmer.convention.result.Result;
 import io.gitee.pkmer.music.application.songlist.get.SongListDto;
 import io.gitee.pkmer.music.application.songlist.get.SongListPageQueryCmd;
+import io.gitee.pkmer.music.application.songlist.update.UpdateSongListCmd;
 import io.gitee.pkmer.music.web.songlist.req.AddSongListReq;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -11,6 +12,7 @@ import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -49,6 +51,15 @@ public interface SongListApi {
     @PostMapping("/page")
     Result<PageResponse<SongListDto>> pageQuery(@Valid @RequestBody SongListPageQueryCmd cmd);
 
+    @Operation(summary = "歌单基本信息")
+    @PostMapping("/update/base")
+    Result<Void> updateSongListBase(@Validated(UpdateSongListCmd.SongListBase.class)
+                                    @RequestBody UpdateSongListCmd cmd);
 
+    // todo 使用minio来尽心上传
+    @Operation(summary = "歌单封面图片链接")
+    @PostMapping("/update/pic")
+    Result<Void> updateSongListPic(@Validated(UpdateSongListCmd.SongListPic.class)
+                                   @RequestBody UpdateSongListCmd cmd);
 
 }

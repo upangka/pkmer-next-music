@@ -3,7 +3,7 @@ plugins{
 }
 dependencies {
     implementation "org.springframework:spring-web"
-//    api "org.springframework.boot:spring-boot-starter-validation"
+    api "org.springframework.boot:spring-boot-starter-validation"
     implementation projects.musicCore.musicApplication
     api libs.knife4j
 }
