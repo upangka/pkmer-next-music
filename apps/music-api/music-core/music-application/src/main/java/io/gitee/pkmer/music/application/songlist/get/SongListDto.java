@@ -1,5 +1,6 @@
 package io.gitee.pkmer.music.application.songlist.get;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
 
@@ -18,18 +19,18 @@ import java.util.List;
 @Data
 @Builder
 public class SongListDto{
-//    @Schema(description = "歌单id")
+    @Schema(description = "歌单id")
     private String id;
 
-//    @Schema(description = "歌单标题")
+    @Schema(description = "歌单标题")
     private String title;
 
-//    @Schema(description = "歌单封面")
+    @Schema(description = "歌单封面")
     private String pic;
 
-//    @Schema(description = "歌单风格")
+    @Schema(description = "歌单风格")
     private List<String> styles;
 
-//    @Schema(description = "歌单介绍")
+    @Schema(description = "歌单介绍")
     private String introduction;
 }

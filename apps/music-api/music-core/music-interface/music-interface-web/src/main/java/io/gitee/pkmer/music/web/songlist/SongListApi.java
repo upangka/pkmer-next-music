@@ -46,7 +46,7 @@ public interface SongListApi {
      * 分页查询歌单
      */
     @Operation(summary = "歌单分页查询")
-    @GetMapping("/page")
+    @PostMapping("/page")
     Result<PageResponse<SongListDto>> pageQuery(@Valid @RequestBody SongListPageQueryCmd cmd);
 
 

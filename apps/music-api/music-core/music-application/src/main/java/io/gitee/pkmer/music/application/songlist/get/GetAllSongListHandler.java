@@ -40,6 +40,7 @@ public class GetAllSongListHandler implements CommandHandler<SongListPageQueryCm
 
         PageResponse<SongListDto> pageResults = new PageResponse<>();
         pageResults.setList(list)
+                .setTotal(page.getTotal())
                 .setTotalPages(page.getTotalPages())
                 .setCurrentPageNo(page.getCurrentPageNo());
         return pageResults;

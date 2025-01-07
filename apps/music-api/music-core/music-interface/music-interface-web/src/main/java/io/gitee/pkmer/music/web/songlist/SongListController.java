@@ -51,7 +51,10 @@ public class SongListController extends BaseController implements SongListApi{
 
     @Override
     public Result<PageResponse<SongListDto>> pageQuery(SongListPageQueryCmd cmd) {
+        logger.info("cmd:{}",cmd);
         return success(cmdDispatcher.dispatch(cmd));
     }
+
+
 
 }

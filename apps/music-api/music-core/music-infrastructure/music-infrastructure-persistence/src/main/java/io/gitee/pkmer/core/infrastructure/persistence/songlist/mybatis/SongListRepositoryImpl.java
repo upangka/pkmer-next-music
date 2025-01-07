@@ -101,7 +101,7 @@ public class SongListRepositoryImpl implements SongListRepository {
         List<SongList> songLists = songListMapper.select(c ->
                 c.applyWhere(whereApplier)
                         .configureStatement(s -> s.setNonRenderingWhereClauseAllowed(true))
-                        .limit(songListPage.getPageNo())
+                        .limit(songListPage.getPageSize())
                         .offset(songListPage.offset()));
 
 
@@ -112,7 +112,8 @@ public class SongListRepositoryImpl implements SongListRepository {
 
         PageResponse<SongListAggregate> pageResponse = new PageResponse<>();
         pageResponse.setList(list)
-                .setTotalPages(total)
+                .setTotal(total)
+                .setTotalPages(total / songListPage.getPageSize() + 1)
                 .setCurrentPageNo(songListPage.getPageNo());
         return pageResponse;
     }
