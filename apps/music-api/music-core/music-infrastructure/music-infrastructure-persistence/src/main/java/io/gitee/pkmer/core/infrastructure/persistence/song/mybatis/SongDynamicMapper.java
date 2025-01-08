@@ -1,7 +1,18 @@
 package io.gitee.pkmer.core.infrastructure.persistence.song.mybatis;
 
+import static io.gitee.pkmer.core.infrastructure.persistence.song.mybatis.SongDynamicSqlSupport.*;
+import static org.mybatis.dynamic.sql.SqlBuilder.isEqualTo;
+
+import io.gitee.pkmer.core.infrastructure.persistence.song.mybatis.Song;
 import jakarta.annotation.Generated;
-import org.apache.ibatis.annotations.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Result;
+import org.apache.ibatis.annotations.ResultMap;
+import org.apache.ibatis.annotations.Results;
+import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.type.JdbcType;
 import org.mybatis.dynamic.sql.BasicColumn;
 import org.mybatis.dynamic.sql.delete.DeleteDSLCompleter;
@@ -12,14 +23,11 @@ import org.mybatis.dynamic.sql.update.UpdateDSL;
 import org.mybatis.dynamic.sql.update.UpdateDSLCompleter;
 import org.mybatis.dynamic.sql.update.UpdateModel;
 import org.mybatis.dynamic.sql.util.SqlProviderAdapter;
-import org.mybatis.dynamic.sql.util.mybatis3.*;
-
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-
-import static io.gitee.pkmer.core.infrastructure.persistence.song.mybatis.SongDynamicSqlSupport.*;
-import static org.mybatis.dynamic.sql.SqlBuilder.isEqualTo;
+import org.mybatis.dynamic.sql.util.mybatis3.CommonCountMapper;
+import org.mybatis.dynamic.sql.util.mybatis3.CommonDeleteMapper;
+import org.mybatis.dynamic.sql.util.mybatis3.CommonInsertMapper;
+import org.mybatis.dynamic.sql.util.mybatis3.CommonUpdateMapper;
+import org.mybatis.dynamic.sql.util.mybatis3.MyBatis3Utils;
 
 @Mapper
 public interface SongDynamicMapper extends CommonCountMapper, CommonDeleteMapper, CommonInsertMapper<Song>, CommonUpdateMapper {

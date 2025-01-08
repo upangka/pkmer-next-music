@@ -30,7 +30,7 @@ public class SongRepositoryImpl implements SongRepository {
     public SongAggregate load(SongId songId) {
 
         Song row = null;
-        songDynamicMapper.insert();
+        songDynamicMapper.insert(row);
         return null;
     }
 

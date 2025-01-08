@@ -3,6 +3,7 @@ package io.gitee.pkmer.music.domain.song;
 import io.gitee.pkmer.ddd.EntityAggregate;
 import io.gitee.pkmer.ddd.common.AuditableEntity;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * <p>
@@ -14,6 +15,7 @@ import lombok.Data;
  * @since 2025/1/9
  * </p>
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 public class SongAggregate extends AuditableEntity implements EntityAggregate {
     private SongId id;

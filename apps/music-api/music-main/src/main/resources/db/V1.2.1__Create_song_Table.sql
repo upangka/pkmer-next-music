@@ -12,5 +12,5 @@ CREATE TABLE `song`
     `lyric`        text,
     `url`          varchar(255) NOT NULL,
     PRIMARY KEY (`id`),
-    INDEX `singer_idx` (`singer_id`),
+    INDEX `singer_idx` (`singer_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='歌曲';
