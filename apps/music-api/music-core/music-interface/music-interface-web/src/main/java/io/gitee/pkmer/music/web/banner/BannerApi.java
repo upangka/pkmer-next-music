@@ -1,7 +1,7 @@
 package io.gitee.pkmer.music.web.banner;
 
 import io.gitee.pkmer.convention.result.Result;
-import io.gitee.pkmer.music.web.banner.resp.BannerView;
+import io.gitee.pkmer.music.application.banner.all.BannerView;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.GetMapping;

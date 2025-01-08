@@ -17,7 +17,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class GetAllCmd implements Command {
+public class GetAllQuery implements Command {
     private List<Long> ids = Collections.emptyList();
 
 
