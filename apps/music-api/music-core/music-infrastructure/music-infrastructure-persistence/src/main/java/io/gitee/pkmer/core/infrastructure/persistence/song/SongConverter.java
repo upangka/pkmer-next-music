@@ -1,7 +1,9 @@
 package io.gitee.pkmer.core.infrastructure.persistence.song;
 
 import io.gitee.pkmer.core.infrastructure.persistence.song.mybatis.Song;
+import io.gitee.pkmer.music.domain.song.SingerId;
 import io.gitee.pkmer.music.domain.song.SongAggregate;
+import io.gitee.pkmer.music.domain.song.SongId;
 import org.springframework.stereotype.Component;
 
 /**
@@ -21,8 +23,7 @@ public class SongConverter {
 
         // 用set方法来赋值
         Song song = new Song();
-        song.setId(aggregateRoot.getId().value());
-        song.setSingerId(aggregateRoot.getSingerId().value().intValue());
+        song.setSingerId(aggregateRoot.getSingerId().value());
         song.setName(aggregateRoot.getName());
         song.setIntroduction(aggregateRoot.getIntroduction());
         song.setCreateTime(aggregateRoot.getCreateTime());
@@ -31,5 +32,22 @@ public class SongConverter {
         song.setUrl(aggregateRoot.getUrl());
         song.setLyric(aggregateRoot.getLyric());
         return song;
+    }
+
+    public SongAggregate covertTo(Song song){
+        // 生成SongAggregate对象
+        SongAggregate songAggregate = new SongAggregate();
+        songAggregate.setId(new SongId(song.getId()));
+        songAggregate.setSingerId(new SingerId(song.getSingerId()));
+
+        songAggregate.setName(song.getName());
+
+        songAggregate.setIntroduction(song.getIntroduction());
+        songAggregate.setCreateTime(song.getCreateTime());
+        songAggregate.setUpdateTime(song.getUpdateTime());
+        songAggregate.setPic(song.getPic());
+        songAggregate.setUrl(song.getUrl());
+        songAggregate.setLyric(song.getLyric());
+        return songAggregate;
     }
 }

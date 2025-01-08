@@ -7,6 +7,8 @@ import io.gitee.pkmer.music.domain.song.SongId;
 import io.gitee.pkmer.music.domain.song.SongRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 /**
  * <p>
  *
@@ -21,17 +23,17 @@ import org.springframework.stereotype.Repository;
 public class SongRepositoryImpl implements SongRepository {
 
     private final SongDynamicMapper songDynamicMapper;
+    private final SongConverter converter;
 
-    public SongRepositoryImpl(SongDynamicMapper songDynamicMapper) {
+    public SongRepositoryImpl(SongDynamicMapper songDynamicMapper,SongConverter converter) {
         this.songDynamicMapper = songDynamicMapper;
+        this.converter = converter;
     }
 
     @Override
     public SongAggregate load(SongId songId) {
-
-        Song row = null;
-        songDynamicMapper.insert(row);
-        return null;
+        Optional<Song> song = songDynamicMapper.selectByPrimaryKey(songId.value());
+        return song.map(converter::covertTo).orElse(null);
     }
 
     @Override
@@ -45,14 +47,16 @@ public class SongRepositoryImpl implements SongRepository {
     }
 
     private void insertAggregate(SongAggregate aggregateRoot){
-
+        Song song = converter.covertFrom(aggregateRoot);
+        songDynamicMapper.insert(song);
     }
 
     private void updateAggregate(SongAggregate aggregateRoot){
-
+        Song song = converter.covertFrom(aggregateRoot);
+        songDynamicMapper.updateByPrimaryKeySelective(song);
     }
 
     private void deleteAggregate(SongAggregate aggregateRoot){
-
+        songDynamicMapper.deleteByPrimaryKey(aggregateRoot.getId().value());
     }
 }

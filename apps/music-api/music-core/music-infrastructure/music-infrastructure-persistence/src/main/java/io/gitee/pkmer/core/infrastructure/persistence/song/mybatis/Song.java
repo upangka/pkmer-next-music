@@ -19,7 +19,8 @@ public class Song {
     @SnowflakeId
     private Long id;
 
-    private Integer singerId;
+
+    private Long singerId;
 
 
     private String name;

@@ -38,7 +38,7 @@ public interface SongDynamicMapper extends CommonCountMapper, CommonDeleteMapper
     @SelectProvider(type=SqlProviderAdapter.class, method="select")
     @Results(id="SongResult", value = {
         @Result(column="id", property="id", jdbcType=JdbcType.BIGINT, id=true),
-        @Result(column="singer_id", property="singerId", jdbcType=JdbcType.INTEGER),
+        @Result(column="singer_id", property="singerId", jdbcType=JdbcType.BIGINT),
         @Result(column="name", property="name", jdbcType=JdbcType.VARCHAR),
         @Result(column="introduction", property="introduction", jdbcType=JdbcType.VARCHAR),
         @Result(column="create_time", property="createTime", jdbcType=JdbcType.TIMESTAMP),

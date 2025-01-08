@@ -14,7 +14,7 @@ public final class SongDynamicSqlSupport {
     public static final SqlColumn<Long> id = song.id;
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
-    public static final SqlColumn<Integer> singerId = song.singerId;
+    public static final SqlColumn<Long> singerId = song.singerId;
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
     public static final SqlColumn<String> name = song.name;
@@ -41,7 +41,7 @@ public final class SongDynamicSqlSupport {
     public static final class Song extends AliasableSqlTable<Song> {
         public final SqlColumn<Long> id = column("id", JDBCType.BIGINT);
 
-        public final SqlColumn<Integer> singerId = column("singer_id", JDBCType.INTEGER);
+        public final SqlColumn<Long> singerId = column("singer_id", JDBCType.BIGINT);
 
         public final SqlColumn<String> name = column("`name`", JDBCType.VARCHAR);
 
