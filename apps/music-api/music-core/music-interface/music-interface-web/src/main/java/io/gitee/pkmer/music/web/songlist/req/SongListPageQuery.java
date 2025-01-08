@@ -3,6 +3,7 @@ package io.gitee.pkmer.music.web.songlist.req;
 import io.gitee.pkmer.convention.page.query.PageQuery;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * <p>
@@ -14,6 +15,7 @@ import lombok.Data;
  * @since 2025/1/7
  * </p>
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 public class SongListPageQuery extends PageQuery {
     @Schema(title = "风格")
