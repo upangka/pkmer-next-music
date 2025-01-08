@@ -2,8 +2,8 @@ package io.gitee.pkmer.music.web.songlist;
 
 import io.gitee.pkmer.convention.page.PageResponse;
 import io.gitee.pkmer.convention.result.Result;
-import io.gitee.pkmer.music.application.songlist.get.SongListDto;
-import io.gitee.pkmer.music.application.songlist.get.SongListPageQueryCmd;
+import io.gitee.pkmer.music.application.songlist.query.SongListView;
+import io.gitee.pkmer.music.application.songlist.query.SongListPageQuery;
 import io.gitee.pkmer.music.application.songlist.update.UpdateSongListCmd;
 import io.gitee.pkmer.music.web.songlist.req.AddSongListReq;
 import io.swagger.v3.oas.annotations.Operation;
@@ -49,7 +49,7 @@ public interface SongListApi {
      */
     @Operation(summary = "歌单分页查询")
     @PostMapping("/page")
-    Result<PageResponse<SongListDto>> pageQuery(@Valid @RequestBody SongListPageQueryCmd cmd);
+    Result<PageResponse<SongListView>> pageQuery(@Valid @RequestBody SongListPageQuery pageQuery);
 
     @Operation(summary = "歌单基本信息")
     @PostMapping("/update/base")

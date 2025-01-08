@@ -47,7 +47,7 @@ public enum Style implements ValueObject {
      * 将风格字符串转换为风格列表
      * @param stylesDesc "-"分隔的字符风格
      */
-    static List<Style> toStyles(String stylesDesc){
+    public static List<Style> toStyles(String stylesDesc){
         String[] styles = stylesDesc.split("-");
         return Stream.of(styles).map(Style::of).toList();
     }

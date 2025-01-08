@@ -1,4 +1,4 @@
-package io.gitee.pkmer.music.application.songlist.get;
+package io.gitee.pkmer.music.application.songlist.query;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
@@ -18,7 +18,7 @@ import java.util.List;
  */
 @Data
 @Builder
-public class SongListDto{
+public class SongListView {
     @Schema(description = "歌单id")
     private String id;
 

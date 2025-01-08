@@ -1,6 +1,8 @@
-package io.gitee.pkmer.music.domain.song.page;
+package io.gitee.pkmer.music.application.songlist.query;
 
 import io.gitee.pkmer.convention.page.query.PageQuery;
+import io.gitee.pkmer.ddd.shared.command.Command;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -16,12 +18,11 @@ import lombok.EqualsAndHashCode;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class SongListPage extends PageQuery {
+public class SongListPageQuery extends PageQuery implements Command {
+    @Schema(description = "歌单风格")
     private String style;
-    private String title;
 
-    public long offset(){
-        return (long)(super.getPageNo() - 1) * super.getPageSize();
-    }
+    @Schema(description = "歌单标题")
+    private String title;
 
 }
