@@ -7,7 +7,6 @@ import io.gitee.pkmer.music.domain.song.SongListRepository;
 import io.gitee.pkmer.music.domain.song.StyleValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * <p>
@@ -30,8 +29,6 @@ public class UpdateSongListHandler implements CommandHandler<UpdateSongListCmd,V
         this.styleValidator = styleValidator;
     }
 
-
-    @Transactional
     @Override
     public Void execute(UpdateSongListCmd cmd) {
         SongListId id = new SongListId(cmd.getId());

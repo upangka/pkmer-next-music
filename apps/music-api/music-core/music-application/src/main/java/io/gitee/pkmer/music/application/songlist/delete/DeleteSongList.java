@@ -5,7 +5,6 @@ import io.gitee.pkmer.music.domain.song.SongListAggregate;
 import io.gitee.pkmer.music.domain.song.SongListId;
 import io.gitee.pkmer.music.domain.song.SongListRepository;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 删除歌单
@@ -22,7 +21,6 @@ public class DeleteSongList implements CommandHandler<DeleteSongListCmd,Void> {
         this.repository = songListRepository;
     }
 
-    @Transactional
     @Override
     public Void execute(DeleteSongListCmd cmd) {
         SongListAggregate songListAggregate = repository.load(new SongListId(cmd.getId()));

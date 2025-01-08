@@ -11,7 +11,7 @@ import lombok.experimental.Accessors;
  */
 @Data
 @Accessors(chain = true)
-public class BannerDto {
+public class BannerView {
     private Long id;
     private String pic;
 }

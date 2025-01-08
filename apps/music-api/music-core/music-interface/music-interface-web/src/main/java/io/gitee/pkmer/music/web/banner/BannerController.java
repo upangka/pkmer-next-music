@@ -3,9 +3,8 @@ package io.gitee.pkmer.music.web.banner;
 import io.gitee.pkmer.convention.controller.BaseController;
 import io.gitee.pkmer.convention.result.Result;
 import io.gitee.pkmer.ddd.shared.dispatch.CmdDispatcher;
-import io.gitee.pkmer.music.application.banner.all.BannerDto;
+import io.gitee.pkmer.music.application.banner.all.BannerView;
 import io.gitee.pkmer.music.application.banner.all.GetAllCmd;
-import io.gitee.pkmer.music.web.banner.resp.BannerView;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,12 +23,12 @@ public class BannerController extends BaseController implements BannerApi {
     private CmdDispatcher cmdDispatcher;
 
     @Override
-    public Result<List<BannerView>> getAllBanner() {
+    public Result<List<io.gitee.pkmer.music.web.banner.resp.BannerView>> getAllBanner() {
         GetAllCmd cmd = new GetAllCmd();
-        List<BannerDto> banners = cmdDispatcher.dispatch(cmd);
+        List<BannerView> banners = cmdDispatcher.dispatch(cmd);
 
-        List<BannerView> results = banners.stream()
-                .map(banner -> new BannerView().setId(banner.getId().toString())
+        List<io.gitee.pkmer.music.web.banner.resp.BannerView> results = banners.stream()
+                .map(banner -> new io.gitee.pkmer.music.web.banner.resp.BannerView().setId(banner.getId().toString())
                 .setUrl(banner.getPic())).toList();
 
         return success(results);

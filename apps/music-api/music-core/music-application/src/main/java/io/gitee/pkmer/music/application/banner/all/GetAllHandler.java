@@ -21,7 +21,7 @@ import java.util.List;
  */
 @Slf4j
 @Component
-public class GetAllHandler implements CommandHandler<GetAllCmd, List<BannerDto>>, EnvironmentAware {
+public class GetAllHandler implements CommandHandler<GetAllCmd, List<BannerView>>, EnvironmentAware {
     private String minioUrl;
     private final  BannerRepository bannerRepository;
 
@@ -30,12 +30,12 @@ public class GetAllHandler implements CommandHandler<GetAllCmd, List<BannerDto>>
     }
 
     @Override
-    public List<BannerDto> execute(GetAllCmd cmd) {
+    public List<BannerView> execute(GetAllCmd cmd) {
         List<BannerEntity> banners = bannerRepository.findAll(cmd.getIds());
 
-        List<BannerDto> results = new ArrayList<>();
+        List<BannerView> results = new ArrayList<>();
         for (BannerEntity banner : banners) {
-            BannerDto bannerDto = new BannerDto().setId(banner.getId().value())
+            BannerView bannerDto = new BannerView().setId(banner.getId().value())
                     .setPic(buildMinioUrl(banner.getPic()));
             results.add(bannerDto);
         }

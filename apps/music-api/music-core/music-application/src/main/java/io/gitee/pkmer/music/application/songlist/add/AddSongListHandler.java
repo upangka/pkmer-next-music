@@ -5,7 +5,6 @@ import io.gitee.pkmer.music.domain.song.SongListAggregate;
 import io.gitee.pkmer.music.domain.song.SongListBuilderFactory;
 import io.gitee.pkmer.music.domain.song.SongListRepository;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author <a href="mailto:1193094618@qq.com">pkmer</a>
@@ -22,7 +21,6 @@ public class AddSongListHandler implements CommandHandler<AddSongListCmd,Void> {
         this.songListBuilderFactory = songListBuilderFactory;
     }
 
-    @Transactional
     @Override
     public Void execute(AddSongListCmd cmd) {
         SongListAggregate aggregate = toAggregate(cmd);
