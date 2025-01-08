@@ -57,3 +57,7 @@ subprojects {
         archiveClassifier.set('')
     }
 }
+
+tasks.named('bootJar') {
+    enabled = false
+}
