@@ -1,4 +1,4 @@
-package io.gitee.pkmer.music.domain.song;
+package io.gitee.pkmer.music.domain.songlist;
 
 import io.gitee.pkmer.ddd.id.Identifier;
 import lombok.AllArgsConstructor;

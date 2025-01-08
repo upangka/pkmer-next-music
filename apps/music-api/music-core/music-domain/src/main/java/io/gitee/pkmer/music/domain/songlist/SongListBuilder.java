@@ -1,13 +1,7 @@
-package io.gitee.pkmer.music.domain.song;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
+package io.gitee.pkmer.music.domain.songlist;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
 
 /**
  * SongList聚合构建工厂

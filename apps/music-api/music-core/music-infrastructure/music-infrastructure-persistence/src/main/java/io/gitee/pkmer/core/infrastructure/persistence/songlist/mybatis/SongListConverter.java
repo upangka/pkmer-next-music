@@ -1,8 +1,8 @@
 package io.gitee.pkmer.core.infrastructure.persistence.songlist.mybatis;
 
-import io.gitee.pkmer.music.domain.song.SongListAggregate;
-import io.gitee.pkmer.music.domain.song.SongListBuilderFactory;
-import io.gitee.pkmer.music.domain.song.Style;
+import io.gitee.pkmer.music.domain.songlist.SongListAggregate;
+import io.gitee.pkmer.music.domain.songlist.SongListBuilderFactory;
+import io.gitee.pkmer.music.domain.songlist.Style;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

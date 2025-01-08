@@ -1,8 +1,8 @@
 package io.gitee.pkmer.core.infrastructure.persistence.songlist.mybatis;
 
-import io.gitee.pkmer.music.domain.song.SongListAggregate;
-import io.gitee.pkmer.music.domain.song.SongListId;
-import io.gitee.pkmer.music.domain.song.SongListRepository;
+import io.gitee.pkmer.music.domain.songlist.SongListAggregate;
+import io.gitee.pkmer.music.domain.songlist.SongListId;
+import io.gitee.pkmer.music.domain.songlist.SongListRepository;
 import org.mybatis.dynamic.sql.delete.render.DeleteStatementProvider;
 import org.mybatis.dynamic.sql.render.RenderingStrategies;
 import org.springframework.stereotype.Repository;

@@ -1,4 +1,4 @@
-package io.gitee.pkmer.music.domain.song;
+package io.gitee.pkmer.music.domain.songlist;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

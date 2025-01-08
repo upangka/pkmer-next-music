@@ -3,7 +3,7 @@ package io.gitee.pkmer.music.application.songlist.query;
 import io.gitee.pkmer.convention.page.PageResponse;
 import io.gitee.pkmer.core.infrastructure.persistence.songlist.mybatis.SongList;
 import io.gitee.pkmer.core.infrastructure.persistence.songlist.mybatis.SongListDynamicMapper;
-import io.gitee.pkmer.music.domain.song.Style;
+import io.gitee.pkmer.music.domain.songlist.Style;
 import org.mybatis.dynamic.sql.where.WhereApplier;
 import org.springframework.stereotype.Service;
 

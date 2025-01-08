@@ -1,9 +1,9 @@
 package io.gitee.pkmer.music.application.songlist.add;
 
 import io.gitee.pkmer.ddd.shared.command.CommandHandler;
-import io.gitee.pkmer.music.domain.song.SongListAggregate;
-import io.gitee.pkmer.music.domain.song.SongListBuilderFactory;
-import io.gitee.pkmer.music.domain.song.SongListRepository;
+import io.gitee.pkmer.music.domain.songlist.SongListAggregate;
+import io.gitee.pkmer.music.domain.songlist.SongListBuilderFactory;
+import io.gitee.pkmer.music.domain.songlist.SongListRepository;
 import org.springframework.stereotype.Component;
 
 /**
