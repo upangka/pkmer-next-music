@@ -14,7 +14,7 @@
             <!--    其他扩展信息        -->
             <property name="pkmer" value="hzz"/>
             <!--    修改生成的文件夹        -->
-            <property name="targetPackage" value="org.hzz.coupon.types.constants"/>
+            <property name="targetPackage" value="io.gitee.pkmer.types.constants"/>
         </plugin>
 
         <!--   使用自己的注释类     -->
@@ -33,12 +33,13 @@
             <property name="useJSR310Types" value="true" />
         </javaTypeResolver>
 
-        <javaModelGenerator targetPackage="io.gitee.pkmer.core.infrastructure.persistence.songlist.mybatis" targetProject="src/main/java" />
+        <javaModelGenerator targetPackage="io.gitee.pkmer.core.infrastructure.persistence.song.mybatis" targetProject="src/main/java" />
         <sqlMapGenerator targetPackage="mapper" targetProject="src/main/resources"/>
-        <javaClientGenerator type="XMLMAPPER" targetPackage="io.gitee.pkmer.core.infrastructure.persistence.songlist.mybatis" targetProject="src/main/java"/>
+        <javaClientGenerator type="XMLMAPPER" targetPackage="io.gitee.pkmer.core.infrastructure.persistence.song.mybatis" targetProject="src/main/java"/>
 
 <!--        <table tableName="banner" mapperName="BannerDynamicMapper" />-->
-        <table tableName="song_list" mapperName="SongListDynamicMapper" />
+<!--        <table tableName="song_list" mapperName="SongListDynamicMapper" />-->
+        <table tableName="song" mapperName="SongDynamicMapper" />
     </context>
 
 
