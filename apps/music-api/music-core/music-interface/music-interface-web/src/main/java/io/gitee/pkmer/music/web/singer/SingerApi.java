@@ -4,6 +4,7 @@ import io.gitee.pkmer.convention.page.PageResponse;
 import io.gitee.pkmer.convention.result.Result;
 import io.gitee.pkmer.music.application.singer.add.AddSingerCmd;
 import io.gitee.pkmer.music.application.singer.query.SingerView;
+import io.gitee.pkmer.music.application.singer.update.UpdateSingerCmd;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -35,6 +36,11 @@ public interface SingerApi {
     @Operation(summary = "删除歌手")
     @DeleteMapping("/{id}")
     Result<Void> deleteSinger(@PathVariable("id") Long id);
+
+    @Operation(summary = "添加歌手")
+    @PostMapping("/update")
+    Result<Void> updateSinger(@Valid @RequestBody
+                              UpdateSingerCmd cmd);
 
 
     @Operation(summary = "查询歌手")
