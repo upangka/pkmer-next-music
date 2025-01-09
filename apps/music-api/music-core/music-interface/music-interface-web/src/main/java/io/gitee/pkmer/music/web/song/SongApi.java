@@ -1,14 +1,14 @@
 package io.gitee.pkmer.music.web.song;
 
 import io.gitee.pkmer.convention.result.Result;
+import io.gitee.pkmer.music.application.song.update.UpdateSongCmd;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * <p>
@@ -30,4 +30,12 @@ public interface SongApi {
     @Operation(summary = "删除歌曲")
     @DeleteMapping("/{id}")
     Result<Void> deleteSong(@PathVariable("id") Long id);
+
+
+    @Operation(summary = "更新歌曲")
+    @PostMapping("/update")
+    Result<Void> updateSong(@Valid @RequestBody  UpdateSongCmd cmd);
+
+
+
 }

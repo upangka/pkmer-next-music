@@ -2,8 +2,8 @@ package io.gitee.pkmer.music.domain.song;
 
 import io.gitee.pkmer.ddd.EntityAggregate;
 import io.gitee.pkmer.ddd.common.AuditableEntity;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 
 /**
  * <p>
@@ -16,7 +16,7 @@ import lombok.EqualsAndHashCode;
  * </p>
  */
 @EqualsAndHashCode(callSuper = true)
-@Data
+@Getter
 public class SongAggregate extends AuditableEntity implements EntityAggregate {
     private SongId id;
     private SingerId singerId;
@@ -30,4 +30,35 @@ public class SongAggregate extends AuditableEntity implements EntityAggregate {
     private String url;
 
     private String lyric;
+
+    public SongAggregate(SongId id, SingerId singerId, String name, String introduction, String pic, String url, String lyric) {
+        this.id = id;
+        this.singerId = singerId;
+        this.name = name;
+        this.introduction = introduction;
+        this.pic = pic;
+        this.url = url;
+        this.lyric = lyric;
+    }
+
+
+    public void modifyName(String name) {
+        this.name = name;
+    }
+
+    public void modifyIntroduction(String introduction) {
+        this.introduction = introduction;
+    }
+
+    public void modifyPic(String pic) {
+        this.pic = pic;
+    }
+
+    public void modifyUrl(String url) {
+        this.url = url;
+    }
+
+    public void modifyLyric(String lyric) {
+        this.lyric = lyric;
+    }
 }

@@ -36,18 +36,16 @@ public class SongConverter {
 
     public SongAggregate covertTo(Song song){
         // 生成SongAggregate对象
-        SongAggregate songAggregate = new SongAggregate();
-        songAggregate.setId(new SongId(song.getId()));
-        songAggregate.setSingerId(new SingerId(song.getSingerId()));
+        SongAggregate songAggregate = new SongAggregate(
+                new SongId(song.getId()),
+                new SingerId(song.getSingerId()),
+                song.getName(),
+                song.getIntroduction(),
+                song.getPic(),
+                song.getUrl(),
+                song.getLyric()
+        );
 
-        songAggregate.setName(song.getName());
-
-        songAggregate.setIntroduction(song.getIntroduction());
-        songAggregate.setCreateTime(song.getCreateTime());
-        songAggregate.setUpdateTime(song.getUpdateTime());
-        songAggregate.setPic(song.getPic());
-        songAggregate.setUrl(song.getUrl());
-        songAggregate.setLyric(song.getLyric());
         return songAggregate;
     }
 }

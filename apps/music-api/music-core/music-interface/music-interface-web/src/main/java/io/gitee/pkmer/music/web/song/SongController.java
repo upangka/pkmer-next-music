@@ -4,6 +4,7 @@ import io.gitee.pkmer.convention.controller.BaseController;
 import io.gitee.pkmer.convention.result.Result;
 import io.gitee.pkmer.ddd.shared.dispatch.CmdDispatcher;
 import io.gitee.pkmer.music.application.song.delete.DeleteCmd;
+import io.gitee.pkmer.music.application.song.update.UpdateSongCmd;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,6 +26,12 @@ public class SongController extends BaseController implements SongApi{
     @Override
     public Result<Void> deleteSong(Long id) {
         cmdDispatcher.dispatch(DeleteCmd.commandOf(id));
+        return success();
+    }
+
+    @Override
+    public Result<Void> updateSong(UpdateSongCmd cmd) {
+        cmdDispatcher.dispatch(cmd);
         return success();
     }
 }
