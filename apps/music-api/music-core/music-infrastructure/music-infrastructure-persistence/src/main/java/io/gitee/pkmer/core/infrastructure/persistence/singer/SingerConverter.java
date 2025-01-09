@@ -38,6 +38,7 @@ public class SingerConverter {
         singer.setPic(singerAggrerate.getPic());
         singer.setBirth(singerAggrerate.getBirth());
         singer.setLocation(singerAggrerate.getLocation());
+        singer.setIntroduction(singerAggrerate.getIntroduction());
         return singer;
     }
 

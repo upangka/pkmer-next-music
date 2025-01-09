@@ -28,6 +28,7 @@ public class SingerAggrerate extends AuditableEntity implements AggregateRoot {
     private String pic;
     private LocalDateTime birth;
     private String location;
+    private String introduction;
     /**
      * 该歌手的所有歌曲
      */
