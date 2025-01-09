@@ -25,7 +25,8 @@ public class SongRepositoryImpl implements SongRepository {
     private final SongDynamicMapper songDynamicMapper;
     private final SongConverter converter;
 
-    public SongRepositoryImpl(SongDynamicMapper songDynamicMapper,SongConverter converter) {
+    public SongRepositoryImpl(SongDynamicMapper songDynamicMapper,
+                              SongConverter converter) {
         this.songDynamicMapper = songDynamicMapper;
         this.converter = converter;
     }
