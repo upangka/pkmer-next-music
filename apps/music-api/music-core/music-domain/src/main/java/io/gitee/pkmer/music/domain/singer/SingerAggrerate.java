@@ -33,4 +33,33 @@ public class SingerAggrerate extends AuditableEntity implements AggregateRoot {
      * 该歌手的所有歌曲
      */
     private List<SongAggregate> songs;
+
+
+    public void modifyName(String name) {
+        this.name = name;
+    }
+
+    public void modifySex(Sex sex) {
+        this.sex = sex;
+    }
+
+    public void modifyPic(String pic) {
+        this.pic = pic;
+    }
+
+    public void modifyBirth(LocalDateTime birth) {
+        this.birth = birth;
+    }
+
+    public void modifyLocation(String location) {
+        this.location = location;
+    }
+
+    public void modifyIntroduction(String introduction) {
+        this.introduction = introduction;
+    }
+
+    public void modifySongs(List<SongAggregate> songs) {
+        this.songs = songs;
+    }
 }
