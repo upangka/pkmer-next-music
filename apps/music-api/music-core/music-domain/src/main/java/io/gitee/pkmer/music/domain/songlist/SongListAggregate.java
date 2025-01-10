@@ -2,10 +2,12 @@ package io.gitee.pkmer.music.domain.songlist;
 
 import io.gitee.pkmer.ddd.common.AuditableEntity;
 import io.gitee.pkmer.ddd.shared.AggregateRoot;
+import io.gitee.pkmer.music.domain.song.SongId;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -31,7 +33,7 @@ public class SongListAggregate extends AuditableEntity implements AggregateRoot 
 
     private String introduction;
 
-    private List<BindSongValueObj> songIds;
+    private List<BindSongValueObj> songIds = new ArrayList<>();
 
     public void modifyTitle(String title) {
         this.title = title;
@@ -47,5 +49,19 @@ public class SongListAggregate extends AuditableEntity implements AggregateRoot 
 
     public void modifyIntroduction(String introduction) {
         this.introduction = introduction;
+    }
+
+    public List<BindSongValueObj> getBindSongs(){
+        return Collections.unmodifiableList(this.songIds);
+    }
+
+    /**
+     * 添加歌曲
+     */
+    public void addSong(Long songId){
+        BindSongValueObj bindSong = new BindSongValueObj(
+                new SongId(songId),this.id);
+
+        this.songIds.add(bindSong);
     }
 }
