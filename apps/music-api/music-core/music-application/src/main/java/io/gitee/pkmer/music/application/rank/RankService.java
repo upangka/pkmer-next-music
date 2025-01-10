@@ -16,8 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static org.mybatis.dynamic.sql.SqlBuilder.isIn;
-import static org.mybatis.dynamic.sql.SqlBuilder.select;
+import static org.mybatis.dynamic.sql.SqlBuilder.*;
 
 /**
  * DDD CQSR 分离查询
@@ -66,6 +65,24 @@ public class RankService {
                 .list(views)
                 .build();
 
+    }
+
+
+    /**
+     * 查询用户歌单评分
+     */
+    public RankView getUserSongListRank(Long userId,Long songListId){
+
+        RankList rankList = rankDynamicMapper.selectOne(c -> c
+                .where(RankListDynamicSqlSupport.consumerId, isEqualTo(userId))
+                .and(RankListDynamicSqlSupport.songListId, isEqualTo(songListId))
+                .limit(1)
+        ).orElseThrow();
+
+
+        Map<Long, SongList> songListMap = handleSongList(List.of(rankList));
+
+        return toView(rankList, songListMap);
     }
 
     /**

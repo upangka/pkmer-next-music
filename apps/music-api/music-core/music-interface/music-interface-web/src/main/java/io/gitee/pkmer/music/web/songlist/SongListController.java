@@ -143,4 +143,11 @@ public class SongListController extends BaseController implements SongListApi{
         rankQuery.setPageSize(size);
         return success(rankService.pageQuery(rankQuery));
     }
+
+    @Override
+    public Result<RankView> getUserSongListRank(Long songListId) {
+        // todo 处理登录用户的userId
+        Long userId = null;
+        return success(rankService.getUserSongListRank(userId,songListId));
+    }
 }

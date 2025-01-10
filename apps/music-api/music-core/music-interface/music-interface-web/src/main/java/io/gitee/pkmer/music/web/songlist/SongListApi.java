@@ -126,4 +126,12 @@ public interface SongListApi {
             @RequestParam(value = "size",defaultValue = "20") Integer size
     );
 
+    @Operation(summary = "查询用户指定歌单")
+    @Parameters({
+            @Parameter(name = "songListId",description = "歌单ID",in = ParameterIn.PATH),
+    })
+    @GetMapping("/user/rank/{songListId}")
+    Result<RankView> getUserSongListRank(@PathVariable("songListId")
+                                         Long songListId);
+
 }
