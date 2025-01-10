@@ -35,6 +35,7 @@ public class ConsumerConverter {
                 .avator(consumer.getAvator())
                 .build();
         userAggregate.setCreateTime(consumer.getCreateTime());
+        userAggregate.setUpdateTime(consumer.getUpdateTime());
         return userAggregate;
 
     }
@@ -45,10 +46,14 @@ public class ConsumerConverter {
     public Consumer toDataModel(UserAggregate userAggregate){
        // setter方法生成数据模型
         Consumer consumer = new Consumer();
-        consumer.setId(userAggregate.getId().value());
+        if(userAggregate.getId() != null){
+            consumer.setId(userAggregate.getId().value());
+        }
         consumer.setUsername(userAggregate.getUsername());
         consumer.setPassword(userAggregate.getPassword());
-        consumer.setSex(userAggregate.getSex().getValue());
+        if(userAggregate.getSex() != null){
+            consumer.setSex(userAggregate.getSex().getValue());
+        }
         consumer.setPhoneNum(userAggregate.getPhoneNum());
         consumer.setEmail(userAggregate.getEmail());
         consumer.setBirth(userAggregate.getBirth());
@@ -56,6 +61,7 @@ public class ConsumerConverter {
         consumer.setLocation(userAggregate.getLocation());
         consumer.setAvator(userAggregate.getAvator());
         consumer.setCreateTime(userAggregate.getCreateTime());
+        consumer.setUpdateTime(userAggregate.getUpdateTime());
         return consumer;
     }
 }
