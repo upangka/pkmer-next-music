@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
+ * 歌单与歌曲的绑定关系
  * @author <a href="mailto:1193094618@qq.com">pkmer</a>
  * <br>
  * <a href = "https://gitee.com/developeros/videos-online">Code Repository</a>
@@ -29,6 +30,9 @@ public class SongListAggregate extends AuditableEntity implements AggregateRoot 
     private List<Style> styles = Collections.emptyList();
 
     private String introduction;
+
+    @Builder.Default
+    private List<BindSongValueObj> songIds = Collections.emptyList();
 
     public void modifyTitle(String title) {
         this.title = title;

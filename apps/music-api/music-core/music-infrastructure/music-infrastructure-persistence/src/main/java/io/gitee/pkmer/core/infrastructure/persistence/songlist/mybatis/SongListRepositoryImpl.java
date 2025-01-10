@@ -1,5 +1,7 @@
 package io.gitee.pkmer.core.infrastructure.persistence.songlist.mybatis;
 
+import io.gitee.pkmer.ddd.common.ChangingStatus;
+import io.gitee.pkmer.music.domain.songlist.BindSongValueObj;
 import io.gitee.pkmer.music.domain.songlist.SongListAggregate;
 import io.gitee.pkmer.music.domain.songlist.SongListId;
 import io.gitee.pkmer.music.domain.songlist.SongListRepository;
@@ -7,10 +9,14 @@ import org.mybatis.dynamic.sql.delete.render.DeleteStatementProvider;
 import org.mybatis.dynamic.sql.render.RenderingStrategies;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
-import static io.gitee.pkmer.core.infrastructure.persistence.songlist.mybatis.SongListDynamicSqlSupport.*;
-import static org.mybatis.dynamic.sql.SqlBuilder.*;
+import static io.gitee.pkmer.core.infrastructure.persistence.songlist.mybatis.SongListDynamicSqlSupport.id;
+import static io.gitee.pkmer.core.infrastructure.persistence.songlist.mybatis.SongListDynamicSqlSupport.songList;
+import static org.mybatis.dynamic.sql.SqlBuilder.deleteFrom;
+import static org.mybatis.dynamic.sql.SqlBuilder.isEqualTo;
 
 /**
  * @author <a href="mailto:1193094618@qq.com">pkmer</a>
@@ -21,9 +27,13 @@ import static org.mybatis.dynamic.sql.SqlBuilder.*;
 @Repository
 public class SongListRepositoryImpl implements SongListRepository {
     private final SongListDynamicMapper songListMapper;
+    private final ListSongDynamicMapper listSongMapper;
     private final SongListConverter converter;
-    public SongListRepositoryImpl(SongListDynamicMapper songListDynamicMapper,SongListConverter converter) {
+    public SongListRepositoryImpl(SongListDynamicMapper songListDynamicMapper,
+                                  ListSongDynamicMapper listSongDynamicMapper,
+                                  SongListConverter converter) {
         this.songListMapper = songListDynamicMapper;
+        this.listSongMapper = listSongDynamicMapper;
         this.converter = converter;
     }
 
@@ -55,8 +65,22 @@ public class SongListRepositoryImpl implements SongListRepository {
 
     private void insertAggregate(SongListAggregate aggregateRoot) {
         SongList record = converter.convertFrom(aggregateRoot);
-        // todo 歌曲与歌单的关联
+        List<ListSong> listSongRecords = handleListSongDataModel(aggregateRoot.getSongIds());
         songListMapper.insert(record);
+        if(!listSongRecords.isEmpty()){
+            listSongMapper.insertMultiple(listSongRecords);
+        }
+    }
+
+    private List<ListSong> handleListSongDataModel( List<BindSongValueObj> songIds){
+        List<ListSong> listSongRecords = new ArrayList<>();
+        for(BindSongValueObj vb: songIds){
+            if(vb.getChangingStatus().equals(ChangingStatus.NEW)){
+                var listSong = converter.toListSongDataModel(vb);
+                listSongRecords.add(listSong);
+            }
+        }
+        return listSongRecords;
     }
 
     private void deleteAggregate(SongListAggregate aggregateRoot) {

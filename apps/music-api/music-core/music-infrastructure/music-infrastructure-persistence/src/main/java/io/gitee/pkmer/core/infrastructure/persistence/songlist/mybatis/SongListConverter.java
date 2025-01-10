@@ -1,5 +1,6 @@
 package io.gitee.pkmer.core.infrastructure.persistence.songlist.mybatis;
 
+import io.gitee.pkmer.music.domain.songlist.BindSongValueObj;
 import io.gitee.pkmer.music.domain.songlist.SongListAggregate;
 import io.gitee.pkmer.music.domain.songlist.SongListBuilderFactory;
 import io.gitee.pkmer.music.domain.songlist.Style;
@@ -57,5 +58,18 @@ public class SongListConverter {
         record.setStyle(style);
         record.setIntroduction(aggregate.getIntroduction());
         return record;
+    }
+
+
+    public ListSong toListSongDataModel(BindSongValueObj songId) {
+        ListSong record = new ListSong();
+        record.setSongId(songId.getSongId().value());
+        record.setSongListId(songId.getSongListId().value());
+        return record;
+    }
+
+    public List<ListSong> toListSongDataModel(List<BindSongValueObj> songIds) {
+        return songIds.stream().map(this::toListSongDataModel)
+                .toList();
     }
 }

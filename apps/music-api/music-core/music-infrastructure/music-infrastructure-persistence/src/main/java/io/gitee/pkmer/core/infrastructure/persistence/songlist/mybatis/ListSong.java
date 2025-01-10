@@ -17,8 +17,8 @@ public class ListSong {
 
     private Long id;
 
-    private Integer songId;
+    private Long songId;
 
-    private Integer songListId;
+    private Long songListId;
 
 }
