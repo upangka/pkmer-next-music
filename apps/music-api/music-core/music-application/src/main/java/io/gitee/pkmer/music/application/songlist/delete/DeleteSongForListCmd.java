@@ -1,4 +1,4 @@
-package io.gitee.pkmer.music.application.songlist.add;
+package io.gitee.pkmer.music.application.songlist.delete;
 
 import io.gitee.pkmer.ddd.shared.command.Command;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -20,7 +20,7 @@ import java.util.List;
  * </p>
  */
 @Data
-public class AddSongForListCmd implements Command {
+public class DeleteSongForListCmd implements Command {
     @Schema(description = "歌单id")
     @NotNull(message = "歌单id不能为空")
     Long songListId;

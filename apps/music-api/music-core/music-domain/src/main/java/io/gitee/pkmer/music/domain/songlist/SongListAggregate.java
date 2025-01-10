@@ -64,4 +64,12 @@ public class SongListAggregate extends AuditableEntity implements AggregateRoot 
 
         this.songIds.add(bindSong);
     }
+
+    /**
+     * 删除歌曲
+     */
+    public void deleteSong(final Long songId){
+        songIds.removeIf(bindSong -> bindSong.getSongId().value().equals(songId));
+    }
+
 }

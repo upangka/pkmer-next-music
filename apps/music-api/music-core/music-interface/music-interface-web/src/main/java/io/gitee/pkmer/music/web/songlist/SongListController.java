@@ -6,6 +6,7 @@ import io.gitee.pkmer.convention.result.Result;
 import io.gitee.pkmer.ddd.shared.dispatch.CmdDispatcher;
 import io.gitee.pkmer.music.application.songlist.add.AddSongForListCmd;
 import io.gitee.pkmer.music.application.songlist.add.AddSongListCmd;
+import io.gitee.pkmer.music.application.songlist.delete.DeleteSongForListCmd;
 import io.gitee.pkmer.music.application.songlist.delete.DeleteSongListCmd;
 import io.gitee.pkmer.music.application.songlist.query.SongListPageQuery;
 import io.gitee.pkmer.music.application.songlist.query.SongListService;
@@ -76,6 +77,12 @@ public class SongListController extends BaseController implements SongListApi{
 
     @Override
     public Result<Void> addSongToSongList(AddSongForListCmd cmd) {
+        cmdDispatcher.dispatch(cmd);
+        return success();
+    }
+
+    @Override
+    public Result<Void> deleteSongToSongList(DeleteSongForListCmd cmd) {
         cmdDispatcher.dispatch(cmd);
         return success();
     }

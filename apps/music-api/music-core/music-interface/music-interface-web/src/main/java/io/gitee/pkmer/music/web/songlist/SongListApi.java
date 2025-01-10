@@ -3,6 +3,7 @@ package io.gitee.pkmer.music.web.songlist;
 import io.gitee.pkmer.convention.page.PageResponse;
 import io.gitee.pkmer.convention.result.Result;
 import io.gitee.pkmer.music.application.songlist.add.AddSongForListCmd;
+import io.gitee.pkmer.music.application.songlist.delete.DeleteSongForListCmd;
 import io.gitee.pkmer.music.application.songlist.query.SongListPageQuery;
 import io.gitee.pkmer.music.application.songlist.query.SongListView;
 import io.gitee.pkmer.music.application.songlist.update.UpdateSongListCmd;
@@ -68,5 +69,11 @@ public interface SongListApi {
     @PostMapping("/add/songs")
     Result<Void> addSongToSongList(@Validated
                                    @RequestBody AddSongForListCmd cmd);
+
+
+    @Operation(summary = "添加歌曲到歌单")
+    @DeleteMapping("/delete/songs")
+    Result<Void> deleteSongToSongList(@Validated
+                                   @RequestBody DeleteSongForListCmd cmd);
 
 }
