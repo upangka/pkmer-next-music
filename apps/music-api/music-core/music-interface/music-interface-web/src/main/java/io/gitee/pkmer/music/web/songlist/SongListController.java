@@ -5,6 +5,7 @@ import io.gitee.pkmer.convention.page.PageResponse;
 import io.gitee.pkmer.convention.result.Result;
 import io.gitee.pkmer.ddd.shared.dispatch.CmdDispatcher;
 import io.gitee.pkmer.music.application.collect.CollectCmd;
+import io.gitee.pkmer.music.application.rank.*;
 import io.gitee.pkmer.music.application.songlist.add.AddCommentCmd;
 import io.gitee.pkmer.music.application.songlist.add.AddSongForListCmd;
 import io.gitee.pkmer.music.application.songlist.add.AddSongListCmd;
@@ -37,6 +38,9 @@ public class SongListController extends BaseController implements SongListApi{
 
     @Setter(onMethod_ = @Autowired)
     private SongListService songListService;
+
+    @Setter(onMethod_ = @Autowired)
+    private RankService rankService;
 
     @Override
     public Result<Void> delete(String id) {
@@ -118,5 +122,25 @@ public class SongListController extends BaseController implements SongListApi{
         CollectCmd collectCmd = new CollectCmd().setSongListId(songListId);
         cmdDispatcher.dispatch(collectCmd);
         return success();
+    }
+
+    @Override
+    public Result<Void> addRank(AddRankCmd cmd) {
+        cmdDispatcher.dispatch(cmd);
+        return success();
+    }
+
+    @Override
+    public Result<Void> deleteRank(Long songListId) {
+       cmdDispatcher.dispatch( DeleteRankCmd.commandOf(songListId));
+        return success();
+    }
+
+    @Override
+    public Result<PageResponse<RankView>> pageQueryRank(Integer page, Integer size) {
+        RankQuery rankQuery = new RankQuery();
+        rankQuery.setPageNo(page);
+        rankQuery.setPageSize(size);
+        return success(rankService.pageQuery(rankQuery));
     }
 }

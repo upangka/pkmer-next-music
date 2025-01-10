@@ -2,6 +2,8 @@ package io.gitee.pkmer.music.web.songlist;
 
 import io.gitee.pkmer.convention.page.PageResponse;
 import io.gitee.pkmer.convention.result.Result;
+import io.gitee.pkmer.music.application.rank.AddRankCmd;
+import io.gitee.pkmer.music.application.rank.RankView;
 import io.gitee.pkmer.music.application.songlist.add.AddCommentCmd;
 import io.gitee.pkmer.music.application.songlist.add.AddSongForListCmd;
 import io.gitee.pkmer.music.application.songlist.delete.DeleteCommentCmd;
@@ -102,4 +104,26 @@ public interface SongListApi {
     })
     @PostMapping("/collect/{id}")
     Result<Void> collectSongList(@PathVariable Long songListId);
+
+
+    @Operation(summary = "添加歌单排行榜")
+    @PostMapping("/addrank")
+    Result<Void> addRank(@Valid @RequestBody AddRankCmd cmd);
+
+    @Operation(summary = "删除歌单排行榜")
+    @DeleteMapping("/delete/{id}/rank")
+    Result<Void> deleteRank(@PathVariable("id") Long songListId);
+
+
+    @Operation(summary = "歌单排行榜分页查询")
+    @Parameters({
+            @Parameter(name = "page",description = "当前页",in = ParameterIn.PATH),
+            @Parameter(name = "size",description = "每页的大小",in = ParameterIn.PATH),
+    })
+    @GetMapping("/rank/page")
+    Result<PageResponse<RankView>> pageQueryRank(
+            @RequestParam(value = "page",defaultValue = "1") Integer page,
+            @RequestParam(value = "size",defaultValue = "20") Integer size
+    );
+
 }
