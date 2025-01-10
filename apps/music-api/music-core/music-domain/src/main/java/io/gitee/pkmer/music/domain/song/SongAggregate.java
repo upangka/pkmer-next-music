@@ -2,8 +2,11 @@ package io.gitee.pkmer.music.domain.song;
 
 import io.gitee.pkmer.ddd.EntityAggregate;
 import io.gitee.pkmer.ddd.common.AuditableEntity;
+import io.gitee.pkmer.music.domain.comment.CommentEntity;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+
+import java.util.List;
 
 /**
  * <p>
@@ -30,6 +33,11 @@ public class SongAggregate extends AuditableEntity implements EntityAggregate {
     private String url;
 
     private String lyric;
+
+    /**
+     * 歌曲的评论
+     */
+    private List<CommentEntity> comments;
 
     public SongAggregate(SongId id, SingerId singerId, String name, String introduction, String pic, String url, String lyric) {
         this.id = id;

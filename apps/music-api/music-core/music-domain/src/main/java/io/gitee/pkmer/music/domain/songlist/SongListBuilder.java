@@ -1,5 +1,7 @@
 package io.gitee.pkmer.music.domain.songlist;
 
+import io.gitee.pkmer.music.domain.comment.CommentEntity;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +22,7 @@ public class SongListBuilder {
     private String styles;
     private String introduction;
     private List<BindSongValueObj> songIds;
+    private List<CommentEntity> comments;
 
      SongListBuilder(StyleValidator styleValidator){
         this.styleValidator = styleValidator;
@@ -56,6 +59,11 @@ public class SongListBuilder {
         return this;
     }
 
+    public SongListBuilder comments(List<CommentEntity> comments) {
+        this.comments = comments;
+        return this;
+    }
+
     public SongListAggregate build() {
         List<Style> songListStyles = buildStyle();
         SongListId songListId = buildId();
@@ -69,6 +77,7 @@ public class SongListBuilder {
                 .styles(songListStyles)
                 .introduction(introduction)
                 .songIds(songIds)
+                .comments(comments)
                 .build();
 
     }

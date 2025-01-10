@@ -1,15 +1,20 @@
 package io.gitee.pkmer.core.infrastructure.persistence.songlist.mybatis;
 
+import io.gitee.pkmer.core.infrastructure.persistence.comment.mybatis.Comment;
+import io.gitee.pkmer.core.infrastructure.persistence.comment.mybatis.CommentDynamicMapper;
+import io.gitee.pkmer.core.infrastructure.persistence.comment.mybatis.CommentDynamicSqlSupport;
 import io.gitee.pkmer.ddd.common.ChangingStatus;
+import io.gitee.pkmer.music.domain.comment.CommentEntity;
 import io.gitee.pkmer.music.domain.songlist.BindSongValueObj;
 import io.gitee.pkmer.music.domain.songlist.SongListAggregate;
 import io.gitee.pkmer.music.domain.songlist.SongListId;
 import io.gitee.pkmer.music.domain.songlist.SongListRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static io.gitee.pkmer.core.infrastructure.persistence.songlist.mybatis.SongListDynamicSqlSupport.id;
 import static org.mybatis.dynamic.sql.SqlBuilder.isEqualTo;
@@ -25,27 +30,37 @@ import static org.mybatis.dynamic.sql.SqlBuilder.isIn;
 public class SongListRepositoryImpl implements SongListRepository {
     private final SongListDynamicMapper songListMapper;
     private final ListSongDynamicMapper listSongMapper;
+    private final CommentDynamicMapper commentMapper;
     private final SongListConverter converter;
 
     public SongListRepositoryImpl(SongListDynamicMapper songListDynamicMapper,
                                   ListSongDynamicMapper listSongDynamicMapper,
+                                  CommentDynamicMapper commentDynamicMapper,
                                   SongListConverter converter) {
         this.songListMapper = songListDynamicMapper;
         this.listSongMapper = listSongDynamicMapper;
+        this.commentMapper = commentDynamicMapper;
         this.converter = converter;
     }
 
     @Override
     public SongListAggregate load(SongListId songListId) {
+        // 处理歌单
         Optional<SongList> optionalSongList = songListMapper.selectOne(
                 c -> c.where(id, isEqualTo(songListId.value())));
+
         if (optionalSongList.isPresent()) {
+            // 处理歌曲
             SongList songList = optionalSongList.get();
 
             List<ListSong> songIds = listSongMapper.select(c ->
                     c.where(id, isEqualTo(songList.getId())));
 
-            return converter.buildAggregate(songList,songIds);
+            // 处理评论
+            List<Comment> comments = commentMapper.select(c ->
+                    c.where(CommentDynamicSqlSupport.songListId, isEqualTo(songList.getId())));
+
+            return converter.buildAggregate(songList, songIds, comments);
         } else {
             return null;
         }
@@ -64,47 +79,82 @@ public class SongListRepositoryImpl implements SongListRepository {
 
     private void insertAggregate(SongListAggregate aggregateRoot) {
         SongList record = converter.convertFrom(aggregateRoot);
-        List<ListSong> listSongRecords = handleListSongDataModel(aggregateRoot.getSongIds());
-
         songListMapper.insert(record);
-        if (!listSongRecords.isEmpty()) {
-            listSongMapper.insertMultiple(listSongRecords);
-        }
     }
-
 
 
     private void deleteAggregate(SongListAggregate aggregateRoot) {
         Long id_ = aggregateRoot.getId().value();
 
-        List<Long> ids = converter.getSongId(aggregateRoot.getSongIds());
-        songListMapper.delete(c -> c.where(id,isEqualTo(id_)));
-        // https://mybatis.org/mybatis-dynamic-sql/docs/configuration.html
+        songListMapper.delete(c -> c.where(id, isEqualTo(id_)));
+        // 删除歌单关联中的所有绑定歌曲的关系
         songListMapper.delete(c ->
-                c.where(ListSongDynamicSqlSupport.songListId,isEqualTo(aggregateRoot.getId().value()))
-                 .and(ListSongDynamicSqlSupport.songId,isIn(ids))
-                 .configureStatement(stmt -> stmt.setNonRenderingWhereClauseAllowed(true)));
+                c.where(ListSongDynamicSqlSupport.songListId, isEqualTo(aggregateRoot.getId().value())));
     }
 
 
-
-
+    /**
+     * 因为增加歌单中的歌曲也算是对歌单的更新。
+     */
     private void updateAggregate(SongListAggregate aggregateRoot) {
         SongList record = converter.convertFrom(aggregateRoot);
         songListMapper.updateByPrimaryKeySelective(record);
-        // 不处理绑定关系，因为这里是歌单，所以不处理绑定关系
+        // 处理歌曲
+        updateSongListForBindSong(aggregateRoot);
+        // 评论
+        updateSongListForComments(aggregateRoot);
     }
 
+    /**
+     * 处理歌单更新中的评论
+     */
+    private void updateSongListForComments(SongListAggregate aggregateRoot) {
+        Map<ChangingStatus, List<CommentEntity>> commentCollect = aggregateRoot.getComments().stream()
+                .collect(Collectors.groupingBy(CommentEntity::getChangingStatus));
 
-    private List<ListSong> handleListSongDataModel(List<BindSongValueObj> songIds) {
-        List<ListSong> listSongRecords = new ArrayList<>();
-        for (BindSongValueObj vb : songIds) {
-            if (vb.getChangingStatus().equals(ChangingStatus.NEW)) {
-                var listSong = converter.toListSongDataModel(vb);
-                listSongRecords.add(listSong);
+        if (commentCollect.containsKey(ChangingStatus.NEW)) {
+            List<Comment> comments = converter.toCommentDataModel(commentCollect.get(ChangingStatus.NEW), aggregateRoot.getId().value());
+            if (!comments.isEmpty()) {
+                commentMapper.insertMultiple(comments);
+            }
+        } else if (commentCollect.containsKey(ChangingStatus.DELETED)) {
+            List<Long> ids = commentCollect.get(ChangingStatus.DELETED).stream()
+                    .map(CommentEntity::getId)
+                    .toList();
+            if (!ids.isEmpty()) {
+                commentMapper.delete(c -> c.where(CommentDynamicSqlSupport.id, isIn(ids)));
+            }
+        }else if(commentCollect.containsKey(ChangingStatus.UPDATED)){
+            // 用户更新在某个歌单同时更新关于自己评论的好几条，这里采用for来处理单一的情况
+            for (CommentEntity commentEntity : commentCollect.get(ChangingStatus.UPDATED)) {
+                commentMapper.update(c -> c.set(CommentDynamicSqlSupport.content)
+                        .equalTo(commentEntity.getContent())
+                        .where(CommentDynamicSqlSupport.id, isEqualTo(commentEntity.getId())));
             }
         }
-        return listSongRecords;
     }
 
+    /**
+     * 处理歌单更新中的歌曲
+     */
+    private void updateSongListForBindSong(SongListAggregate aggregateRoot) {
+        List<BindSongValueObj> bindSongs = aggregateRoot.getBindSongs();
+
+        Map<ChangingStatus, List<BindSongValueObj>> songCollect = bindSongs.stream()
+                .collect(Collectors.groupingBy(BindSongValueObj::getChangingStatus));
+
+        if (songCollect.containsKey(ChangingStatus.NEW)) {
+            List<ListSong> listSongRecords = converter.toListSongDataModel(songCollect.get(ChangingStatus.NEW));
+            if (!listSongRecords.isEmpty()) {
+                listSongMapper.insertMultiple(listSongRecords);
+            }
+        } else if (songCollect.containsKey(ChangingStatus.DELETED)) {
+            List<Long> ids = converter.getSongId(songCollect.get(ChangingStatus.DELETED));
+            // https://mybatis.org/mybatis-dynamic-sql/docs/configuration.html
+            songListMapper.delete(c ->
+                    c.where(ListSongDynamicSqlSupport.songListId, isEqualTo(aggregateRoot.getId().value()))
+                            .and(ListSongDynamicSqlSupport.songId, isIn(ids))
+                            .configureStatement(stmt -> stmt.setNonRenderingWhereClauseAllowed(true)));
+        }
+    }
 }

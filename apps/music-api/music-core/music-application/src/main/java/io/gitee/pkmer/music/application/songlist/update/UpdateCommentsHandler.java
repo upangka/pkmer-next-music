@@ -1,4 +1,4 @@
-package io.gitee.pkmer.music.application.songlist.add;
+package io.gitee.pkmer.music.application.songlist.update;
 
 import io.gitee.pkmer.ddd.shared.command.CommandHandler;
 import io.gitee.pkmer.music.domain.songlist.SongListAggregate;
@@ -7,8 +7,6 @@ import io.gitee.pkmer.music.domain.songlist.SongListRepository;
 import org.springframework.stereotype.Component;
 
 /**
- *
- * 给歌单添加歌曲
  * <p>
  *
  * @author <a href="mailto:3149374525@qq.com">pkmer</a>
@@ -19,21 +17,18 @@ import org.springframework.stereotype.Component;
  * </p>
  */
 @Component
-public class AddSongForListHandler implements CommandHandler<AddSongForListCmd,Void> {
-    private final SongListRepository repository;
+public class UpdateCommentsHandler implements CommandHandler<UpdateSongListCommentCmd,Void> {
 
-    public AddSongForListHandler(SongListRepository repository){
+    private final SongListRepository repository;
+    public UpdateCommentsHandler(SongListRepository repository){
         this.repository = repository;
     }
 
-    /**
-     * 给歌单添加歌曲
-     */
     @Override
-    public Void execute(AddSongForListCmd cmd) {
+    public Void execute(UpdateSongListCommentCmd cmd) {
         SongListAggregate songList = repository.load(new SongListId(cmd.getSongListId()));
         if(songList != null){
-            cmd.getSongIds().forEach(songList::addSong);
+            songList.modifyComment(cmd.getCommentId(),cmd.getContent());
             songList.toUpdate();
             repository.save(songList);
         }

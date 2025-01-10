@@ -2,12 +2,12 @@ package io.gitee.pkmer.music.domain.songlist;
 
 import io.gitee.pkmer.ddd.common.AuditableEntity;
 import io.gitee.pkmer.ddd.shared.AggregateRoot;
+import io.gitee.pkmer.music.domain.comment.CommentEntity;
 import io.gitee.pkmer.music.domain.song.SongId;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -33,7 +33,12 @@ public class SongListAggregate extends AuditableEntity implements AggregateRoot 
 
     private String introduction;
 
-    private List<BindSongValueObj> songIds = new ArrayList<>();
+    private List<BindSongValueObj> songIds;
+
+    /**
+     * 歌单的评论
+     */
+    private List<CommentEntity> comments;
 
     public void modifyTitle(String title) {
         this.title = title;
@@ -61,7 +66,6 @@ public class SongListAggregate extends AuditableEntity implements AggregateRoot 
     public void addSong(Long songId){
         BindSongValueObj bindSong = new BindSongValueObj(
                 new SongId(songId),this.id);
-
         this.songIds.add(bindSong);
     }
 
@@ -72,6 +76,18 @@ public class SongListAggregate extends AuditableEntity implements AggregateRoot 
         songIds.stream().filter(song -> song.getSongId().value().equals(songId))
                 .findFirst()
                 .ifPresent(AuditableEntity::toDelete);
+    }
+
+    /**
+     * 更新评论
+     * @param commentId 评论id
+     * @param content 评论内容
+     */
+    public void modifyComment(Long commentId,String content){
+        CommentEntity commentEntity = comments.stream().filter(comment -> comment.getId().equals(commentId))
+                .findFirst().orElseThrow();
+        commentEntity.setContent(content);
+        commentEntity.toUpdate();
     }
 
 }

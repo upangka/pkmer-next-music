@@ -7,6 +7,7 @@ import io.gitee.pkmer.music.application.songlist.delete.DeleteSongForListCmd;
 import io.gitee.pkmer.music.application.songlist.query.SongListPageQuery;
 import io.gitee.pkmer.music.application.songlist.query.SongListView;
 import io.gitee.pkmer.music.application.songlist.update.UpdateSongListCmd;
+import io.gitee.pkmer.music.application.songlist.update.UpdateSongListCommentCmd;
 import io.gitee.pkmer.music.web.songlist.req.AddSongListReq;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -76,4 +77,9 @@ public interface SongListApi {
     Result<Void> deleteSongToSongList(@Validated
                                    @RequestBody DeleteSongForListCmd cmd);
 
+
+    @Operation(summary = "更新歌单的评论")
+    @DeleteMapping("/update/comments")
+    Result<Void> updateSongListComment(@Valid @RequestBody
+                                       UpdateSongListCommentCmd cmd);
 }

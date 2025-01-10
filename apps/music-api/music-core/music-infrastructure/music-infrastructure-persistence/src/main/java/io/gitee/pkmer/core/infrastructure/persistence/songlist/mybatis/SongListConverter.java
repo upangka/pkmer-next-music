@@ -1,10 +1,14 @@
 package io.gitee.pkmer.core.infrastructure.persistence.songlist.mybatis;
 
+import io.gitee.pkmer.core.infrastructure.persistence.comment.mybatis.Comment;
 import io.gitee.pkmer.ddd.common.ChangingStatus;
+import io.gitee.pkmer.music.domain.comment.CommentEntity;
 import io.gitee.pkmer.music.domain.song.SongId;
 import io.gitee.pkmer.music.domain.songlist.*;
+import io.gitee.pkmer.music.domain.user.UserId;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,9 +36,14 @@ public class SongListConverter {
      * @param songList
      */
     public SongListAggregate buildAggregate(SongList songList,
-                                            List<ListSong> listSongs) {
+                                            List<ListSong> listSongs,
+                                            List<Comment> comments) {
+        // 歌曲信息
         List<BindSongValueObj> bindSongDomainModel = toBindSongDomainModel(listSongs);
-        // todo 绑定歌单对应的歌曲
+
+        // 评论信息
+        List<CommentEntity> commentDomainModels = toCommentDomainModel(comments);
+
         return songListBuilderFactory.createSongListBuilder()
                 .id(songList.getId())
                 .pic(songList.getPic())
@@ -42,6 +51,7 @@ public class SongListConverter {
                 .styles(songList.getStyle())
                 .introduction(songList.getIntroduction())
                 .songIds(bindSongDomainModel)
+                .comments(commentDomainModels)
                 .build();
     }
 
@@ -89,6 +99,53 @@ public class SongListConverter {
 
     public List<BindSongValueObj> toBindSongDomainModel(List<ListSong> listSongs){
         return listSongs.stream().map(this::toBindSongDomainModel)
+                .toList();
+    }
+
+
+    /**
+     * 评论数据模型转换成领域对象
+     */
+    public CommentEntity toCommentDomainModel(Comment comment){
+        CommentEntity commentEntity = new CommentEntity();
+        commentEntity.setId(comment.getId());
+        commentEntity.setUserId(new UserId(comment.getUserId()));
+        commentEntity.setContent(comment.getContent());
+        commentEntity.setCreateTime(comment.getCreateTime());
+        commentEntity.setType(comment.getType());
+        return commentEntity;
+    }
+
+    /**
+     * 评论数据模型转换成领域对象
+     */
+    public List<CommentEntity> toCommentDomainModel(List<Comment> comments){
+        return comments.stream().map(this::toCommentDomainModel)
+                .toList();
+    }
+
+    /**
+     * 评论领域对象转换成数据模型
+     * @param commentEntity 评论领域对象
+     * @param songListId 歌单id
+     */
+    public Comment toCommentDataModel(CommentEntity commentEntity,Long songListId){
+        Comment comment = new Comment();
+        comment.setUserId(commentEntity.getUserId().value());
+        comment.setSongListId(songListId);
+        comment.setContent(commentEntity.getContent());
+        comment.setCreateTime(LocalDateTime.now());
+        comment.setType(commentEntity.getType());
+        return comment;
+    }
+
+    /**
+     * 评论领域对象转换成数据模型
+     * @param commentEntities 评论领域对象
+     * @param songListId 歌单id
+     */
+    public List<Comment> toCommentDataModel(List<CommentEntity> commentEntities,Long songListId){
+        return commentEntities.stream().map(commentEntity -> toCommentDataModel(commentEntity,songListId))
                 .toList();
     }
 
