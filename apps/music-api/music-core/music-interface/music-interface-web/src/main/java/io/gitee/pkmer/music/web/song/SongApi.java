@@ -36,6 +36,11 @@ public interface SongApi {
     @PostMapping("/update")
     Result<Void> updateSong(@Valid @RequestBody  UpdateSongCmd cmd);
 
-
+    @Operation(summary = "收藏歌曲")
+    @Parameters({
+            @Parameter(name = "id",description = "歌曲id",in = ParameterIn.PATH),
+    })
+    @PostMapping("/collect/{id}")
+    Result<Void> collectSongList(@PathVariable Long songId);
 
 }

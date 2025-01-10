@@ -4,6 +4,7 @@ import io.gitee.pkmer.convention.controller.BaseController;
 import io.gitee.pkmer.convention.page.PageResponse;
 import io.gitee.pkmer.convention.result.Result;
 import io.gitee.pkmer.ddd.shared.dispatch.CmdDispatcher;
+import io.gitee.pkmer.music.application.collect.CollectCmd;
 import io.gitee.pkmer.music.application.songlist.add.AddCommentCmd;
 import io.gitee.pkmer.music.application.songlist.add.AddSongForListCmd;
 import io.gitee.pkmer.music.application.songlist.add.AddSongListCmd;
@@ -109,5 +110,13 @@ public class SongListController extends BaseController implements SongListApi{
     @Override
     public Result<PageResponse<SongListCommentsView>> pageQueryComments(SongListCommentQuery pageQuery) {
         return success(songListService.pageQueryComments(pageQuery));
+    }
+
+    @Override
+    public Result<Void> collectSongList(Long songListId) {
+        // todo userId
+        CollectCmd collectCmd = new CollectCmd().setSongListId(songListId);
+        cmdDispatcher.dispatch(collectCmd);
+        return success();
     }
 }

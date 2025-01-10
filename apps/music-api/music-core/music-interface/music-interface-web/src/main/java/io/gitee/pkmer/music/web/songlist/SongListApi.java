@@ -96,4 +96,10 @@ public interface SongListApi {
     Result<PageResponse<SongListCommentsView>> pageQueryComments(@Valid @RequestBody
                                                          SongListCommentQuery pageQuery);
 
+    @Operation(summary = "收藏歌单")
+    @Parameters({
+            @Parameter(name = "id",description = "歌单id",in = ParameterIn.PATH),
+    })
+    @PostMapping("/collect/{id}")
+    Result<Void> collectSongList(@PathVariable Long songListId);
 }
