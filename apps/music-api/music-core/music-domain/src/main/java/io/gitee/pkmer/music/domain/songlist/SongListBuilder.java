@@ -19,6 +19,7 @@ public class SongListBuilder {
     private String pic;
     private String styles;
     private String introduction;
+    private List<BindSongValueObj> songIds;
 
      SongListBuilder(StyleValidator styleValidator){
         this.styleValidator = styleValidator;
@@ -50,6 +51,11 @@ public class SongListBuilder {
         return this;
     }
 
+    public SongListBuilder songIds(List<BindSongValueObj> songIds) {
+        this.songIds = songIds;
+        return this;
+    }
+
     public SongListAggregate build() {
         List<Style> songListStyles = buildStyle();
         SongListId songListId = buildId();
@@ -62,6 +68,7 @@ public class SongListBuilder {
                 .title(title)
                 .styles(songListStyles)
                 .introduction(introduction)
+                .songIds(songIds)
                 .build();
 
     }

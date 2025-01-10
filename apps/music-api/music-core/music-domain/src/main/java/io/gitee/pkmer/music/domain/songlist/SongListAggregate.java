@@ -31,8 +31,7 @@ public class SongListAggregate extends AuditableEntity implements AggregateRoot 
 
     private String introduction;
 
-    @Builder.Default
-    private List<BindSongValueObj> songIds = Collections.emptyList();
+    private List<BindSongValueObj> songIds;
 
     public void modifyTitle(String title) {
         this.title = title;

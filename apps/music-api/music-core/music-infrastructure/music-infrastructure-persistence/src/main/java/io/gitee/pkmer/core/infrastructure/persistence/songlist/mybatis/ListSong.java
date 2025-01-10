@@ -13,11 +13,12 @@ import lombok.Data;
  */
 @Data
 public class ListSong {
-    @SnowflakeId
-
+   @SnowflakeId
     private Long id;
 
+
     private Long songId;
+
 
     private Long songListId;
 

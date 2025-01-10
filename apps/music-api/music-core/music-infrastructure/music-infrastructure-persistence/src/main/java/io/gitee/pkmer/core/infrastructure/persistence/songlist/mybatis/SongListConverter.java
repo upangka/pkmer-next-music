@@ -1,11 +1,11 @@
 package io.gitee.pkmer.core.infrastructure.persistence.songlist.mybatis;
 
-import io.gitee.pkmer.music.domain.songlist.BindSongValueObj;
-import io.gitee.pkmer.music.domain.songlist.SongListAggregate;
-import io.gitee.pkmer.music.domain.songlist.SongListBuilderFactory;
-import io.gitee.pkmer.music.domain.songlist.Style;
+import io.gitee.pkmer.ddd.common.ChangingStatus;
+import io.gitee.pkmer.music.domain.song.SongId;
+import io.gitee.pkmer.music.domain.songlist.*;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,7 +31,9 @@ public class SongListConverter {
      * 构建领域对象
      * @param songList
      */
-    public SongListAggregate buildAggregate(SongList songList) {
+    public SongListAggregate buildAggregate(SongList songList,
+                                            List<ListSong> listSongs) {
+        List<BindSongValueObj> bindSongDomainModel = toBindSongDomainModel(listSongs);
         // todo 绑定歌单对应的歌曲
         return songListBuilderFactory.createSongListBuilder()
                 .id(songList.getId())
@@ -39,6 +41,7 @@ public class SongListConverter {
                 .title(songList.getTitle())
                 .styles(songList.getStyle())
                 .introduction(songList.getIntroduction())
+                .songIds(bindSongDomainModel)
                 .build();
     }
 
@@ -71,5 +74,36 @@ public class SongListConverter {
     public List<ListSong> toListSongDataModel(List<BindSongValueObj> songIds) {
         return songIds.stream().map(this::toListSongDataModel)
                 .toList();
+    }
+
+    public BindSongValueObj toBindSongDomainModel(ListSong listSong){
+        BindSongValueObj bindSongValueObj = new BindSongValueObj(
+                new SongId(listSong.getSongId()),
+                new SongListId(listSong.getSongListId())
+        );
+
+        bindSongValueObj.toUnChang();
+        return bindSongValueObj;
+    }
+
+
+    public List<BindSongValueObj> toBindSongDomainModel(List<ListSong> listSongs){
+        return listSongs.stream().map(this::toBindSongDomainModel)
+                .toList();
+    }
+
+
+    /**
+     * 获取值对象BindSongValueObj对应数据模型的id
+     * @param songIds BindSongValueObj 值对象
+     */
+    public List<Long> getSongId(List<BindSongValueObj> songIds) {
+        List<Long> ids = new ArrayList<>();
+        for (BindSongValueObj songId : songIds){
+            if(songId.getChangingStatus().equals(ChangingStatus.DELETED)){
+                ids.add(songId.getSongId().value());
+            }
+        }
+        return ids;
     }
 }
