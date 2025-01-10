@@ -33,16 +33,17 @@
             <property name="useJSR310Types" value="true" />
         </javaTypeResolver>
 
-        <javaModelGenerator targetPackage="io.gitee.pkmer.core.infrastructure.persistence.comment.mybatis" targetProject="src/main/java" />
+        <javaModelGenerator targetPackage="io.gitee.pkmer.core.infrastructure.persistence.collect.mybatis" targetProject="src/main/java" />
         <sqlMapGenerator targetPackage="mapper" targetProject="src/main/resources"/>
-        <javaClientGenerator type="XMLMAPPER" targetPackage="io.gitee.pkmer.core.infrastructure.persistence.comment.mybatis" targetProject="src/main/java"/>
+        <javaClientGenerator type="XMLMAPPER" targetPackage="io.gitee.pkmer.core.infrastructure.persistence.collect.mybatis" targetProject="src/main/java"/>
 
 <!--        <table tableName="banner" mapperName="BannerDynamicMapper" />-->
 <!--        <table tableName="song_list" mapperName="SongListDynamicMapper" />-->
 <!--        <table tableName="song" mapperName="SongDynamicMapper" />-->
 <!--        <table tableName="singer" mapperName="SingerDynamicMapper" />-->
 <!--        <table tableName="list_song" mapperName="ListSongDynamicMapper" />-->
-        <table tableName="comment" mapperName="CommentDynamicMapper" />
+<!--        <table tableName="comment" mapperName="CommentDynamicMapper" />-->
+        <table tableName="collect" mapperName="CollectDynamicMapper" />
     </context>
 
 
