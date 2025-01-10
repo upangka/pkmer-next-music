@@ -2,7 +2,9 @@ package io.gitee.pkmer.music.web.songlist;
 
 import io.gitee.pkmer.convention.page.PageResponse;
 import io.gitee.pkmer.convention.result.Result;
+import io.gitee.pkmer.music.application.songlist.add.AddCommentCmd;
 import io.gitee.pkmer.music.application.songlist.add.AddSongForListCmd;
+import io.gitee.pkmer.music.application.songlist.delete.DeleteCommentCmd;
 import io.gitee.pkmer.music.application.songlist.delete.DeleteSongForListCmd;
 import io.gitee.pkmer.music.application.songlist.query.SongListPageQuery;
 import io.gitee.pkmer.music.application.songlist.query.SongListView;
@@ -79,7 +81,19 @@ public interface SongListApi {
 
 
     @Operation(summary = "更新歌单的评论")
-    @DeleteMapping("/update/comments")
+    @PostMapping("/update/comments")
     Result<Void> updateSongListComment(@Valid @RequestBody
                                        UpdateSongListCommentCmd cmd);
+
+
+    @Operation(summary = "删除歌单的评论")
+    @PostMapping("/delete/comments")
+    Result<Void> deleteSongListComment(@Valid @RequestBody
+                                       DeleteCommentCmd cmd);
+
+    @Operation(summary = "新增歌单的评论")
+    @PostMapping("/add/comments")
+    Result<Void> addSongListComment(@Valid @RequestBody
+                                    AddCommentCmd cmd);
+
 }

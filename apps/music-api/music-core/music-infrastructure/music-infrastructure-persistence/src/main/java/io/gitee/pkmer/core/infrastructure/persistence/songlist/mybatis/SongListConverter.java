@@ -8,7 +8,6 @@ import io.gitee.pkmer.music.domain.songlist.*;
 import io.gitee.pkmer.music.domain.user.UserId;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -134,8 +133,9 @@ public class SongListConverter {
         comment.setUserId(commentEntity.getUserId().value());
         comment.setSongListId(songListId);
         comment.setContent(commentEntity.getContent());
-        comment.setCreateTime(LocalDateTime.now());
-        comment.setType(commentEntity.getType());
+        comment.setCreateTime(commentEntity.getCreateTime());
+        // todo 写前端的时候再来确定它的type
+        // comment.setType(commentEntity.getType());
         return comment;
     }
 

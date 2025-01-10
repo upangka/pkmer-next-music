@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
@@ -84,10 +85,31 @@ public class SongListAggregate extends AuditableEntity implements AggregateRoot 
      * @param content 评论内容
      */
     public void modifyComment(Long commentId,String content){
-        CommentEntity commentEntity = comments.stream().filter(comment -> comment.getId().equals(commentId))
+        // todo 完成登录功能之后处理&& comment.getUserId().value() == userId
+        CommentEntity commentEntity = comments.stream().filter(comment ->
+                        comment.getId().equals(commentId))
                 .findFirst().orElseThrow();
         commentEntity.setContent(content);
         commentEntity.toUpdate();
+    }
+
+    public void deleteComment(Long commentId){
+        // todo 完成登录功能之后处理&& comment.getUserId().value() == userId
+        CommentEntity commentEntity = comments.stream().filter(comment ->
+                        comment.getId().equals(commentId))
+                .findFirst().orElseThrow();
+        commentEntity.toDelete();
+    }
+
+    /**
+     * 添加评论
+     */
+    public void addComment(String content){
+        // todo 完成登录功能之后处理 添加userId
+        CommentEntity commentEntity = new CommentEntity();
+        commentEntity.setContent(content);
+        commentEntity.setCreateTime(LocalDateTime.now());
+        comments.add(commentEntity);
     }
 
 }
