@@ -1,9 +1,15 @@
 package io.gitee.pkmer.music.application.songlist.query;
 
+import io.gitee.pkmer.convention.converter.TargetAndSourceConverter;
 import io.gitee.pkmer.convention.page.PageResponse;
+import io.gitee.pkmer.core.infrastructure.persistence.comment.mybatis.Comment;
+import io.gitee.pkmer.core.infrastructure.persistence.comment.mybatis.CommentDynamicMapper;
+import io.gitee.pkmer.core.infrastructure.persistence.comment.mybatis.CommentDynamicSqlSupport;
 import io.gitee.pkmer.core.infrastructure.persistence.songlist.mybatis.SongList;
 import io.gitee.pkmer.core.infrastructure.persistence.songlist.mybatis.SongListDynamicMapper;
 import io.gitee.pkmer.music.domain.songlist.Style;
+import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
 import org.mybatis.dynamic.sql.where.WhereApplier;
 import org.springframework.stereotype.Service;
 
@@ -11,8 +17,7 @@ import java.util.List;
 
 import static io.gitee.pkmer.core.infrastructure.persistence.songlist.mybatis.SongListDynamicSqlSupport.style;
 import static io.gitee.pkmer.core.infrastructure.persistence.songlist.mybatis.SongListDynamicSqlSupport.title;
-import static org.mybatis.dynamic.sql.SqlBuilder.isLikeWhenPresent;
-import static org.mybatis.dynamic.sql.SqlBuilder.where;
+import static org.mybatis.dynamic.sql.SqlBuilder.*;
 
 /**
  * CQRS分离，抽离出查询
@@ -27,15 +32,18 @@ import static org.mybatis.dynamic.sql.SqlBuilder.where;
 @Service
 public class SongListService {
     private final SongListDynamicMapper songListMapper;
-    public SongListService(SongListDynamicMapper songListDynamicMapper){
+    private final CommentDynamicMapper commentMapper;
+    public SongListService(SongListDynamicMapper songListDynamicMapper,
+                           CommentDynamicMapper commentDynamicMapper){
         this.songListMapper = songListDynamicMapper;
+        this.commentMapper = commentDynamicMapper;
     }
 
     /**
-     * 分页查询
+     * 分页查询歌单
      * @param query
      */
-    public PageResponse<SongListView> pageQuery(SongListPageQuery query){
+    public PageResponse<SongListView> pageQuerySongList(SongListPageQuery query){
 
         // https://mybatis.org/mybatis-dynamic-sql/docs/conditions.html#value-transformation
         WhereApplier whereApplier =
@@ -50,9 +58,8 @@ public class SongListService {
                         .offset(query.offset()));
 
 
-        int total = (int) songListMapper.count(c -> c);
+        int total = (int) songListMapper.count(c -> c.applyWhere(whereApplier));
 
-        // todo 歌单绑定的歌曲
         List<SongListView> list = songLists.stream().map(this::buildView).toList();
 
         PageResponse<SongListView> pageResponse = new PageResponse<>();
@@ -61,6 +68,38 @@ public class SongListService {
                 .setTotalPages(total / query.getPageSize() + 1)
                 .setCurrentPageNo(query.getPageNo());
         return pageResponse;
+    }
+
+    /**
+     * 分页查询歌单的评论
+     * @param query
+     */
+    public PageResponse<SongListCommentsView> pageQueryComments(SongListCommentQuery query){
+
+        WhereApplier whereApplier = where(CommentDynamicSqlSupport.songListId, isEqualTo(query.getSongListId())).toWhereApplier();
+
+        List<Comment> comments = commentMapper.select(c -> c
+                .applyWhere(whereApplier)
+                .limit(query.getPageSize())
+                .offset(query.offset()));
+
+
+        long total = commentMapper.count(c -> c.applyWhere(whereApplier));
+
+        List<SongListCommentsView> list = CommentConverter.INSTRANCE.toTargets(comments);
+
+        PageResponse<SongListCommentsView> pageResponse = new PageResponse<>();
+        pageResponse.setList(list)
+                .setTotal((int)total)
+                .setTotalPages((int)total / query.getPageSize() + 1)
+                .setCurrentPageNo(query.getPageNo());
+        return pageResponse;
+    }
+
+
+    @Mapper
+    public interface CommentConverter extends TargetAndSourceConverter<SongListCommentsView, Comment>{
+        CommentConverter INSTRANCE = Mappers.getMapper(CommentConverter.class);
     }
 
     /**

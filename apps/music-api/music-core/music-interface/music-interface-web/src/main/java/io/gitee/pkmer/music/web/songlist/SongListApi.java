@@ -6,6 +6,8 @@ import io.gitee.pkmer.music.application.songlist.add.AddCommentCmd;
 import io.gitee.pkmer.music.application.songlist.add.AddSongForListCmd;
 import io.gitee.pkmer.music.application.songlist.delete.DeleteCommentCmd;
 import io.gitee.pkmer.music.application.songlist.delete.DeleteSongForListCmd;
+import io.gitee.pkmer.music.application.songlist.query.SongListCommentQuery;
+import io.gitee.pkmer.music.application.songlist.query.SongListCommentsView;
 import io.gitee.pkmer.music.application.songlist.query.SongListPageQuery;
 import io.gitee.pkmer.music.application.songlist.query.SongListView;
 import io.gitee.pkmer.music.application.songlist.update.UpdateSongListCmd;
@@ -31,9 +33,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("songList")
 public interface SongListApi {
 
-    /**
-     * 删除歌单
-     */
+
     @Operation(summary = "删除歌单")
     @Parameters({
             @Parameter(name = "id",description = "歌单id",in = ParameterIn.PATH),
@@ -41,20 +41,14 @@ public interface SongListApi {
     @DeleteMapping("/{id}")
     Result<Void> delete(@PathVariable("id") String id);
 
-    /**
-     * 添加歌单
-     */
     @Operation(summary = "添加歌单")
     @PostMapping
     Result<Void> addSongList(@Valid @RequestBody AddSongListReq songList);
 
 
-    /**
-     * 分页查询歌单
-     */
     @Operation(summary = "歌单分页查询")
     @PostMapping("/page")
-    Result<PageResponse<SongListView>> pageQuery(@Valid @RequestBody SongListPageQuery pageQuery);
+    Result<PageResponse<SongListView>> pageQuerySongList(@Valid @RequestBody SongListPageQuery pageQuery);
 
     @Operation(summary = "歌单基本信息")
     @PostMapping("/update/base")
@@ -95,5 +89,11 @@ public interface SongListApi {
     @PostMapping("/add/comments")
     Result<Void> addSongListComment(@Valid @RequestBody
                                     AddCommentCmd cmd);
+
+
+    @Operation(summary = "歌单评论分页查询")
+    @PostMapping("/comments/page")
+    Result<PageResponse<SongListCommentsView>> pageQueryComments(@Valid @RequestBody
+                                                         SongListCommentQuery pageQuery);
 
 }

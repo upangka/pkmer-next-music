@@ -10,9 +10,7 @@ import io.gitee.pkmer.music.application.songlist.add.AddSongListCmd;
 import io.gitee.pkmer.music.application.songlist.delete.DeleteCommentCmd;
 import io.gitee.pkmer.music.application.songlist.delete.DeleteSongForListCmd;
 import io.gitee.pkmer.music.application.songlist.delete.DeleteSongListCmd;
-import io.gitee.pkmer.music.application.songlist.query.SongListPageQuery;
-import io.gitee.pkmer.music.application.songlist.query.SongListService;
-import io.gitee.pkmer.music.application.songlist.query.SongListView;
+import io.gitee.pkmer.music.application.songlist.query.*;
 import io.gitee.pkmer.music.application.songlist.update.UpdateSongListCmd;
 import io.gitee.pkmer.music.application.songlist.update.UpdateSongListCommentCmd;
 import io.gitee.pkmer.music.web.songlist.converter.AddSongListConverter;
@@ -60,8 +58,8 @@ public class SongListController extends BaseController implements SongListApi{
     }
 
     @Override
-    public Result<PageResponse<SongListView>> pageQuery(SongListPageQuery pageQuery) {
-        return success(songListService.pageQuery(pageQuery));
+    public Result<PageResponse<SongListView>> pageQuerySongList(SongListPageQuery pageQuery) {
+        return success(songListService.pageQuerySongList(pageQuery));
     }
 
     @Override
@@ -106,5 +104,10 @@ public class SongListController extends BaseController implements SongListApi{
     public Result<Void> addSongListComment(AddCommentCmd cmd) {
         cmdDispatcher.dispatch(cmd);
         return success();
+    }
+
+    @Override
+    public Result<PageResponse<SongListCommentsView>> pageQueryComments(SongListCommentQuery pageQuery) {
+        return success(songListService.pageQueryComments(pageQuery));
     }
 }
