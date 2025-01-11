@@ -48,4 +48,6 @@ include 'music-core:music-infrastructure'
 findProject(':music-core:music-infrastructure')?.name = 'music-infrastructure'
 include 'music-core:music-infrastructure:music-infrastructure-persistence'
 findProject(':music-core:music-infrastructure:music-infrastructure-persistence')?.name = 'music-infrastructure-persistence'
+include 'music-core:music-infrastructure:music-infrastructure-gateway'
+findProject(':music-core:music-infrastructure:music-infrastructure-gateway')?.name = 'music-infrastructure-gateway'
 

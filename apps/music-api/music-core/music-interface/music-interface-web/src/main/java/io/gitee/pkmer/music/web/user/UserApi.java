@@ -3,6 +3,7 @@ package io.gitee.pkmer.music.web.user;
 import io.gitee.pkmer.convention.result.Result;
 import io.gitee.pkmer.music.application.user.SignUserCmd;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @since 2025/1/11
  * </p>
  */
+@Tag(name = "用户")
 @RequestMapping("/user")
 public interface UserApi {
 

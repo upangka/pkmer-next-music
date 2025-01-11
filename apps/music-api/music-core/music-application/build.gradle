@@ -1,6 +1,5 @@
 
 dependencies {
-    implementation "io.gitee.pkmer:pkmer-boot-starter-security"
     implementation "org.springframework:spring-tx"
     implementation projects.musicCore.musicInfrastructure.musicInfrastructurePersistence
     implementation projects.musicCore.musicDomain

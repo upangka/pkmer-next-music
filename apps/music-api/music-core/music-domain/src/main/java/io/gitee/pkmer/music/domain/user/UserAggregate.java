@@ -31,5 +31,4 @@ public class UserAggregate extends AuditableEntity implements AggregateRoot {
     private String introduction;
     private String location;
     private String avator;
-
 }
