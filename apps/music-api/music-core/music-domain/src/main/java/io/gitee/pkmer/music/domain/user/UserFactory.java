@@ -1,12 +1,11 @@
 package io.gitee.pkmer.music.domain.user;
 
-import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 
 /**
+ * 用户领域工厂
  * <p>
  *
  * @author <a href="mailto:3149374525@qq.com">pkmer</a>
@@ -19,8 +18,11 @@ import java.time.LocalDateTime;
 @Component
 public class UserFactory {
 
-    @Setter(onMethod_ = @Autowired)
-    private UserGateway userGateway;
+    private final UserGateway userGateway;
+
+    public UserFactory(UserGateway userGateway) {
+        this.userGateway = userGateway;
+    }
 
     public UserAggregate register(String email, String rawPassword) {
         if (email == null || email.isEmpty()) {

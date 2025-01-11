@@ -6,6 +6,8 @@ import io.gitee.pkmer.music.domain.user.UserFactory;
 import io.gitee.pkmer.music.domain.user.UserRepository;
 import org.springframework.stereotype.Component;
 
+import java.text.MessageFormat;
+
 /**
  * <p>
  *
@@ -21,7 +23,9 @@ public class SignUserHandler implements CommandHandler<SignUserCmd, Void> {
 
     private final UserRepository userRepository;
     private final UserFactory userFactory;
-
+    public static final String msgTemplate = """
+                    用户注册失败 {0} 邮箱重复
+                    """;
     public SignUserHandler(UserRepository userRepository,
                            UserFactory userFactory){
 
@@ -33,7 +37,16 @@ public class SignUserHandler implements CommandHandler<SignUserCmd, Void> {
     public Void execute(SignUserCmd signUserCmd) {
         UserAggregate userAggregate = userFactory.register(signUserCmd.getEmail(),
                 signUserCmd.getPassword());
-        userRepository.save(userAggregate);
-        return null;
+        try{
+            userRepository.save(userAggregate);
+            return null;
+        }catch (Exception e){
+            throw new RuntimeException(createErrorMsg(signUserCmd.getEmail()));
+        }
+    }
+
+
+    public static String createErrorMsg(String email){
+        return MessageFormat.format(msgTemplate, email);
     }
 }
