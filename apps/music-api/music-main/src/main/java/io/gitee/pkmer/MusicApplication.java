@@ -15,8 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class MusicApplication {
 
     public static void main(String[] args) {
-        SpringApplication app = new SpringApplication(MusicApplication.class);
-        app.run(args);
+        SpringApplication.run(MusicApplication.class, args);
     }
 
 }

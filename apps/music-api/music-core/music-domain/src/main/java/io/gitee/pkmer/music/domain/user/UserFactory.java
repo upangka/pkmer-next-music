@@ -7,41 +7,39 @@ import java.time.LocalDateTime;
 /**
  * 用户领域工厂
  * <p>
- *
- * @author <a href="mailto:3149374525@qq.com">pkmer</a>
- * <br>
- * <a href = "https://gitee.com/pkmer">Code Repository</a>
- * @author pkmer
- * @since 2025/1/11
+ * 负责用户的创建与验证
  * </p>
  */
 @Component
 public class UserFactory {
 
     private final UserGateway userGateway;
+    private final UserValidator userValidator;
 
-    public UserFactory(UserGateway userGateway) {
+    public UserFactory(UserGateway userGateway, UserValidator userValidator) {
         this.userGateway = userGateway;
+        this.userValidator = userValidator;
     }
 
+    /**
+     * 注册新用户
+     *
+     * @param email 用户的邮箱地址，作为用户的唯一标识
+     * @param rawPassword 用户的原始密码，未加密
+     * @return 返回新创建的用户对象
+     */
     public UserAggregate register(String email, String rawPassword) {
-        if (email == null || email.isEmpty()) {
-            throw new IllegalArgumentException("Email cannot be empty");
-        }
-        if (rawPassword == null || rawPassword.isEmpty()) {
-            throw new IllegalArgumentException("Password cannot be empty");
-        }
+        userValidator.validate(email, rawPassword);  // 使用注入的验证器进行验证
 
         String encryptedPassword = userGateway.encodePassword(rawPassword);
 
-        UserAggregate userAggregate = UserAggregate.builder()
+        UserAggregate user = UserAggregate.builder()
                 .username(email) // 默认用户名与邮箱相同
                 .email(email)
                 .password(encryptedPassword)
                 .build();
-
-        userAggregate.setCreateTime(LocalDateTime.now());
-        userAggregate.setUpdateTime(LocalDateTime.now());
-        return userAggregate;
+        user.setCreateTime(LocalDateTime.now());
+        user.setUpdateTime(LocalDateTime.now());
+        return user;
     }
 }
