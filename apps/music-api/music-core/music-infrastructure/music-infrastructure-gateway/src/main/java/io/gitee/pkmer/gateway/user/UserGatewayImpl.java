@@ -1,6 +1,8 @@
 package io.gitee.pkmer.gateway.user;
 
 import io.gitee.pkmer.music.domain.user.UserGateway;
+import io.gitee.pkmer.security.jwt.bo.JWTUserBo;
+import io.gitee.pkmer.security.jwt.service.JWTService;
 import io.gitee.pkmer.security.password.AppPasswordEncoder;
 import org.springframework.stereotype.Repository;
 
@@ -17,12 +19,32 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class UserGatewayImpl implements UserGateway {
     private final AppPasswordEncoder passwordEncoder;
-
-    public UserGatewayImpl(AppPasswordEncoder appPasswordEncoder) {
+    private final JWTService jwtService;
+    public UserGatewayImpl(AppPasswordEncoder appPasswordEncoder,
+                           JWTService jwtService) {
         this.passwordEncoder = appPasswordEncoder;
+        this.jwtService = jwtService;
     }
     @Override
     public String encodePassword(String password) {
         return passwordEncoder.encode(password);
+    }
+
+    @Override
+    public String generateJWT(Long userId, String email,String username) {
+        JWTUserBo jwtUserBo = new JWTUserBo();
+        jwtUserBo.setId(userId);
+        jwtUserBo.setUsername(username);
+        jwtUserBo.setEmail(email);
+        return jwtService.generateToken(jwtUserBo);
+    }
+
+    @Override
+    public boolean checkPassword(String password, String encodedPassword) {
+        try {
+            return passwordEncoder.check(password, encodedPassword);
+        } catch (Exception e) {
+            return false;
+        }
     }
 }

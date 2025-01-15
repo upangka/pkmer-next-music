@@ -1,6 +1,8 @@
 package io.gitee.pkmer.music.web.user;
 
 import io.gitee.pkmer.convention.result.Result;
+import io.gitee.pkmer.music.application.user.LoginUserCmd;
+import io.gitee.pkmer.music.application.user.LoginView;
 import io.gitee.pkmer.music.application.user.SignUserCmd;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -28,4 +30,10 @@ public interface UserApi {
     @PostMapping("/signup")
     Result<Void> signUp(@Valid @RequestBody
                         SignUserCmd cmd);
+
+
+    @Operation(summary = "用户登录")
+    @PostMapping("/login")
+    Result<LoginView> login(@Valid @RequestBody
+                        LoginUserCmd cmd);
 }

@@ -3,6 +3,8 @@ package io.gitee.pkmer.music.web.user;
 import io.gitee.pkmer.convention.controller.BaseController;
 import io.gitee.pkmer.convention.result.Result;
 import io.gitee.pkmer.ddd.shared.dispatch.CmdDispatcher;
+import io.gitee.pkmer.music.application.user.LoginUserCmd;
+import io.gitee.pkmer.music.application.user.LoginView;
 import io.gitee.pkmer.music.application.user.SignUserCmd;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,5 +30,10 @@ public class UserController extends BaseController implements UserApi {
     public Result<Void> signUp(SignUserCmd cmd) {
          cmdDispatcher.dispatch(cmd);
         return success();
+    }
+
+    @Override
+    public Result<LoginView> login(LoginUserCmd cmd) {
+        return success(cmdDispatcher.dispatch(cmd));
     }
 }

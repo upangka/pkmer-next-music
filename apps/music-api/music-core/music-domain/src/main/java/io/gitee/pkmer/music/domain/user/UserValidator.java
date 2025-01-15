@@ -48,4 +48,5 @@ public class UserValidator {
             throw new IllegalArgumentException(errorMessage);
         }
     }
+
 }

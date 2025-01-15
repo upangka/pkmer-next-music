@@ -16,4 +16,19 @@ public interface UserGateway {
      * 加密密码
      */
     String encodePassword(String password);
+
+
+    /**
+     * 生成JWT
+     * @param userId
+     * @param email
+     * @param username
+     * @return
+     */
+    String generateJWT(Long userId,String email,String username);
+
+    /**
+     * 检查密码
+     */
+    boolean checkPassword(String password, String encodedPassword);
 }
