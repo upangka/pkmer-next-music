@@ -1,7 +1,10 @@
+plugins{
+    id "java-library"
+}
 
 dependencies {
     implementation "org.springframework:spring-tx"
     implementation projects.musicCore.musicInfrastructure.musicInfrastructurePersistence
-    implementation projects.musicCore.musicInfrastructure.musicInfrastructureGateway
+    api projects.musicCore.musicInfrastructure.musicInfrastructureGateway
     implementation projects.musicCore.musicDomain
 }

@@ -6,6 +6,8 @@ import io.gitee.pkmer.music.domain.user.UserId;
 import io.gitee.pkmer.music.domain.user.UserRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 /**
  * <p>
  *
@@ -28,12 +30,12 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public UserAggregate load(UserId userId) {
+    public Optional<UserAggregate> load(UserId userId) {
 
         Consumer consumer = consumerDynamicMapper
                 .selectByPrimaryKey(userId.value())
                 .orElseThrow();
-        return consumerConverter.toDomainModel(consumer);
+        return Optional.of(consumerConverter.toDomainModel(consumer));
     }
 
     @Override

@@ -6,6 +6,8 @@ import io.gitee.pkmer.music.domain.rank.RankId;
 import io.gitee.pkmer.music.domain.rank.RankRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 /**
  * <p>
  *
@@ -30,9 +32,9 @@ public class RankRepositoryImpl implements RankRepository {
 
 
     @Override
-    public RankAggregate load(RankId rankId) {
+    public Optional<RankAggregate> load(RankId rankId) {
         RankList rankList = rankDynamicMapper.selectByPrimaryKey(rankId.value()).orElseThrow();
-        return rankConverter.toDomainModel(rankList);
+        return Optional.of(rankConverter.toDomainModel(rankList));
     }
 
     @Override

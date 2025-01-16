@@ -32,9 +32,10 @@ public class SongRepositoryImpl implements SongRepository {
     }
 
     @Override
-    public SongAggregate load(SongId songId) {
-        Optional<Song> song = songDynamicMapper.selectByPrimaryKey(songId.value());
-        return song.map(converter::covertTo).orElse(null);
+    public Optional<SongAggregate> load(SongId songId) {
+        Song song = songDynamicMapper.selectByPrimaryKey(songId.value())
+                .orElseThrow();
+        return Optional.of(converter.covertTo(song));
     }
 
     @Override

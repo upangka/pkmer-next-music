@@ -2,6 +2,6 @@ plugins{
     id 'java-library'
 }
 dependencies {
-    implementation "io.gitee.pkmer:pkmer-boot-starter-security"
+    api "io.gitee.pkmer:pkmer-boot-starter-security"
     api projects.musicCore.musicDomain
 }

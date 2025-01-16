@@ -6,6 +6,8 @@ import io.gitee.pkmer.music.domain.collect.CollectId;
 import io.gitee.pkmer.music.domain.collect.CollectRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 /**
  * <p>
  *
@@ -28,9 +30,11 @@ public class CollectRepositoryImpl implements CollectRepository {
     }
 
     @Override
-    public CollectAggregate load(CollectId collectId) {
+    public Optional<CollectAggregate> load(CollectId collectId) {
         Collect collect = collectDynamicMapper.selectByPrimaryKey(collectId.value()).orElseThrow();
-        return collectConverter.toDomainModel(collect);
+        CollectAggregate domainModel = collectConverter.toDomainModel(collect);
+
+        return Optional.of(domainModel);
     }
 
     @Override

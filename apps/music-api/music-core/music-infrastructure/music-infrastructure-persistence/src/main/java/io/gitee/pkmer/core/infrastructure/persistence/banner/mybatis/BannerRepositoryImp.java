@@ -6,6 +6,8 @@ import io.gitee.pkmer.music.domain.banner.BannerRepository;
 
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 import static org.mybatis.dynamic.sql.select.SelectDSL.select;
 
 
@@ -25,7 +27,7 @@ public class BannerRepositoryImp implements BannerRepository{
     }
 
     @Override
-    public BannerEntity load(BannerId bannerId) {
+    public Optional<BannerEntity> load(BannerId bannerId) {
         throw new UnsupportedOperationException("未实现");
     }
 

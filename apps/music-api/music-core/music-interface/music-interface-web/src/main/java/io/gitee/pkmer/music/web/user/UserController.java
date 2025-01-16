@@ -1,11 +1,10 @@
 package io.gitee.pkmer.music.web.user;
-
+import io.gitee.pkmer.music.application.user.*;
+import io.gitee.pkmer.security.context.AppContextHolder;
 import io.gitee.pkmer.convention.controller.BaseController;
 import io.gitee.pkmer.convention.result.Result;
 import io.gitee.pkmer.ddd.shared.dispatch.CmdDispatcher;
-import io.gitee.pkmer.music.application.user.LoginUserCmd;
-import io.gitee.pkmer.music.application.user.LoginView;
-import io.gitee.pkmer.music.application.user.SignUserCmd;
+import io.gitee.pkmer.security.jwt.bo.JWTUserBo;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,5 +34,14 @@ public class UserController extends BaseController implements UserApi {
     @Override
     public Result<LoginView> login(LoginUserCmd cmd) {
         return success(cmdDispatcher.dispatch(cmd));
+    }
+
+    @Override
+    public Result<UserDetailView> getUserDetail() {
+
+        JWTUserBo user = AppContextHolder.userContextHolder.getUser();
+        GetUserDetailCmd userDetailCmd = new GetUserDetailCmd();
+        userDetailCmd.setUserId(user.getId());
+        return success(cmdDispatcher.dispatch(userDetailCmd));
     }
 }

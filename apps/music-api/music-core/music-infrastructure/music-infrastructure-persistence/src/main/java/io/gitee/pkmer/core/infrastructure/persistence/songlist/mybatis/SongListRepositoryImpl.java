@@ -44,26 +44,24 @@ public class SongListRepositoryImpl implements SongListRepository {
     }
 
     @Override
-    public SongListAggregate load(SongListId songListId) {
+    public Optional<SongListAggregate> load(SongListId songListId) {
         // 处理歌单
-        Optional<SongList> optionalSongList = songListMapper.selectOne(
-                c -> c.where(id, isEqualTo(songListId.value())));
+        SongList songList = songListMapper.selectOne(
+                        c -> c.where(id, isEqualTo(songListId.value())))
+                .orElseThrow();
 
-        if (optionalSongList.isPresent()) {
-            // 处理歌曲
-            SongList songList = optionalSongList.get();
 
-            List<ListSong> songIds = listSongMapper.select(c ->
-                    c.where(id, isEqualTo(songList.getId())));
+        List<ListSong> songIds = listSongMapper.select(c ->
+                c.where(id, isEqualTo(songList.getId())));
 
-            // 处理评论
-            List<Comment> comments = commentMapper.select(c ->
-                    c.where(CommentDynamicSqlSupport.songListId, isEqualTo(songList.getId())));
+        // 处理评论
+        List<Comment> comments = commentMapper.select(c ->
+                c.where(CommentDynamicSqlSupport.songListId, isEqualTo(songList.getId())));
 
-            return converter.buildAggregate(songList, songIds, comments);
-        } else {
-            return null;
-        }
+        return Optional.of(
+                converter.buildAggregate(songList, songIds, comments)
+        );
+
     }
 
 
@@ -124,7 +122,7 @@ public class SongListRepositoryImpl implements SongListRepository {
             if (!ids.isEmpty()) {
                 commentMapper.delete(c -> c.where(CommentDynamicSqlSupport.id, isIn(ids)));
             }
-        }else if(commentCollect.containsKey(ChangingStatus.UPDATED)){
+        } else if (commentCollect.containsKey(ChangingStatus.UPDATED)) {
             // 用户更新在某个歌单同时更新关于自己评论的好几条，这里采用for来处理单一的情况
             for (CommentEntity commentEntity : commentCollect.get(ChangingStatus.UPDATED)) {
                 commentMapper.update(c -> c.set(CommentDynamicSqlSupport.content)

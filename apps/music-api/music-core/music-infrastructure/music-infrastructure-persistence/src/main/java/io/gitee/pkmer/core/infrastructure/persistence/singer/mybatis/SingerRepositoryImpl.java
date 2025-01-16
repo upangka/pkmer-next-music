@@ -43,18 +43,15 @@ public class SingerRepositoryImpl implements SingerRepository {
     }
 
     @Override
-    public SingerAggrerate load(SingerId singerId) {
-        Optional<Singer> singerOptional = singerDynamicMapper.selectOne(c ->
-                c.where(SingerDynamicSqlSupport.id, isEqualTo(singerId.value())));
+    public Optional<SingerAggrerate> load(SingerId singerId) {
+        Singer singer = singerDynamicMapper.selectOne(c ->
+                c.where(SingerDynamicSqlSupport.id, isEqualTo(singerId.value())))
+                .orElseThrow();
 
-        if (singerOptional.isPresent()) {
-            Singer singer = singerOptional.get();
-            List<Song> songs = songDynamicMapper.select(c ->
-                    c.where(SongDynamicSqlSupport.singerId, isEqualTo(singer.getId())));
+        List<Song> songs = songDynamicMapper.select(c ->
+                c.where(SongDynamicSqlSupport.singerId, isEqualTo(singer.getId())));
 
-           return singerConverter.convertTo(singer, songs);
-        }
-        return null;
+        return Optional.of(singerConverter.convertTo(singer, songs));
     }
 
     @Override

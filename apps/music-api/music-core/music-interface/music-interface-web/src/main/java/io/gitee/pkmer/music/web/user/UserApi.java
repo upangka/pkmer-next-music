@@ -1,12 +1,11 @@
 package io.gitee.pkmer.music.web.user;
 
 import io.gitee.pkmer.convention.result.Result;
-import io.gitee.pkmer.music.application.user.LoginUserCmd;
-import io.gitee.pkmer.music.application.user.LoginView;
-import io.gitee.pkmer.music.application.user.SignUserCmd;
+import io.gitee.pkmer.music.application.user.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,4 +35,9 @@ public interface UserApi {
     @PostMapping("/login")
     Result<LoginView> login(@Valid @RequestBody
                         LoginUserCmd cmd);
+
+
+    @Operation(summary = "获取用户详情")
+    @GetMapping("/detail")
+    Result<UserDetailView> getUserDetail();
 }
