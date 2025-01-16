@@ -30,11 +30,9 @@ public class DeleteSongForListHandler implements CommandHandler<DeleteSongForLis
      */
     @Override
     public Void execute(DeleteSongForListCmd cmd) {
-        SongListAggregate songList = repository.load(new SongListId(cmd.getSongListId()));
-        if(songList != null){
-            cmd.getSongIds().forEach(songList::deleteSong);
-            repository.save(songList);
-        }
+        SongListAggregate songList = repository.load(new SongListId(cmd.getSongListId())).orElseThrow();
+        cmd.getSongIds().forEach(songList::deleteSong);
+        repository.save(songList);
         return null;
     }
 }

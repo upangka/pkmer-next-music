@@ -25,11 +25,9 @@ public class CancelHandler implements CommandHandler<CancelCmd,Void> {
     }
     @Override
     public Void execute(CancelCmd cancelCmd) {
-        CollectAggregate collect = collectRepository.load(new CollectId(cancelCmd.getId()));
-        if(collect != null){
-            collect.cancel();
-            collectRepository.save(collect);
-        }
+        CollectAggregate collect = collectRepository.load(new CollectId(cancelCmd.getId())).orElseThrow();
+        collect.cancel();
+        collectRepository.save(collect);
         return null;
     }
 }

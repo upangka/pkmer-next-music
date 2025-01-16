@@ -15,12 +15,8 @@ public class GetUserDetailHandler implements CommandHandler<GetUserDetailCmd,Use
     }
     @Override
     public UserDetailView execute(GetUserDetailCmd cmd) {
-        UserAggregate user = repository.load(new UserId(cmd.getUserId()));
-
-        if(user != null){
-            return toView(user);
-        }
-        return null;
+        UserAggregate user = repository.load(new UserId(cmd.getUserId())).orElseThrow();
+        return toView(user);
     }
 
     private UserDetailView toView(UserAggregate user){

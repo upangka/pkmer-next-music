@@ -25,11 +25,9 @@ public class DeleteHandler implements CommandHandler<DeleteRankCmd,Void> {
 
     @Override
     public Void execute(DeleteRankCmd deleteCmd) {
-        RankAggregate rank = rankRepository.load(new RankId(deleteCmd.getId()));
-        if(rank != null){
-            rank.toDelete();
-            rankRepository.save(rank);
-        }
+        RankAggregate rank = rankRepository.load(new RankId(deleteCmd.getId())).orElseThrow();
+        rank.toDelete();
+        rankRepository.save(rank);
         return null;
     }
 }

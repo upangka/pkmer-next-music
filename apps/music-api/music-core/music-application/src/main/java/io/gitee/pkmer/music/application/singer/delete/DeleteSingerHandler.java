@@ -26,11 +26,9 @@ public class DeleteSingerHandler implements CommandHandler<DeleteSingerCmd,Void>
 
     @Override
     public Void execute(DeleteSingerCmd deleteSingerCmd) {
-        SingerAggrerate singer = singerRepository.load(new SingerId(deleteSingerCmd.getId()));
-        if(singer != null){
-            singer.toDelete();
-            singerRepository.save(singer);
-        }
+        SingerAggrerate singer = singerRepository.load(new SingerId(deleteSingerCmd.getId())).orElseThrow();
+        singer.toDelete();
+        singerRepository.save(singer);
         return null;
     }
 }

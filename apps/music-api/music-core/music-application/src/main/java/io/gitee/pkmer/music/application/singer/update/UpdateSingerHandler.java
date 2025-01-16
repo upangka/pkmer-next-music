@@ -27,13 +27,11 @@ public class UpdateSingerHandler implements CommandHandler<UpdateSingerCmd,Void>
 
     @Override
     public Void execute(UpdateSingerCmd cmd) {
-        SingerAggrerate singer = singerRepository.load(new SingerId(cmd.getId()));
+        SingerAggrerate singer = singerRepository.load(new SingerId(cmd.getId())).orElseThrow();
 
-        if(singer != null){
-            singer.toUpdate();
-            updateSinger(singer, cmd);
-            singerRepository.save(singer);
-        }
+        singer.toUpdate();
+        updateSinger(singer, cmd);
+        singerRepository.save(singer);
 
         return null;
     }

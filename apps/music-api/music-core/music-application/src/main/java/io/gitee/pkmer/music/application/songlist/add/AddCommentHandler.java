@@ -26,12 +26,10 @@ public class AddCommentHandler implements CommandHandler<AddCommentCmd,Void> {
 
     @Override
     public Void execute(AddCommentCmd cmd) {
-        SongListAggregate songList = repository.load(new SongListId(cmd.getSongListId()));
-        if(songList != null){
-            songList.addComment(cmd.getComment());
-            songList.toUpdate();
-            repository.save(songList);
-        }
+        SongListAggregate songList = repository.load(new SongListId(cmd.getSongListId())).orElseThrow();
+        songList.addComment(cmd.getComment());
+        songList.toUpdate();
+        repository.save(songList);
         return null;
     }
 }

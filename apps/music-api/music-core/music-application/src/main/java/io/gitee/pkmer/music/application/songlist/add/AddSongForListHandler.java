@@ -31,12 +31,10 @@ public class AddSongForListHandler implements CommandHandler<AddSongForListCmd,V
      */
     @Override
     public Void execute(AddSongForListCmd cmd) {
-        SongListAggregate songList = repository.load(new SongListId(cmd.getSongListId()));
-        if(songList != null){
-            cmd.getSongIds().forEach(songList::addSong);
-            songList.toUpdate();
-            repository.save(songList);
-        }
+        SongListAggregate songList = repository.load(new SongListId(cmd.getSongListId())).orElseThrow();
+        cmd.getSongIds().forEach(songList::addSong);
+        songList.toUpdate();
+        repository.save(songList);
         return null;
     }
 }

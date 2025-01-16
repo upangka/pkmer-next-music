@@ -26,12 +26,10 @@ public class UpdateCommentsHandler implements CommandHandler<UpdateSongListComme
 
     @Override
     public Void execute(UpdateSongListCommentCmd cmd) {
-        SongListAggregate songList = repository.load(new SongListId(cmd.getSongListId()));
-        if(songList != null){
-            songList.modifyComment(cmd.getCommentId(),cmd.getContent());
-            songList.toUpdate();
-            repository.save(songList);
-        }
+        SongListAggregate songList = repository.load(new SongListId(cmd.getSongListId())).orElseThrow();
+        songList.modifyComment(cmd.getCommentId(),cmd.getContent());
+        songList.toUpdate();
+        repository.save(songList);
         return null;
     }
 }

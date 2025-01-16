@@ -27,12 +27,10 @@ public class DeleteCommentHandler implements CommandHandler<DeleteCommentCmd,Voi
 
     @Override
     public Void execute(DeleteCommentCmd cmd) {
-        SongListAggregate songList = repository.load(new SongListId(cmd.getSongListId()));
-        if(songList != null){
-            songList.deleteComment(cmd.getCommentId());
-            songList.toUpdate();
-            repository.save(songList);
-        }
+        SongListAggregate songList = repository.load(new SongListId(cmd.getSongListId())).orElseThrow();
+        songList.deleteComment(cmd.getCommentId());
+        songList.toUpdate();
+        repository.save(songList);
         return null;
     }
 }

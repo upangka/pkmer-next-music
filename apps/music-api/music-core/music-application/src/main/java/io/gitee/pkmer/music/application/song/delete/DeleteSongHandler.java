@@ -27,7 +27,7 @@ public class DeleteSongHandler implements CommandHandler<DeleteCmd, Void> {
 
     @Override
     public Void execute(DeleteCmd cmd) {
-        SongAggregate song = songRepository.load(new SongId(cmd.getId()));
+        SongAggregate song = songRepository.load(new SongId(cmd.getId())).orElseThrow();
         song.toDelete();
         songRepository.save(song);
         return null;

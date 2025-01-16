@@ -31,13 +31,11 @@ public class UpdateSongListHandler implements CommandHandler<UpdateSongListCmd,V
 
     @Override
     public Void execute(UpdateSongListCmd cmd) {
-        SongListId id = new SongListId(cmd.getId());
-        SongListAggregate songListAggregate = repository.load(id);
-        if(songListAggregate != null){
-            updateSongList(songListAggregate,cmd);
-            songListAggregate.toUpdate();
-            repository.save(songListAggregate);
-        }
+        SongListAggregate songListAggregate = repository.load(new SongListId(cmd.getId()))
+                .orElseThrow();
+        updateSongList(songListAggregate,cmd);
+        songListAggregate.toUpdate();
+        repository.save(songListAggregate);
         return null;
     }
 

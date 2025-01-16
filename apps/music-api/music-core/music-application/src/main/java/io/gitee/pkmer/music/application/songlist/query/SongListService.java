@@ -8,11 +8,13 @@ import io.gitee.pkmer.core.infrastructure.persistence.comment.mybatis.CommentDyn
 import io.gitee.pkmer.core.infrastructure.persistence.songlist.mybatis.SongList;
 import io.gitee.pkmer.core.infrastructure.persistence.songlist.mybatis.SongListDynamicMapper;
 import io.gitee.pkmer.music.domain.songlist.Style;
+import lombok.RequiredArgsConstructor;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 import org.mybatis.dynamic.sql.where.WhereApplier;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static io.gitee.pkmer.core.infrastructure.persistence.songlist.mybatis.SongListDynamicSqlSupport.style;
@@ -30,14 +32,10 @@ import static org.mybatis.dynamic.sql.SqlBuilder.*;
  * </p>
  */
 @Service
+@RequiredArgsConstructor
 public class SongListService {
     private final SongListDynamicMapper songListMapper;
     private final CommentDynamicMapper commentMapper;
-    public SongListService(SongListDynamicMapper songListDynamicMapper,
-                           CommentDynamicMapper commentDynamicMapper){
-        this.songListMapper = songListDynamicMapper;
-        this.commentMapper = commentDynamicMapper;
-    }
 
     /**
      * 分页查询歌单
@@ -83,10 +81,9 @@ public class SongListService {
                 .limit(query.getPageSize())
                 .offset(query.offset()));
 
-
         long total = commentMapper.count(c -> c.applyWhere(whereApplier));
 
-        List<SongListCommentsView> list = CommentConverter.INSTRANCE.toTargets(comments);
+        List<SongListCommentsView> list = toTargets(comments);
 
         PageResponse<SongListCommentsView> pageResponse = new PageResponse<>();
         pageResponse.setList(list)
@@ -97,10 +94,36 @@ public class SongListService {
     }
 
 
-    @Mapper
-    public interface CommentConverter extends TargetAndSourceConverter<SongListCommentsView, Comment>{
-        CommentConverter INSTRANCE = Mappers.getMapper(CommentConverter.class);
+
+    public SongListCommentsView toTarget(Comment source) {
+        if ( source == null ) {
+            return null;
+        }
+
+        SongListCommentsView songListCommentsView = new SongListCommentsView();
+
+        songListCommentsView.setId( source.getId() );
+        songListCommentsView.setUserId( source.getUserId() );
+        songListCommentsView.setContent( source.getContent() );
+        songListCommentsView.setCreateTime( source.getCreateTime() );
+        songListCommentsView.setUp( source.getUp() );
+
+        return songListCommentsView;
     }
+
+    public List<SongListCommentsView> toTargets(List<Comment> sources) {
+        if ( sources == null ) {
+            return null;
+        }
+
+        List<SongListCommentsView> list = new ArrayList<SongListCommentsView>( sources.size() );
+        for ( Comment comment : sources ) {
+            list.add( toTarget( comment ) );
+        }
+
+        return list;
+    }
+
 
     /**
      * 转换数据模型为视图
