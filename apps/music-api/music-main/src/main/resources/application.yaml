@@ -35,3 +35,12 @@ logging:
 app:
   jwt:
     secret-key: 9cZjXN9uHH0erCgOAdZCsXIAJbeh7Q43eLa/c1a69rU=
+    expiration-time: 604800000 # 7天
+  auth:
+    ignore-urls:
+      - "/user/login"
+      - "/user/sign"
+      - "/doc.html"
+      - "/webjars/**"
+      - "/v3/**"
+      - "/favicon.ico"
