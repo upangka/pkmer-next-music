@@ -4,6 +4,7 @@ import io.gitee.pkmer.service.MinioAdapter;
 import io.minio.MinioClient;
 import io.minio.errors.*;
 import io.minio.messages.Bucket;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,15 +31,13 @@ import java.security.NoSuchAlgorithmException;
  */
 @Slf4j
 @RestController
-@RequestMapping("/oss")
-public class MusicFileController {
+@RequiredArgsConstructor
+public class MusicFileController implements MusicOssApi{
 
-    @Setter(onMethod_ = @Autowired)
-    private MinioClient minioClient;
-    @Setter(onMethod_ = @Autowired)
-    private MinioAdapter minioAdapter;
+    private final MinioClient minioClient;
+    private final MinioAdapter minioAdapter;
 
-    @GetMapping("/listBuckets")
+    @Override
     public Object listBuckets() throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
         return minioClient.listBuckets()
                 .stream()
@@ -46,7 +45,7 @@ public class MusicFileController {
                 .toList();
     }
 
-    @PostMapping("/upload")
+    @Override
     public Object uploadFile(@RequestParam("uploadFile") MultipartFile uploadFile,
                              @RequestParam("bucketName") String bucketName,
                              @RequestParam(name = "fileName", required = false) String fileName) throws Exception {
@@ -76,7 +75,7 @@ public class MusicFileController {
      * @param bucketName 桶名称
      * @param fileName   Summer Dance & Ya! 现场版 李贞贤.mp3
      */
-    @GetMapping(value = "/{bucketName}/download")
+    @Override
     public ResponseEntity<ByteArrayResource> downloadFile(
             @PathVariable("bucketName") String bucketName,
             @RequestParam("filename") String fileName) {
@@ -99,8 +98,7 @@ public class MusicFileController {
     /**
      * 构造下载文件的请求头
      *
-     * @param fileName
-     * @return
+     * @param fileName 文件名
      */
     private HttpHeaders buildHttpHeaders(String fileName) {
         HttpHeaders headers = new HttpHeaders();
@@ -116,12 +114,12 @@ public class MusicFileController {
     /**
      * 获取一个桶下的所有文件
      */
-    @GetMapping("/{bucket}/listfiles")
+    @Override
     public Object listFilesOfBucketName(@PathVariable("bucket") String bucket) throws Exception {
        return  minioAdapter.listFiles(bucket);
     }
 
-    @GetMapping("/getPresignedObjectUrl")
+    @Override
     public String getPresignedObjectUrl(
             @RequestParam("bucketName")
             String bucketName,
