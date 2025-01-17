@@ -2,6 +2,7 @@ package io.gitee.pkmer.minio.repository.mybatis;
 
 import io.gitee.pkmer.minio.service.FileMetaInfoDto;
 import io.gitee.pkmer.minio.service.FileMetaInfoRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -10,6 +11,7 @@ import java.util.Optional;
 import static org.mybatis.dynamic.sql.SqlBuilder.isEqualTo;
 import static io.gitee.pkmer.minio.repository.mybatis.FileMetadataInfoDynamicSqlSupport.*;
 
+@Slf4j
 public class FileMetaInfoRepositoryImpl implements FileMetaInfoRepository {
     private final FileMetadataInfoMapper fileMetadataInfoMapper;
     public FileMetaInfoRepositoryImpl(FileMetadataInfoMapper fileMetadataInfoMapper){
@@ -18,9 +20,15 @@ public class FileMetaInfoRepositoryImpl implements FileMetaInfoRepository {
 
     @Override
     public void save(FileMetaInfoDto fileMetaInfoDto) {
-        FileMetadataInfo fileMetadataInfo = new FileMetadataInfo();
+        FileMetadataInfo fileMetadataInfo = Converter.INSTANCE.toRecord(fileMetaInfoDto);
         fileMetadataInfoMapper.insert(fileMetadataInfo);
+        // todo 检查id是否生成
+        log.info("检查id是否生成 {}",fileMetadataInfo.getId());
+        fileMetadataInfo.setId(fileMetadataInfo.getId());
     }
+
+
+
 
     @Override
     public Optional<FileMetaInfoDto> loadByMd5(String md5) {
@@ -46,5 +54,6 @@ public class FileMetaInfoRepositoryImpl implements FileMetaInfoRepository {
     public interface Converter{
         Converter INSTANCE = Mappers.getMapper(Converter.class);
         FileMetaInfoDto toDto(FileMetadataInfo fileMetadataInfo);
+        FileMetadataInfo toRecord(FileMetaInfoDto fileMetaInfoDto);
     }
 }

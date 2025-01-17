@@ -1,8 +1,10 @@
 package io.gitee.pkmer.minio.service;
 
 import com.google.common.collect.HashMultimap;
+import com.google.common.collect.ImmutableMap;
 import io.gitee.pkmer.minio.props.PkmerMinioProps;
 import io.gitee.pkmer.minio.s3.PkmerMinioClientAdapter;
+import io.gitee.pkmer.minio.s3.S3BaseSupport;
 import io.minio.*;
 import io.minio.errors.*;
 import io.minio.http.Method;
@@ -162,14 +164,36 @@ public class MinioAdapter{
         }
     }
 
+    /**
+     * 创建上传URL
+     * 该方法用于生成一个带有预签名的URL，用于上传特定部分的文件到指定的存储桶
+     *
+     * @param bucketName 存储桶名称
+     * @param objectName 对象名称，即存储桶中的文件名
+     * @param uploadId 多部分上传的唯一标识符
+     * @param partNumber 文件部分编号，用于标识文件的特定部分
+     * @return 返回生成的上传URL
+     *
+     * 使用了ImmutableMap来构建查询参数，并使用GetPresignedObjectUrlArgs来配置请求的详细信息
+     * 通过MinIO客户端的getPresignedObjectUrl方法获取预签名的上传URL
+     * 如果在获取URL过程中遇到异常，将抛出运行时异常
+     */
+    public String createUploadUrl(String bucketName,
+                                  String objectName,
+                                  String uploadId,
+                                  String partNumber){
 
-    public String createUploadUrl(String bucketName,String objectName){
+        ImmutableMap<String, String> queryParams = ImmutableMap.of(
+                S3BaseSupport.UPLOAD_ID, uploadId,
+                S3BaseSupport.PART_NUMBER, partNumber);
+
         // https://min.io/docs/minio/linux/developers/java/API.html#getPresignedObjectUrl
         GetPresignedObjectUrlArgs args = GetPresignedObjectUrlArgs.builder()
                 .method(Method.PUT)
                 .bucket(bucketName)
                 .object(objectName)
                 .expiry(expires, TimeUnit.MINUTES)
+                .extraQueryParams(queryParams)
                 .build();
         try {
             return client.getPresignedObjectUrl(args);

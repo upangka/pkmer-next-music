@@ -2,10 +2,9 @@ package io.gitee.pkmer.music.oss.api;
 
 import io.gitee.pkmer.minio.api.BigFileInitReq;
 import io.gitee.pkmer.minio.api.MinioBigFileOssApi;
+import io.gitee.pkmer.minio.s3.PkmerMinioClientAdapter;
 import io.gitee.pkmer.minio.service.MinioAdapter;
 import io.gitee.pkmer.minio.service.MinioEngineService;
-import io.minio.MinioClient;
-import io.minio.errors.*;
 import io.minio.messages.Bucket;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,12 +16,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 /**
@@ -36,13 +32,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MusicFileController implements MinioBigFileOssApi {
 
-    private final MinioClient minioClient;
+    private final PkmerMinioClientAdapter pkmerMinioClient;
     private final MinioAdapter minioAdapter;
     private final MinioEngineService minioEngineService;
 
     @Override
-    public Object listBuckets() throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
-        return minioClient.listBuckets()
+    public Object listBuckets() throws Exception {
+        return pkmerMinioClient.listBuckets().get()
                 .stream()
                 .map(Bucket::name)
                 .toList();

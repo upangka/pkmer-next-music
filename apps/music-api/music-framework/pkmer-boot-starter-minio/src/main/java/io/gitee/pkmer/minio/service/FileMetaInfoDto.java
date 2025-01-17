@@ -1,10 +1,12 @@
 package io.gitee.pkmer.minio.service;
 
+import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDateTime;
 
 @Data
+@Builder
 public class FileMetaInfoDto {
     /**
      * 文件元数据信息表的唯一标识ID
