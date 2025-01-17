@@ -1,6 +1,8 @@
 package io.gitee.pkmer.music.oss.api;
 
+import io.gitee.pkmer.minio.api.BigFileInitReq;
 import io.gitee.pkmer.minio.api.MinioBasicOssApi;
+import io.gitee.pkmer.minio.api.MinioBigFileOssApi;
 import io.gitee.pkmer.minio.service.MinioAdapter;
 import io.minio.MinioClient;
 import io.minio.errors.*;
@@ -21,6 +23,7 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 /**
  * @author <a href="mailto:1193094618@qq.com">pkmer</a>
@@ -31,7 +34,7 @@ import java.security.NoSuchAlgorithmException;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-public class MusicBasicFileController implements MinioBasicOssApi {
+public class MusicBasicFileController implements MinioBigFileOssApi {
 
     private final MinioClient minioClient;
     private final MinioAdapter minioAdapter;
@@ -133,6 +136,16 @@ public class MusicBasicFileController implements MinioBasicOssApi {
         }
 
         return minioAdapter.getPresignedObjectUrl(bucketName,objectName,expires);
+    }
+
+    @Override
+    public void init(BigFileInitReq req) {
+
+    }
+
+    @Override
+    public void merge(List<String> partMd5List) {
+
     }
 }
 

@@ -1,10 +1,11 @@
 package io.gitee.pkmer.minio.autoconfig;
 
 import io.gitee.pkmer.minio.props.PkmerMinioProps;
-import io.gitee.pkmer.minio.repository.FileMetaInfoRepository;
+import io.gitee.pkmer.minio.service.FileMetaInfoRepository;
 import io.gitee.pkmer.minio.repository.mybatis.FileMetaInfoRepositoryImpl;
 import io.gitee.pkmer.minio.repository.mybatis.FileMetadataInfoMapper;
 import io.gitee.pkmer.minio.service.MinioAdapter;
+import io.gitee.pkmer.minio.service.MinioEngineService;
 import io.minio.MinioClient;
 import lombok.extern.slf4j.Slf4j;
 import org.mybatis.spring.annotation.MapperScan;
@@ -41,7 +42,7 @@ public class PkmerMinioAutoConfiguration {
      * @param client MinioClient
      */
     @Bean
-    public MinioAdapter minioHelper(MinioClient client){
+    public MinioAdapter minioAdapter(MinioClient client){
         return new MinioAdapter(client);
     }
 
@@ -54,5 +55,15 @@ public class PkmerMinioAutoConfiguration {
     public FileMetaInfoRepository fileMetaInfoRepository(FileMetadataInfoMapper fileMetadataInfoMapper){
         log.info("检测注册{}",fileMetadataInfoMapper);
         return new FileMetaInfoRepositoryImpl(fileMetadataInfoMapper);
+    }
+
+
+    /**
+     * minio大文件操作引擎
+     */
+    @Bean
+    public MinioEngineService minioEngineService(FileMetaInfoRepository fileMetaInfoRepository){
+        log.info("检测注册大文件注册success");
+        return new MinioEngineService(fileMetaInfoRepository);
     }
 }
