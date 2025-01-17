@@ -1,5 +1,6 @@
 package io.gitee.pkmer.music.oss.api;
 
+import io.gitee.pkmer.minio.api.MinioBasicOssApi;
 import io.gitee.pkmer.minio.service.MinioAdapter;
 import io.minio.MinioClient;
 import io.minio.errors.*;
@@ -30,7 +31,7 @@ import java.security.NoSuchAlgorithmException;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-public class MusicFileController implements MusicOssApi{
+public class MusicBasicFileController implements MinioBasicOssApi {
 
     private final MinioClient minioClient;
     private final MinioAdapter minioAdapter;

@@ -1,18 +1,23 @@
-package io.gitee.pkmer.music.oss.api;
+package io.gitee.pkmer.minio.api;
 
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+/**
+ * minio基础操作
+ */
 
+@Tag(name = "minio基础操作")
 @RequestMapping("/oss")
-public interface MusicOssApi {
+public interface MinioBasicOssApi {
 
     @Operation(summary = "获取所有存储桶")
     @GetMapping("/listBuckets")
