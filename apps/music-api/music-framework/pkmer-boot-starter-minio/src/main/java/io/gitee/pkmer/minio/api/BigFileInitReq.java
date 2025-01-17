@@ -8,14 +8,14 @@ import lombok.Data;
 
 @Data
 public class BigFileInitReq {
-    @Schema(description = "文件md5")
+    @Schema(description = "文件md5",requiredMode = Schema.RequiredMode.REQUIRED)
     @NotBlank
     private String fileMd5;
-    @Schema(description = "文件名称")
+    @Schema(description = "文件名称",requiredMode = Schema.RequiredMode.REQUIRED)
     @NotBlank
     private String fullFileName;
-    @Schema(description = "文件大小")
+    @Schema(description = "文件长度", requiredMode = Schema.RequiredMode.REQUIRED)
     @NotNull
     @Min(value = 1, message = "文件大小不能小于1")
-    private Integer fileSize;
+    private Long fileSize;
 }

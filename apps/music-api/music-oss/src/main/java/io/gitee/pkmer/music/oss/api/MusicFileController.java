@@ -1,9 +1,9 @@
 package io.gitee.pkmer.music.oss.api;
 
 import io.gitee.pkmer.minio.api.BigFileInitReq;
-import io.gitee.pkmer.minio.api.MinioBasicOssApi;
 import io.gitee.pkmer.minio.api.MinioBigFileOssApi;
 import io.gitee.pkmer.minio.service.MinioAdapter;
+import io.gitee.pkmer.minio.service.MinioEngineService;
 import io.minio.MinioClient;
 import io.minio.errors.*;
 import io.minio.messages.Bucket;
@@ -34,10 +34,11 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-public class MusicBasicFileController implements MinioBigFileOssApi {
+public class MusicFileController implements MinioBigFileOssApi {
 
     private final MinioClient minioClient;
     private final MinioAdapter minioAdapter;
+    private final MinioEngineService minioEngineService;
 
     @Override
     public Object listBuckets() throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
@@ -140,7 +141,7 @@ public class MusicBasicFileController implements MinioBigFileOssApi {
 
     @Override
     public void init(BigFileInitReq req) {
-
+        minioEngineService.init(req.getFileMd5(),req.getFullFileName(),req.getFileSize());
     }
 
     @Override

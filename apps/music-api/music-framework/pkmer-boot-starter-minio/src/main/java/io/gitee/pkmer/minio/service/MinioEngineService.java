@@ -21,6 +21,7 @@ public class MinioEngineService {
      * @param fileSize 文件大小，用于表示文件的字节大小
      */
 
-    public void init(String fileMd5,String fileName,String fileSize){
+    public void init(String fileMd5,String fileName,Long fileSize){
+        fileMetaInfoRepository.save(null);
     }
 }
