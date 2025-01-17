@@ -5,6 +5,7 @@ dependencies {
     api libs.minio
     implementation 'org.springframework.boot:spring-boot-starter'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    implementation 'io.gitee.pkmer:pkmer-boot-starter-mybatis'
 }
 
 /**

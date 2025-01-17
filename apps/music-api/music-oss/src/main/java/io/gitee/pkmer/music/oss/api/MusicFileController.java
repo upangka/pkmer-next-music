@@ -1,13 +1,11 @@
 package io.gitee.pkmer.music.oss.api;
 
-import io.gitee.pkmer.service.MinioAdapter;
+import io.gitee.pkmer.minio.service.MinioAdapter;
 import io.minio.MinioClient;
 import io.minio.errors.*;
 import io.minio.messages.Bucket;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

@@ -1,4 +1,4 @@
-package io.gitee.pkmer.service;
+package io.gitee.pkmer.minio.service;
 
 import io.minio.*;
 import io.minio.http.Method;

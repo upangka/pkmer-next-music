@@ -1,4 +1,4 @@
-package io.gitee.pkmer.props;
+package io.gitee.pkmer.minio.props;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
