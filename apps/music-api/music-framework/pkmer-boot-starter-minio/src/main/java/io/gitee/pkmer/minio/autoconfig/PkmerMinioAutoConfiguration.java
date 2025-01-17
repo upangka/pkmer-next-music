@@ -1,6 +1,7 @@
 package io.gitee.pkmer.minio.autoconfig;
 
 import io.gitee.pkmer.minio.props.PkmerMinioProps;
+import io.gitee.pkmer.minio.service.BigFileHelper;
 import io.gitee.pkmer.minio.service.FileMetaInfoRepository;
 import io.gitee.pkmer.minio.repository.mybatis.FileMetaInfoRepositoryImpl;
 import io.gitee.pkmer.minio.repository.mybatis.FileMetadataInfoMapper;
@@ -62,8 +63,13 @@ public class PkmerMinioAutoConfiguration {
      * minio大文件操作引擎
      */
     @Bean
-    public MinioEngineService minioEngineService(FileMetaInfoRepository fileMetaInfoRepository){
+    public MinioEngineService minioEngineService(PkmerMinioProps props,
+                                                 MinioAdapter minioAdapter,
+                                                 FileMetaInfoRepository fileMetaInfoRepository){
         log.info("检测注册大文件注册success");
-        return new MinioEngineService(fileMetaInfoRepository);
+        return new MinioEngineService(
+                minioAdapter,
+                fileMetaInfoRepository,
+                new BigFileHelper(props));
     }
 }

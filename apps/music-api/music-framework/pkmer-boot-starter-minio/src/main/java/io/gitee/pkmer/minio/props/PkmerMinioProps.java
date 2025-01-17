@@ -26,4 +26,9 @@ public class PkmerMinioProps {
      * 密码
      */
     private String secretKey;
+
+    /**
+     * 默认分片大小5MB
+     */
+    private String defaultChunkSize = "5MB";
 }
