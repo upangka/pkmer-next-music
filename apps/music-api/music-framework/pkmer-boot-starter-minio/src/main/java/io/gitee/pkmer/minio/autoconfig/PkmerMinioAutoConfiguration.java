@@ -1,12 +1,14 @@
 package io.gitee.pkmer.minio.autoconfig;
 
 import io.gitee.pkmer.minio.props.PkmerMinioProps;
+import io.gitee.pkmer.minio.s3.PkmerMinioClientAdapter;
 import io.gitee.pkmer.minio.service.BigFileHelper;
 import io.gitee.pkmer.minio.service.FileMetaInfoRepository;
 import io.gitee.pkmer.minio.repository.mybatis.FileMetaInfoRepositoryImpl;
 import io.gitee.pkmer.minio.repository.mybatis.FileMetadataInfoMapper;
 import io.gitee.pkmer.minio.service.MinioAdapter;
 import io.gitee.pkmer.minio.service.MinioEngineService;
+import io.minio.MinioAsyncClient;
 import io.minio.MinioClient;
 import lombok.extern.slf4j.Slf4j;
 import org.mybatis.spring.annotation.MapperScan;
@@ -28,22 +30,27 @@ import org.springframework.context.annotation.Bean;
 @MapperScan(basePackages = "io.gitee.pkmer.minio.repository.mybatis")
 public class PkmerMinioAutoConfiguration {
 
-    /**
-     * minio 客户端
-     * @param props minio配置信息
-     */
+
+
     @Bean
-    public MinioClient minioClient(PkmerMinioProps props){
-        return MinioClient.builder().endpoint(props.getUrl())
-                .credentials(props.getAccessKey(), props.getSecretKey()).build();
+    public PkmerMinioClientAdapter minioClientAsync(PkmerMinioProps props){
+        MinioAsyncClient minioAsyncClient = MinioAsyncClient.builder()
+                .endpoint(props.getUrl())
+                .credentials(props.getAccessKey(), props.getSecretKey())
+                .build();
+
+        return new PkmerMinioClientAdapter(minioAsyncClient);
+
     }
+
+
 
     /**
      * Minio封装类
      * @param client MinioClient
      */
     @Bean
-    public MinioAdapter minioAdapter(MinioClient client){
+    public MinioAdapter minioAdapter(PkmerMinioClientAdapter client){
         return new MinioAdapter(client);
     }
 

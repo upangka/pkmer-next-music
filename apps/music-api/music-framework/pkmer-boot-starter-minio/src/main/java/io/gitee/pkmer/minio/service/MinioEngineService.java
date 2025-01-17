@@ -51,8 +51,6 @@ public class MinioEngineService {
             handleUserFirstUpload(fileMd5, fileName, fileSize);
 
         }
-
-
     }
 
     /**

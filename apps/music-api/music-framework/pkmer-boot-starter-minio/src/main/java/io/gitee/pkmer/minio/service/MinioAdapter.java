@@ -1,5 +1,6 @@
 package io.gitee.pkmer.minio.service;
 
+import io.gitee.pkmer.minio.s3.PkmerMinioClientAdapter;
 import io.minio.*;
 import io.minio.http.Method;
 import io.minio.messages.Item;
@@ -8,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -18,9 +20,9 @@ import java.util.concurrent.TimeUnit;
  * At 2024/12/31
  */
 @Slf4j
-public class MinioAdapter {
-    private final MinioClient client;
-    public MinioAdapter(MinioClient client){
+public class MinioAdapter{
+    private final PkmerMinioClientAdapter client;
+    public MinioAdapter(PkmerMinioClientAdapter client){
         this.client = client;
     }
 
@@ -49,7 +51,7 @@ public class MinioAdapter {
      */
     public boolean bucketExists(String bucketName) throws Exception {
         BucketExistsArgs args = BucketExistsArgs.builder().bucket(bucketName).build();
-        return client.bucketExists(args);
+        return client.bucketExists(args).get();
     }
 
     /**
@@ -83,7 +85,7 @@ public class MinioAdapter {
                 .bucket(bucketName)
                 .object(objectName)
                 .build();
-        return client.getObject(args);
+        return client.getObject(args).get();
     }
 
 
@@ -120,5 +122,25 @@ public class MinioAdapter {
                 .build();
 
         return client.getPresignedObjectUrl(args);
+    }
+
+
+    /**
+     * 初始化一个分段上传任务
+     *
+     * 此方法用于创建一个分段上传任务，并返回上传ID该ID用于后续的上传操作
+     * 使用异步方式调用AWS S3客户端发起创建分段上传请求，以获取上传ID
+     *
+     * @return String 返回上传ID，用于后续的上传操作
+     * @throws RuntimeException 如果在获取上传ID过程中发生错误，抛出运行时异常
+     */
+    public String createMultipartUpload(){
+        CompletableFuture<CreateMultipartUploadResponse> multipartUploadAsync = client.createMultipartUploadAsync("bucketName", "region", "objectName", null, null);
+        try {
+            CreateMultipartUploadResponse response = multipartUploadAsync.get();
+            return response.result().uploadId();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
