@@ -25,7 +25,8 @@ public class MinioAdapter {
     }
 
     /**
-     * 创建桶
+     * <a href="https://min.io/docs/minio/linux/developers/java/API.html#makeBucket">创建桶</a>
+     *
      * @param bucketName 桶的名称
      */
     public void createBucket(String bucketName){

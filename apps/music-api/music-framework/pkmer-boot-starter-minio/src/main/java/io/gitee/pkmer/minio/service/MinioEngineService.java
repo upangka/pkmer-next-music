@@ -1,6 +1,7 @@
 package io.gitee.pkmer.minio.service;
 
 import io.gitee.pkmer.minio.common.StorageBucketEnums;
+import io.gitee.pkmer.minio.utils.FileUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Optional;
@@ -76,6 +77,8 @@ public class MinioEngineService {
         int chunckTotal = bigFileHelper.computeChunks(fileSize);
         String bucketName = getBucketName(fileName);
 
+        minioAdapter.createBucket(bucketName);
+
     }
 
 
@@ -86,7 +89,7 @@ public class MinioEngineService {
      * @return 返回与文件后缀对应的存储桶名称
      */
     private String getBucketName(String fileName) {
-        String fileExtension = BigFileHelper.getFileExtension(fileName);
+        String fileExtension = FileUtil.getFileExtension(fileName);
         String bucketName = StorageBucketEnums.getBucketNameByFileSuffix(fileExtension);
         log.info("根据文件后缀获取存储桶名称:{}", bucketName);
         return bucketName;
