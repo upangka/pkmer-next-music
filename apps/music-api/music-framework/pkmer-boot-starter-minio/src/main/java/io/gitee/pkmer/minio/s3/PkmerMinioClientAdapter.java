@@ -3,15 +3,7 @@ package io.gitee.pkmer.minio.s3;
 import com.google.common.collect.Multimap;
 import io.minio.CreateMultipartUploadResponse;
 import io.minio.MinioAsyncClient;
-import io.minio.errors.InsufficientDataException;
-import io.minio.errors.InternalException;
-import io.minio.errors.XmlParserException;
-
-import java.io.IOException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 
 /**
  * 封装minio 异步客户端，
