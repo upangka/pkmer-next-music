@@ -26,6 +26,12 @@ public class BigFileHelper {
     }
 
 
+    /**
+     * 获取分片大小
+     */
+    public long getChunkSize(){
+        return CHUNK_SIZE;
+    }
 }
 
 

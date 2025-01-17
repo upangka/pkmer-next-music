@@ -30,8 +30,6 @@ import org.springframework.context.annotation.Bean;
 @MapperScan(basePackages = "io.gitee.pkmer.minio.repository.mybatis")
 public class PkmerMinioAutoConfiguration {
 
-
-
     @Bean
     public PkmerMinioClientAdapter minioClientAsync(PkmerMinioProps props){
         MinioAsyncClient minioAsyncClient = MinioAsyncClient.builder()
@@ -50,8 +48,8 @@ public class PkmerMinioAutoConfiguration {
      * @param client MinioClient
      */
     @Bean
-    public MinioAdapter minioAdapter(PkmerMinioClientAdapter client){
-        return new MinioAdapter(client);
+    public MinioAdapter minioAdapter(PkmerMinioClientAdapter client,PkmerMinioProps props){
+        return new MinioAdapter(client,props);
     }
 
     /**

@@ -1,12 +1,18 @@
 package io.gitee.pkmer.minio.service;
 
+import com.google.common.collect.HashMultimap;
+import io.gitee.pkmer.minio.props.PkmerMinioProps;
 import io.gitee.pkmer.minio.s3.PkmerMinioClientAdapter;
 import io.minio.*;
+import io.minio.errors.*;
 import io.minio.http.Method;
 import io.minio.messages.Item;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -22,8 +28,10 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class MinioAdapter{
     private final PkmerMinioClientAdapter client;
-    public MinioAdapter(PkmerMinioClientAdapter client){
+    private final int expires;
+    public MinioAdapter(PkmerMinioClientAdapter client, PkmerMinioProps props){
         this.client = client;
+        this.expires = props.getExpiresOfMinutes();
     }
 
     /**
@@ -111,14 +119,13 @@ public class MinioAdapter{
      * 获取一个预签名的下载链接
      * @param bucketName 桶的名臣
      * @param objectName 对象名称
-     * @param expires 单位为小时
      */
-    public String getPresignedObjectUrl(String bucketName,String objectName,Integer expires) throws Exception {
+    public String getPresignedObjectUrl(String bucketName,String objectName) throws Exception {
         GetPresignedObjectUrlArgs args = GetPresignedObjectUrlArgs.builder()
                 .method(Method.GET)
                 .bucket(bucketName)
                 .object(objectName)
-                .expiry(1, TimeUnit.HOURS)
+                .expiry(expires, TimeUnit.MINUTES)
                 .build();
 
         return client.getPresignedObjectUrl(args);
@@ -134,11 +141,38 @@ public class MinioAdapter{
      * @return String 返回上传ID，用于后续的上传操作
      * @throws RuntimeException 如果在获取上传ID过程中发生错误，抛出运行时异常
      */
-    public String createMultipartUpload(){
-        CompletableFuture<CreateMultipartUploadResponse> multipartUploadAsync = client.createMultipartUploadAsync("bucketName", "region", "objectName", null, null);
+    public String createMultipartUpload(String bucketName,String objectName,String mimeType){
+
+        HashMultimap<String, String> headers = HashMultimap.<String, String>create();
+        if(mimeType != null && !mimeType.isBlank()){
+            headers.put("Content-Type", mimeType);
+        }
+
+        CompletableFuture<CreateMultipartUploadResponse> multipartUploadAsync = client.createMultipartUploadAsync(
+                bucketName,
+                null,
+                objectName,
+                headers,
+                null);
         try {
             CreateMultipartUploadResponse response = multipartUploadAsync.get();
             return response.result().uploadId();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    public String createUploadUrl(String bucketName,String objectName){
+        // https://min.io/docs/minio/linux/developers/java/API.html#getPresignedObjectUrl
+        GetPresignedObjectUrlArgs args = GetPresignedObjectUrlArgs.builder()
+                .method(Method.PUT)
+                .bucket(bucketName)
+                .object(objectName)
+                .expiry(expires, TimeUnit.MINUTES)
+                .build();
+        try {
+            return client.getPresignedObjectUrl(args);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

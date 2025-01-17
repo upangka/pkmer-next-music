@@ -1,6 +1,9 @@
 package io.gitee.pkmer.minio.props;
 
+import io.gitee.pkmer.minio.utils.TimeMinutesUtil;
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.Getter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
@@ -14,6 +17,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "pkmer.minio")
 @Data
 public class PkmerMinioProps {
+
     /**
      * 对象存储服务的URL
      */
@@ -31,4 +35,15 @@ public class PkmerMinioProps {
      * 默认分片大小5MB
      */
     private String defaultChunkSize = "5MB";
+
+    /**
+     * 默认过期时间1小时
+     * 如： 配置60m 代表一小时,或者 1h
+     * 支持的单位 m h
+     */
+    private String expires = "1h";
+
+    public int getExpiresOfMinutes() {
+        return TimeMinutesUtil.getTime(expires);
+    }
 }

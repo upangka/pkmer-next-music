@@ -136,7 +136,7 @@ public class MusicFileController implements MinioBigFileOssApi {
             expires = 24;
         }
 
-        return minioAdapter.getPresignedObjectUrl(bucketName,objectName,expires);
+        return minioAdapter.getPresignedObjectUrl(bucketName,objectName);
     }
 
     @Override

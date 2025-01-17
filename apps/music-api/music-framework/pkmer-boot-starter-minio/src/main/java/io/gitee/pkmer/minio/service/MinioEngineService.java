@@ -1,9 +1,14 @@
 package io.gitee.pkmer.minio.service;
 
 import io.gitee.pkmer.minio.common.StorageBucketEnums;
+import io.gitee.pkmer.minio.utils.CommonUtil;
 import io.gitee.pkmer.minio.utils.FileUtil;
+import io.gitee.pkmer.minio.utils.MimeTypeUtil;
+import io.gitee.pkmer.minio.utils.UUIDUtil;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -35,20 +40,21 @@ public class MinioEngineService {
      * @param fileSize 文件大小，用于表示文件的字节大小
      */
 
-    public void init(String fileMd5, String fileName, Long fileSize) {
+    public FileInitView init(String fileMd5, String fileName, Long fileSize) {
         Optional<FileMetaInfoDto> fileMetaInfoDtoOptional = fileMetaInfoRepository.loadByMd5(fileMd5);
 
         if (fileMetaInfoDtoOptional.isPresent()) {
             // 1. 处理秒传
             FileMetaInfoDto fileMetaInfoDto = fileMetaInfoDtoOptional.get();
             if (fileMetaInfoDto.getIsFinished()) {
-                return;
+                return null;
             } else {
                 // 2. 处理断点续传
+                return null;
             }
         } else {
             // 3. 用户第一次上传
-            handleUserFirstUpload(fileMd5, fileName, fileSize);
+            return handleUserFirstUpload(fileMd5, fileName, fileSize);
 
         }
     }
@@ -61,7 +67,7 @@ public class MinioEngineService {
      * @param fileName 文件名，包括文件的完整路径
      * @param fileSize 文件大小，用于计算上传分片的总数
      */
-    private void handleUserFirstUpload(String fileMd5, String fileName, Long fileSize) {
+    private FileInitView handleUserFirstUpload(String fileMd5, String fileName, Long fileSize) {
         CreateUploadUrlReq createUploadUrlReq = CreateUploadUrlReq.builder()
                 .fileMd5(fileMd5)
                 .fullFileName(fileName)
@@ -69,13 +75,54 @@ public class MinioEngineService {
                 .isResumableUpload(false)
                 .build();
 
+
+        String fileExtension = FileUtil.getFileExtension(fileName);
+        if(fileExtension.isBlank()){
+            throw new RuntimeException("文件后缀不能为空");
+        }
+        String bucketName = getBucketName(fileName);
+        String fileKey = UUIDUtil.getUUID();
+        String mimeType = MimeTypeUtil.getMimeType(fileName);
+        String objectName = CommonUtil.getObjectName(fileMd5);
+        String filePath = CommonUtil.getPathByDate();
+
+        minioAdapter.createBucket(bucketName);
+        String uploadId = minioAdapter.createMultipartUpload(bucketName,objectName,mimeType);
+
         /**
          * 文件分片的总数
          */
         int chunckTotal = bigFileHelper.computeChunks(fileSize);
-        String bucketName = getBucketName(fileName);
+        long start = 0L;
+        List<FileInitView.Part> parts = new ArrayList<>();
+        for(int partNumber = 1; partNumber <= chunckTotal; partNumber++){
+            // todo 抽离构建part
+            long end = start + bigFileHelper.getChunkSize();
 
-        minioAdapter.createBucket(bucketName);
+
+
+
+            FileInitView.Part part = FileInitView.Part.builder()
+                    .uploadId(uploadId)
+//                    .uploadUrl()
+                    .partNumber(partNumber)
+                    .shardingStart(start)
+                    .shardingEnd(end)
+                    .build();
+
+            /**
+             * JavaScript中File对象的slice方法区间是**[start, end)
+             * 即包括开始索引start，但不包括结束索引end。
+             */
+            start = end;
+            parts.add(part);
+        }
+
+
+        return FileInitView.builder()
+                .parts(parts)
+                .build();
+
 
     }
 
