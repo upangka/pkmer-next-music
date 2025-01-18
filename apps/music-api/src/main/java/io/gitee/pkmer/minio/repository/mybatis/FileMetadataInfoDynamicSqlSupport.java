@@ -1,11 +1,10 @@
 package io.gitee.pkmer.minio.repository.mybatis;
 
 import jakarta.annotation.Generated;
-import org.mybatis.dynamic.sql.AliasableSqlTable;
-import org.mybatis.dynamic.sql.SqlColumn;
-
 import java.sql.JDBCType;
 import java.time.LocalDateTime;
+import org.mybatis.dynamic.sql.AliasableSqlTable;
+import org.mybatis.dynamic.sql.SqlColumn;
 
 public final class FileMetadataInfoDynamicSqlSupport {
     @Generated("org.mybatis.generator.api.MyBatisGenerator")

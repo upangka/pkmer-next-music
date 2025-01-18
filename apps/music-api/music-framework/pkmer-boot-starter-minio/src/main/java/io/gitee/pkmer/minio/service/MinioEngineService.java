@@ -8,7 +8,6 @@ import io.gitee.pkmer.minio.utils.UUIDUtil;
 import io.gitee.pkmer.security.context.AppContextHolder;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.context.ApplicationContext;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -16,7 +15,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 /**
@@ -80,8 +78,7 @@ public class MinioEngineService {
      */
     private FileInitView quickUpload(String fileMd5, String fileName, Long fileSize, FileMetaInfoDto fileMetaInfoDto) {
         FileInitView view = FileInitView.builder()
-                .id(fileMetaInfoDto.getId())
-                .fileKey(fileMetaInfoDto.getFileKey())
+                .fileKey(UUIDUtil.getUUID())
                 .fileMd5(fileMd5)
                 .fileName(fileName)
                 .fileSize(fileSize)
