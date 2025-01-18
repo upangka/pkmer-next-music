@@ -43,3 +43,8 @@ pnpm dev --filter=@pkmer-music-ui/vue --filter=music-web
 - [libs](./packages/libs/) 公共库
 - [react](./packages/react/) react组件库
 - [vue](./packages/vue/) vue组件库
+
+
+# 环境
+
+- node v22.13.0
