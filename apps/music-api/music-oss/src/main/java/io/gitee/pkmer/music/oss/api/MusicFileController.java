@@ -144,9 +144,32 @@ public class MusicFileController extends BaseController implements MinioBigFileO
         return success(view);
     }
 
-    @Override
-    public void merge(List<String> partMd5List) {
 
+    public Result<String> merge(@RequestParam("fileMd5") String fileMd5,
+                                @RequestBody List<String> partMd5List) {
+        try {
+            String fileUrl = minioEngineService.mergeFile(fileMd5, partMd5List);
+            return success(fileUrl);
+        } catch (Exception e) {
+            log.error("Failed to merge file parts", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    /**
+     * 重试上传失败的分片
+     */
+    @PostMapping("/retry")
+    public Result<String> retryUploadPart(@RequestParam("fileMd5") String fileMd5,
+                                          @RequestParam("partNumber") int partNumber) {
+        try {
+            String uploadUrl = minioEngineService.retryUploadPart(fileMd5, partNumber);
+            return success(uploadUrl);
+        } catch (Exception e) {
+            log.error("Failed to generate retry upload url", e);
+            throw new RuntimeException(e);
+        }
     }
 }
 

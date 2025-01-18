@@ -12,6 +12,7 @@ CREATE TABLE `file_metadata_info`
     `bucket`         varchar(20)  NOT NULL COMMENT '存储桶',
     `bucket_path`    varchar(20)  NOT NULL COMMENT '存储桶路径',
     `upload_id`      varchar(255) DEFAULT NULL COMMENT '上传任务id',
+    `etag`           varchar(255) DEFAULT NULL COMMENT '文件的etag',
     `is_finished`    tinyint(1) NOT NULL DEFAULT '0' COMMENT '状态 0:未完成 1:已完成',
     `is_part`        tinyint(1) DEFAULT NULL COMMENT '是否分块 0:否 1:是',
     `part_number`    int(4) DEFAULT NULL COMMENT '分块数量',

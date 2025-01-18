@@ -27,7 +27,11 @@ public class FileMetaInfoRepositoryImpl implements FileMetaInfoRepository {
         fileMetadataInfo.setId(fileMetadataInfo.getId());
     }
 
-
+    @Override
+    public void update(FileMetaInfoDto fileMetaInfoDto) {
+        FileMetadataInfo record = Converter.INSTANCE.toRecord(fileMetaInfoDto);
+        fileMetadataInfoMapper.updateByPrimaryKeySelective(record);
+    }
 
 
     @Override

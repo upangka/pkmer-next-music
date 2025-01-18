@@ -5,6 +5,8 @@ import io.gitee.pkmer.minio.service.PartSummary;
 import io.minio.CreateMultipartUploadResponse;
 import io.minio.ListPartsResponse;
 import io.minio.MinioAsyncClient;
+import io.minio.ObjectWriteResponse;
+import io.minio.messages.Part;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -105,6 +107,48 @@ public class PkmerMinioClientAdapter extends MinioAsyncClient {
         } catch (Exception e) {
             log.error("获取分片列表失败 - bucket: {}, object: {}, uploadId: {}", bucketName, objectName, uploadId, e);
             throw new RuntimeException("获取分片列表失败: " + e.getMessage());
+        }
+    }
+
+
+    /**
+     * 完成分片上传
+     * @param bucketName 存储桶名称
+     * @param objectName 对象名称
+     * @param uploadId 上传ID
+     * @param parts 已上传的分片信息
+     * @return 合并后的文件ETag
+     */
+    public String completeMultipartUpload(String bucketName, String objectName, String uploadId, List<PartSummary> parts) {
+        try {
+            ObjectWriteResponse response = super.completeMultipartUploadAsync(
+                    bucketName,
+                    null,
+                    objectName,
+                    uploadId,
+                    parts.stream()
+                            .map(part -> new Part(part.getPartNumber(), part.getEtag()))
+                            .toList().toArray(new Part[0]),
+                    null,
+                    null).get();
+
+            return response.etag();
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to complete multipart upload", e);
+        }
+    }
+
+    /**
+     * 中止分片上传
+     * @param bucketName 存储桶名称
+     * @param objectName 对象名称
+     * @param uploadId 上传ID
+     */
+    public void abortMultipartUpload(String bucketName, String objectName, String uploadId) {
+        try {
+            super.abortMultipartUploadAsync(bucketName, null, objectName, uploadId, null, null).get();
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to abort multipart upload", e);
         }
     }
 

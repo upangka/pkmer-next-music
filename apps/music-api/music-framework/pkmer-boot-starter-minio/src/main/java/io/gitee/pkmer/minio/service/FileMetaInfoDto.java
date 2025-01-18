@@ -69,6 +69,11 @@ public class FileMetaInfoDto {
     private String uploadId;
 
     /**
+     * 文件的ETag值
+     */
+    private String etag;
+
+    /**
      * 文件是否上传完成
      */
     private Boolean isFinished;

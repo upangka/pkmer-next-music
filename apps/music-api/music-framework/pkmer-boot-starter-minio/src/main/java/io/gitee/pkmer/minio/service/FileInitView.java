@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -46,6 +47,9 @@ public class FileInitView {
 
     @Schema(description = "分片上传的分片数量")
     private Integer partNumber;
+
+    @Schema(description = "创建时间")
+    private LocalDateTime createTime;
 
     @Schema(description = "文件分片列表")
     private List<Part> parts;

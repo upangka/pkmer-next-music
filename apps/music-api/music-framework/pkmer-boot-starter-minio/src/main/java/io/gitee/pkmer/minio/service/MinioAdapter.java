@@ -9,6 +9,7 @@ import io.minio.*;
 import io.minio.errors.*;
 import io.minio.http.Method;
 import io.minio.messages.Item;
+import io.minio.messages.Part;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
@@ -214,6 +215,29 @@ public class MinioAdapter{
      */
     public List<PartSummary> listParts(String bucketName, String objectName, String uploadId) {
         return client.listParts(bucketName, objectName, uploadId);
+    }
+
+
+    /**
+     * 完成分片上传
+     * @param bucketName 存储桶名称
+     * @param objectName 对象名称
+     * @param uploadId 上传ID
+     * @param parts 已上传的分片信息
+     * @return 合并后的文件ETag
+     */
+    public String completeMultipartUpload(String bucketName, String objectName, String uploadId, List<PartSummary> parts) {
+       return client.completeMultipartUpload(bucketName, objectName, uploadId, parts);
+    }
+
+    /**
+     * 中止分片上传
+     * @param bucketName 存储桶名称
+     * @param objectName 对象名称
+     * @param uploadId 上传ID
+     */
+    public void abortMultipartUpload(String bucketName, String objectName, String uploadId) {
+        client.abortMultipartUpload(bucketName, objectName, uploadId);
     }
 
 }

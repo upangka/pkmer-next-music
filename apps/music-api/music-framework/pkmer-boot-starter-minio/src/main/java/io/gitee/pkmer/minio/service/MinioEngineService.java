@@ -49,6 +49,8 @@ public class MinioEngineService {
      */
 
     public FileInitView init(String fileMd5, String fileName, Long fileSize) {
+
+        // todo 判断list
         Optional<FileMetaInfoDto> fileMetaInfoDtoOptional = fileMetaInfoRepository.loadByMd5(fileMd5);
 
         if (fileMetaInfoDtoOptional.isPresent()) {
@@ -56,14 +58,7 @@ public class MinioEngineService {
             FileMetaInfoDto fileMetaInfoDto = fileMetaInfoDtoOptional.get();
             if (fileMetaInfoDto.getIsFinished()) {
                 // 秒传：文件已存在且已完成上传
-                return FileInitView.builder()
-                        .id(fileMetaInfoDto.getId())
-                        .fileKey(fileMetaInfoDto.getFileKey())
-                        .fileMd5(fileMd5)
-                        .fileName(fileName)
-                        .fileSize(fileSize)
-                        .isFinished(fileMetaInfoDto.getIsFinished())
-                        .build();
+                return quickUpload(fileMd5, fileName, fileSize, fileMetaInfoDto);
             } else {
                 // 2. 处理断点续传
                 return resumeUpload(fileMetaInfoDto);
@@ -76,6 +71,35 @@ public class MinioEngineService {
         }
     }
 
+    /**
+     * 处理秒传
+     * @param fileMd5 文件MD5
+     * @param fileName 文件名
+     * @param fileSize 文件size
+     * @param fileMetaInfoDto 文件元信息
+     */
+    private FileInitView quickUpload(String fileMd5, String fileName, Long fileSize, FileMetaInfoDto fileMetaInfoDto) {
+        FileInitView view = FileInitView.builder()
+                .id(fileMetaInfoDto.getId())
+                .fileKey(fileMetaInfoDto.getFileKey())
+                .fileMd5(fileMd5)
+                .fileName(fileName)
+                .fileSize(fileSize)
+                .isFinished(fileMetaInfoDto.getIsFinished())
+                .partNumber(fileMetaInfoDto.getPartNumber())
+                .bucket(fileMetaInfoDto.getBucket())
+                .bucketPath(fileMetaInfoDto.getBucketPath())
+                .uploadId(fileMetaInfoDto.getUploadId())
+                .isFinished(fileMetaInfoDto.getIsFinished())
+                .createTime(fileMetaInfoDto.getCreateTime())
+                .fileSuffix(fileMetaInfoDto.getFileSuffix())
+                .fileMimeType(MimeTypeUtil.getMimeType(fileName))
+                .build();
+
+        persistFileMetaInfo(view);
+        return view;
+    }
+
 
     /**
      * 根据文件元信息恢复上传任务
@@ -85,6 +109,9 @@ public class MinioEngineService {
      * @return 返回一个FileInitView对象，其中包含了文件的元信息和已上传分片的信息，用于展示文件上传的初始化视图
      */
     private FileInitView resumeUpload(FileMetaInfoDto metaInfo) {
+
+        boolean isSelf = isCurrentUserUpload(metaInfo.getCreateUser());
+
         // 获取已上传的分片信息
         List<PartSummary> uploadedParts = minioAdapter.listParts(
                 metaInfo.getBucket(),
@@ -138,6 +165,15 @@ public class MinioEngineService {
                 .partNumber(metaInfo.getPartNumber())
                 .parts(unUploadedParts)
                 .build();
+    }
+
+    /**
+     * 判断是否问当前用户上传的文件
+     */
+
+    private  boolean isCurrentUserUpload(String uploadUserId) {
+        Long currentUserId = AppContextHolder.userContextHolder.getUser().getId();
+        return uploadUserId.equals(currentUserId.toString());
     }
 
     /**
@@ -309,5 +345,99 @@ public class MinioEngineService {
         String bucketName = StorageBucketEnums.getBucketNameByFileSuffix(fileExtension);
         log.info("根据文件后缀获取存储桶名称:{}", bucketName);
         return bucketName;
+    }
+
+    /**
+     * 合并分片并完成上传
+     * @param fileMd5 文件MD5
+     * @param partMd5List 分片MD5列表
+     * @return 合并后的文件访问URL
+     */
+    public String mergeFile(String fileMd5, List<String> partMd5List) {
+        // 1. 获取文件元信息
+        FileMetaInfoDto metaInfo = fileMetaInfoRepository.loadByMd5(fileMd5)
+                .orElseThrow(() -> new RuntimeException("File meta info not found"));
+
+        try {
+            // 2. 验证分片数量
+            if (partMd5List.size() != metaInfo.getPartNumber()) {
+                throw new RuntimeException("Part number mismatch");
+            }
+
+            // 3. 获取已上传的分片信息
+            List<PartSummary> uploadedParts = minioAdapter.listParts(
+                    metaInfo.getBucket(),
+                    CommonUtil.getObjectName(metaInfo.getFileMd5()),
+                    metaInfo.getUploadId()
+            );
+
+            // 4. 验证所有分片都已上传
+            if (uploadedParts.size() != metaInfo.getPartNumber()) {
+                throw new RuntimeException("Some parts are missing");
+            }
+
+            // 5. 合并分片
+            String etag = minioAdapter.completeMultipartUpload(
+                    metaInfo.getBucket(),
+                    CommonUtil.getObjectName(metaInfo.getFileMd5()),
+                    metaInfo.getUploadId(),
+                    uploadedParts
+            );
+
+            // 6. 更新文件状态
+            updateFileMetaInfo(metaInfo, etag);
+
+            // 7. 生成文件访问URL
+            return minioAdapter.getPresignedObjectUrl(
+                    metaInfo.getBucket(),
+                    CommonUtil.getObjectName(metaInfo.getFileMd5())
+            );
+
+        } catch (Exception e) {
+            // 合并失败时中止上传
+            minioAdapter.abortMultipartUpload(
+                    metaInfo.getBucket(),
+                    CommonUtil.getObjectName(metaInfo.getFileMd5()),
+                    metaInfo.getUploadId()
+            );
+            throw new RuntimeException("Failed to merge file parts", e);
+        }
+    }
+
+    /**
+     * 更新文件元信息
+     *
+     * 此方法用于在文件上传完成后更新文件的元信息，包括设置文件上传完成状态、更新时间、以及Amazon S3对象的ETag
+     *
+     * @param metaInfo 文件元信息对象，包含文件的各类元数据
+     * @param etag 文件在Amazon S3上的ETag，用于标识文件的唯一性
+     */
+    private void updateFileMetaInfo(FileMetaInfoDto metaInfo, String etag) {
+        metaInfo.setIsFinished(true);
+        metaInfo.setUpdateTime(LocalDateTime.now());
+        metaInfo.setEtag(etag);
+        fileMetaInfoRepository.save(metaInfo);
+    }
+
+    /**
+     * 重试上传失败的分片
+     * @param fileMd5 文件MD5
+     * @param partNumber 分片号
+     * @return 新的上传URL
+     */
+    public String retryUploadPart(String fileMd5, int partNumber) {
+        FileMetaInfoDto metaInfo = fileMetaInfoRepository.loadByMd5(fileMd5)
+                .orElseThrow(() -> new RuntimeException("File meta info not found"));
+
+        if (metaInfo.getIsFinished()) {
+            throw new RuntimeException("File upload already completed");
+        }
+
+        return minioAdapter.createUploadUrl(
+                metaInfo.getBucket(),
+                CommonUtil.getObjectName(metaInfo.getFileMd5()),
+                metaInfo.getUploadId(),
+                String.valueOf(partNumber)
+        );
     }
 }

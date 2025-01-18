@@ -12,6 +12,8 @@ public interface FileMetaInfoRepository {
      */
     void save(FileMetaInfoDto fileMetaInfoDto);
 
+    void update(FileMetaInfoDto fileMetaInfoDto);
+
     /**
      * 根据md5加载文件元数据
      * @param md5
