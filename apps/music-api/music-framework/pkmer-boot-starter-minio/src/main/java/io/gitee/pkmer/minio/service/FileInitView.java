@@ -64,5 +64,10 @@ public class FileInitView {
         private Long shardingStart;
         @Schema(description = "分片结束位置")
         private Long shardingEnd;
+        @Schema(description = "是否已上传")
+        private boolean uploaded;
+        @Schema(description = "分片etag")
+        private String etag;
+
     }
 }

@@ -1,6 +1,8 @@
 package io.gitee.pkmer.minio.api;
 
 
+import io.gitee.pkmer.convention.result.Result;
+import io.gitee.pkmer.minio.service.FileInitView;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -16,7 +18,7 @@ public interface MinioBigFileOssApi extends MinioBasicOssApi {
 
     @Operation(summary = "初始化大文件上传")
     @PostMapping("/bigfile/init")
-    void init(@Valid @RequestBody BigFileInitReq req);
+    Result<FileInitView> init(@Valid @RequestBody BigFileInitReq req);
 
 
     @Operation(summary = "分片上传小文件")

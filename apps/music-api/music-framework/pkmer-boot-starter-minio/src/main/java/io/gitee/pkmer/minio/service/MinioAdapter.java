@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 /**
  * Minio客户端封装
@@ -201,4 +202,18 @@ public class MinioAdapter{
             throw new RuntimeException(e);
         }
     }
+
+    /**
+     * 获取已上传的分片列表
+     * 通过递归方式获取所有分片信息，每次最多获取1000个分片
+     *
+     * @param bucketName 存储桶名称
+     * @param objectName 对象名称
+     * @param uploadId   分片上传ID
+     * @return 已上传的分片信息列表
+     */
+    public List<PartSummary> listParts(String bucketName, String objectName, String uploadId) {
+        return client.listParts(bucketName, objectName, uploadId);
+    }
+
 }

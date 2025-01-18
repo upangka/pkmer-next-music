@@ -1,8 +1,11 @@
 package io.gitee.pkmer.music.oss.api;
 
+import io.gitee.pkmer.convention.controller.BaseController;
+import io.gitee.pkmer.convention.result.Result;
 import io.gitee.pkmer.minio.api.BigFileInitReq;
 import io.gitee.pkmer.minio.api.MinioBigFileOssApi;
 import io.gitee.pkmer.minio.s3.PkmerMinioClientAdapter;
+import io.gitee.pkmer.minio.service.FileInitView;
 import io.gitee.pkmer.minio.service.MinioAdapter;
 import io.gitee.pkmer.minio.service.MinioEngineService;
 import io.minio.messages.Bucket;
@@ -30,7 +33,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-public class MusicFileController implements MinioBigFileOssApi {
+public class MusicFileController extends BaseController implements MinioBigFileOssApi {
 
     private final PkmerMinioClientAdapter pkmerMinioClient;
     private final MinioAdapter minioAdapter;
@@ -136,8 +139,9 @@ public class MusicFileController implements MinioBigFileOssApi {
     }
 
     @Override
-    public void init(BigFileInitReq req) {
-        minioEngineService.init(req.getFileMd5(),req.getFullFileName(),req.getFileSize());
+    public Result<FileInitView> init(BigFileInitReq req) {
+        FileInitView view =  minioEngineService.init(req.getFileMd5(),req.getFullFileName(),req.getFileSize());
+        return success(view);
     }
 
     @Override

@@ -13,9 +13,11 @@ import org.springframework.context.ApplicationContext;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 /**
  * 处理大文件的分片上传的服务
@@ -53,10 +55,18 @@ public class MinioEngineService {
             // 1. 处理秒传
             FileMetaInfoDto fileMetaInfoDto = fileMetaInfoDtoOptional.get();
             if (fileMetaInfoDto.getIsFinished()) {
-                return null;
+                // 秒传：文件已存在且已完成上传
+                return FileInitView.builder()
+                        .id(fileMetaInfoDto.getId())
+                        .fileKey(fileMetaInfoDto.getFileKey())
+                        .fileMd5(fileMd5)
+                        .fileName(fileName)
+                        .fileSize(fileSize)
+                        .isFinished(fileMetaInfoDto.getIsFinished())
+                        .build();
             } else {
                 // 2. 处理断点续传
-                return null;
+                return resumeUpload(fileMetaInfoDto);
             }
         } else {
             // 3. 用户第一次上传
@@ -64,6 +74,70 @@ public class MinioEngineService {
             persistFileMetaInfo(fileInitView);
             return fileInitView;
         }
+    }
+
+
+    /**
+     * 根据文件元信息恢复上传任务
+     * 该方法主要用于恢复已存在的上传任务，通过获取已上传的分片信息，并标记这些分片，以便继续未完成的上传任务
+     *
+     * @param metaInfo 文件元信息，包含文件的详细属性，如桶名称、文件MD5、上传ID等
+     * @return 返回一个FileInitView对象，其中包含了文件的元信息和已上传分片的信息，用于展示文件上传的初始化视图
+     */
+    private FileInitView resumeUpload(FileMetaInfoDto metaInfo) {
+        // 获取已上传的分片信息
+        List<PartSummary> uploadedParts = minioAdapter.listParts(
+                metaInfo.getBucket(),
+                CommonUtil.getObjectName(metaInfo.getFileMd5()),
+                metaInfo.getUploadId()
+        );
+
+        // 生成所有分片信息
+        List<FileInitView.Part> allParts = generateShardingParts(
+                metaInfo.getPartNumber(),
+                0L,
+                metaInfo.getBucket(),
+                CommonUtil.getObjectName(metaInfo.getFileMd5()),
+                metaInfo.getUploadId()
+        );
+
+        // 使用Map来存储已上传的分片信息，提高查找效率
+        Map<Integer, String> uploadedPartsMap = uploadedParts.stream()
+                .collect(Collectors.toMap(
+                        PartSummary::getPartNumber,
+                        PartSummary::getEtag,
+                        (existing, replacement) -> {
+                            log.warn("发现重复的分片号: {}", existing);
+                            return existing;
+                        }
+                ));
+
+        // 更新分片状态
+        allParts.forEach(part -> {
+            Integer partNumber = part.getPartNumber();
+            if (uploadedPartsMap.containsKey(partNumber)) {
+                part.setUploaded(true);
+                part.setEtag(uploadedPartsMap.get(partNumber));
+            }
+        });
+
+        List<FileInitView.Part> unUploadedParts = allParts.stream().filter(part -> !part.isUploaded()).toList();
+
+        return FileInitView.builder()
+                .id(metaInfo.getId())
+                .fileKey(metaInfo.getFileKey())
+                .fileMd5(metaInfo.getFileMd5())
+                .fileName(metaInfo.getFileName())
+                .fileMimeType(metaInfo.getFileMimeType())
+                .fileSuffix(metaInfo.getFileSuffix())
+                .fileSize(metaInfo.getFileSize())
+                .bucket(metaInfo.getBucket())
+                .bucketPath(metaInfo.getBucketPath())
+                .uploadId(metaInfo.getUploadId())
+                .isFinished(false)
+                .partNumber(metaInfo.getPartNumber())
+                .parts(unUploadedParts)
+                .build();
     }
 
     /**
@@ -83,7 +157,7 @@ public class MinioEngineService {
      * 将FileInitView对象转换为FileMetaInfoDto对象
      */
     private static FileMetaInfoDto toFileMetaInfoDto(FileInitView fileInitView) {
-        return  FileMetaInfoDto.builder()
+        return FileMetaInfoDto.builder()
                 .bucket(fileInitView.getBucket())
                 .fileKey(fileInitView.getFileKey())
                 .fileMd5(fileInitView.getFileMd5())
@@ -121,13 +195,6 @@ public class MinioEngineService {
      * @param fileSize 文件大小，用于计算上传分片的总数
      */
     private FileInitView handleUserFirstUpload(String fileMd5, String fileName, Long fileSize) {
-//        CreateUploadUrlReq createUploadUrlReq = CreateUploadUrlReq.builder()
-//                .fileMd5(fileMd5)
-//                .fullFileName(fileName)
-//                .fileSize(fileSize)
-//                .isResumableUpload(false)
-//                .build();
-
 
         String fileExtension = FileUtil.getFileExtension(fileName);
         if (fileExtension.isBlank()) {
