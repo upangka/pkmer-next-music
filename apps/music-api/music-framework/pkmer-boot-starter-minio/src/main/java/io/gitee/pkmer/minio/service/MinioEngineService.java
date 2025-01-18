@@ -118,26 +118,9 @@ public class MinioEngineService {
         if(isCurrentUserUpload){
             // 用户自己上传的
             FileMetaInfoDto metaInfo = currentUserUpload.get();
-            List<FileInitView.Part> unUploadedParts = generateUploadShardingParts(metaInfo);
-
-            return FileInitView.builder()
-                    .id(metaInfo.getId())
-                    .fileKey(metaInfo.getFileKey())
-                    .fileMd5(metaInfo.getFileMd5())
-                    .fileName(metaInfo.getFileName())
-                    .fileMimeType(metaInfo.getFileMimeType())
-                    .fileSuffix(metaInfo.getFileSuffix())
-                    .fileSize(metaInfo.getFileSize())
-                    .bucket(metaInfo.getBucket())
-                    .bucketPath(metaInfo.getBucketPath())
-                    .uploadId(metaInfo.getUploadId())
-                    .isFinished(false)
-                    .partNumber(metaInfo.getPartNumber())
-                    .parts(unUploadedParts)
-                    .build();
+            return buildResumeDownload(metaInfo);
         }else{
             // 使用其他用户上传的文件
-
             Supplier<FileMetaInfoDto> findUnFinishedFileMetaInfoDto = () -> metaInfos.stream()
                     .filter(m -> !m.getIsFinished())
                     .findFirst()
@@ -147,18 +130,39 @@ public class MinioEngineService {
                     .filter(FileMetaInfoDto::getIsFinished)
                     .findAny()
                     .orElseGet(findUnFinishedFileMetaInfoDto);
-            
 
 
+            // 保存用户上传的文件的元数据信息
+            metaInfo.setId(null);
+            metaInfo.setCreateTime(LocalDateTime.now());
+            metaInfo.setCreateUser(currentUploadUserId);
+            fileMetaInfoRepository.save(metaInfo);
 
-
-
-
+            return buildResumeDownload(metaInfo);
         }
-        return null;
-
     }
 
+    /**
+     * 构建用户继续上传的文件的下载视图
+     */
+    private FileInitView buildResumeDownload(FileMetaInfoDto metaInfo) {
+        List<FileInitView.Part> unUploadedParts = generateUploadShardingParts(metaInfo);
+        return FileInitView.builder()
+                .id(metaInfo.getId())
+                .fileKey(metaInfo.getFileKey())
+                .fileMd5(metaInfo.getFileMd5())
+                .fileName(metaInfo.getFileName())
+                .fileMimeType(metaInfo.getFileMimeType())
+                .fileSuffix(metaInfo.getFileSuffix())
+                .fileSize(metaInfo.getFileSize())
+                .bucket(metaInfo.getBucket())
+                .bucketPath(metaInfo.getBucketPath())
+                .uploadId(metaInfo.getUploadId())
+                .isFinished(false)
+                .partNumber(metaInfo.getPartNumber())
+                .parts(unUploadedParts)
+                .build();
+    }
 
 
     /**
