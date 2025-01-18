@@ -211,10 +211,12 @@ public class MinioAdapter{
      * @param bucketName 存储桶名称
      * @param objectName 对象名称
      * @param uploadId   分片上传ID
+     * @param maxParts   查找最大的分片数量
+     *
      * @return 已上传的分片信息列表
      */
-    public List<PartSummary> listParts(String bucketName, String objectName, String uploadId) {
-        return client.listParts(bucketName, objectName, uploadId);
+    public List<PartSummary> listParts(String bucketName, String objectName, String uploadId,Integer maxParts) {
+        return client.listParts(bucketName, objectName, uploadId,maxParts);
     }
 
 

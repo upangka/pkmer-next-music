@@ -63,46 +63,33 @@ public class PkmerMinioClientAdapter extends MinioAsyncClient {
      * @param uploadId   分片上传ID
      * @return 已上传的分片信息列表
      */
-    public List<PartSummary> listParts(String bucketName, String objectName, String uploadId) {
+    public List<PartSummary> listParts(String bucketName,
+                                       String objectName,
+                                       String uploadId,
+                                       Integer maxParts) {
         try {
-            List<PartSummary> allParts = new ArrayList<>();
-            Integer partNumberMarker = null;
-            boolean hasMore = true;
+            ListPartsResponse response = super.listPartsAsync(
+                    bucketName,
+                    null,              // region
+                    objectName,
+                    maxParts,             // maxParts
+                    null,  // 从哪个分片号开始获取
+                    uploadId,
+                    null,              // extraHeaders
+                    null               // extraQueryParams
+            ).get();
 
-            while (hasMore) {
-                // 获取一批分片信息（最多1000个）
-                ListPartsResponse response = super.listPartsAsync(
-                        bucketName,
-                        null,              // region
-                        objectName,
-                        1000,             // maxParts
-                        partNumberMarker,  // 从哪个分片号开始获取
-                        uploadId,
-                        null,              // extraHeaders
-                        null               // extraQueryParams
-                ).get();
+            // 转换并添加到结果列表
+            List<PartSummary> parts = response.result().partList().stream()
+                    .map(part -> PartSummary.builder()
+                            .partNumber(part.partNumber())
+                            .etag(part.etag())
+                            .partSize(part.partSize())
+                            .build())
+                    .toList();
 
-                // 转换并添加到结果列表
-                List<PartSummary> parts = response.result().partList().stream()
-                        .map(part -> PartSummary.builder()
-                                .partNumber(part.partNumber())
-                                .etag(part.etag())
-                                .partSize(part.partSize())
-                                .build())
-                        .toList();
-                allParts.addAll(parts);
-
-                // 检查是否还有更多分片
-                if (response.result().partList().size() < 1000) {
-                    hasMore = false;
-                } else {
-                    // 更新partNumberMarker为最后一个分片的编号
-                    partNumberMarker = parts.get(parts.size() - 1).getPartNumber();
-                }
-            }
-
-            log.info("获取到总分片数: {} - bucket: {}, object: {}", allParts.size(), bucketName, objectName);
-            return allParts;
+            log.info("获取到总分片数: {} - bucket: {}, object: {}", parts.size(), bucketName, objectName);
+            return parts;
 
         } catch (Exception e) {
             log.error("获取分片列表失败 - bucket: {}, object: {}, uploadId: {}", bucketName, objectName, uploadId, e);

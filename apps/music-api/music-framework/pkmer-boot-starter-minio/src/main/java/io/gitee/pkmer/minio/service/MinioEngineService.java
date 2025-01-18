@@ -10,13 +10,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * 处理大文件的分片上传的服务
@@ -49,7 +47,6 @@ public class MinioEngineService {
 
     public FileInitView init(String fileMd5, String fileName, Long fileSize) {
 
-        // todo 判断list
         List<FileMetaInfoDto> fileMetaInfos = fileMetaInfoRepository.loadByMd5(fileMd5);
 
         if (!fileMetaInfos.isEmpty()) {
@@ -121,46 +118,7 @@ public class MinioEngineService {
         if(isCurrentUserUpload){
             // 用户自己上传的
             FileMetaInfoDto metaInfo = currentUserUpload.get();
-            // 获取已上传的分片信息
-            List<PartSummary> uploadedParts = minioAdapter.listParts(
-                    metaInfo.getBucket(),
-                    CommonUtil.getObjectName(metaInfo.getFileMd5()),
-                    metaInfo.getUploadId()
-            );
-
-            // 生成所有分片信息
-            List<FileInitView.Part> allParts = generateShardingParts(
-                    metaInfo.getPartNumber(),
-                    0L,
-                    metaInfo.getBucket(),
-                    CommonUtil.getObjectName(metaInfo.getFileMd5()),
-                    metaInfo.getUploadId()
-            );
-
-            // 使用Map来存储已上传的分片信息，提高查找效率
-            Map<Integer, String> uploadedPartsMap = uploadedParts.stream()
-                    .collect(Collectors.toMap(
-                            PartSummary::getPartNumber,
-                            PartSummary::getEtag,
-                            (existing, replacement) -> {
-                                log.warn("发现重复的分片号: {}", existing);
-                                return existing;
-                            }
-                    ));
-
-            // 更新分片状态
-            allParts.forEach(part -> {
-                Integer partNumber = part.getPartNumber();
-                if (uploadedPartsMap.containsKey(partNumber)) {
-                    part.setUploaded(true);
-                    part.setEtag(uploadedPartsMap.get(partNumber));
-                }
-            });
-
-            // 只需要给前端返回未上传的分片
-            List<FileInitView.Part> unUploadedParts = allParts.stream()
-                    .filter(part -> !part.isUploaded())
-                    .toList();
+            List<FileInitView.Part> unUploadedParts = generateUploadShardingParts(metaInfo);
 
             return FileInitView.builder()
                     .id(metaInfo.getId())
@@ -197,8 +155,81 @@ public class MinioEngineService {
 
 
         }
+        return null;
+
+    }
 
 
+
+    /**
+     * 找到已上传的分片信息
+     * @param metaInfo 用户上传的文件的元数据信息
+     * @return 已上传的分片的信息
+     */
+    private List<PartSummary> findUploadedParts(FileMetaInfoDto metaInfo) {
+        // 获取已上传的分片信息
+       return  minioAdapter.listParts(
+                metaInfo.getBucket(),
+                CommonUtil.getObjectName(metaInfo.getFileMd5()),
+                metaInfo.getUploadId(),
+                metaInfo.getPartNumber()
+        );
+    }
+
+
+    /**
+     * 生成未上传的分片信息
+     * @param metaInfo 用户上传的文件的元数据信息
+     * @return 未上传的分片的信息
+     */
+    private List<FileInitView.Part> generateUploadShardingParts(FileMetaInfoDto metaInfo){
+
+        List<PartSummary> uploadedParts = findUploadedParts(metaInfo);
+
+        // 找到丢失的分片
+        List<Integer> unUploadPartNumber = findUnuploadPartNumber(metaInfo,uploadedParts);
+
+        final String objectName = CommonUtil.getObjectName(metaInfo.getFileMd5());
+        List<CompletableFuture<FileInitView.Part>> allFutureParts = new ArrayList<>();
+        for(Integer partNumber : unUploadPartNumber){
+            // 分片序号以1开始
+            final long start = (partNumber - 1) * bigFileHelper.getChunkSize();
+            CompletableFuture<FileInitView.Part> futurePart = getPartCompletableFuture(
+                    metaInfo.getBucket(),
+                    objectName,
+                    metaInfo.getUploadId(),
+                    partNumber,
+                    start);
+
+            allFutureParts.add(futurePart);
+        }
+
+       return allFutureParts.stream()
+                .map(CompletableFuture::join) // join() 抛出的异常是未检查异常，减少了异常处理的代码
+                .toList();
+    }
+
+    /**
+     * 找到丢失的分片序号
+     * @param metaInfo 文件元数据信息
+     * @param uploadedParts 已经上传的分片信息
+     */
+    private List<Integer> findUnuploadPartNumber(FileMetaInfoDto metaInfo, List<PartSummary> uploadedParts) {
+
+        Set<Integer> uploadedPartNumberSet = uploadedParts.stream()
+                .map(PartSummary::getPartNumber)
+                .collect(Collectors.toSet());
+
+        // 丢失的分片序号
+        List<Integer> lostPartNumbers = new ArrayList<>();
+        // 分片编号以1开始
+        for(int i = 1; i <= metaInfo.getPartNumber(); i++){
+            if(!uploadedPartNumberSet.contains(i)){
+                lostPartNumbers.add(i);
+            }
+        }
+
+        return lostPartNumbers;
     }
 
     @NotNull
@@ -329,25 +360,12 @@ public class MinioEngineService {
 
         for (int partNumber = 1; partNumber <= chunckTotal; partNumber++) {
 
-            final int finalPartNumber = partNumber;
-            final long finalStart = start;
-            CompletableFuture<FileInitView.Part> futurePart = CompletableFuture.supplyAsync(() -> {
-                // 异步创建上传URL
-                final String uploadUrl = minioAdapter.createUploadUrl(
-                        bucketName,
-                        objectName,
-                        uploadId,
-                        String.valueOf(finalPartNumber));
-
-                // 创建文件分片信息
-                return FileInitView.Part.builder()
-                        .uploadId(uploadId)
-                        .uploadUrl(uploadUrl)
-                        .partNumber(finalPartNumber)
-                        .shardingStart(finalStart)
-                        .shardingEnd(finalStart + bigFileHelper.getChunkSize())
-                        .build();
-            });
+            CompletableFuture<FileInitView.Part> futurePart = getPartCompletableFuture(
+                    bucketName,
+                    objectName,
+                    uploadId,
+                    partNumber,
+                    start);
 
             futureParts.add(futurePart);
 
@@ -365,6 +383,33 @@ public class MinioEngineService {
             }
         }
         return parts;
+    }
+
+    @NotNull
+    private CompletableFuture<FileInitView.Part> getPartCompletableFuture(
+            final String bucketName,
+            final String objectName,
+            final String uploadId,
+            final int finalPartNumber,
+            final long finalStart) {
+
+        return  CompletableFuture.supplyAsync(() -> {
+            // 异步创建上传URL
+            final String uploadUrl = minioAdapter.createUploadUrl(
+                    bucketName,
+                    objectName,
+                    uploadId,
+                    String.valueOf(finalPartNumber));
+
+            // 创建文件分片信息
+            return FileInitView.Part.builder()
+                    .uploadId(uploadId)
+                    .uploadUrl(uploadUrl)
+                    .partNumber(finalPartNumber)
+                    .shardingStart(finalStart)
+                    .shardingEnd(finalStart + bigFileHelper.getChunkSize())
+                    .build();
+        });
     }
 
 
@@ -403,7 +448,8 @@ public class MinioEngineService {
             List<PartSummary> uploadedParts = minioAdapter.listParts(
                     metaInfo.getBucket(),
                     CommonUtil.getObjectName(metaInfo.getFileMd5()),
-                    metaInfo.getUploadId()
+                    metaInfo.getUploadId(),
+                    metaInfo.getPartNumber()
             );
 
             // 4. 验证所有分片都已上传
