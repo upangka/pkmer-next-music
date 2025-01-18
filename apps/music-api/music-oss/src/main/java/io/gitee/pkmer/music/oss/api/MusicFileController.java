@@ -1,5 +1,6 @@
 package io.gitee.pkmer.music.oss.api;
 
+import io.gitee.pkmer.base.ApplicationContextHolder;
 import io.gitee.pkmer.convention.controller.BaseController;
 import io.gitee.pkmer.convention.result.Result;
 import io.gitee.pkmer.minio.api.BigFileInitReq;
@@ -8,6 +9,7 @@ import io.gitee.pkmer.minio.s3.PkmerMinioClientAdapter;
 import io.gitee.pkmer.minio.service.FileInitView;
 import io.gitee.pkmer.minio.service.MinioAdapter;
 import io.gitee.pkmer.minio.service.MinioEngineService;
+import io.gitee.pkmer.security.context.AppContextHolder;
 import io.minio.messages.Bucket;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -148,7 +150,10 @@ public class MusicFileController extends BaseController implements MinioBigFileO
     public Result<String> merge(@RequestParam("fileMd5") String fileMd5,
                                 @RequestBody List<String> partMd5List) {
         try {
-            String fileUrl = minioEngineService.mergeFile(fileMd5, partMd5List);
+            String fileUrl = minioEngineService.mergeFile(
+                    fileMd5,
+                    partMd5List,
+                    getUserId());
             return success(fileUrl);
         } catch (Exception e) {
             log.error("Failed to merge file parts", e);
@@ -164,12 +169,20 @@ public class MusicFileController extends BaseController implements MinioBigFileO
     public Result<String> retryUploadPart(@RequestParam("fileMd5") String fileMd5,
                                           @RequestParam("partNumber") int partNumber) {
         try {
-            String uploadUrl = minioEngineService.retryUploadPart(fileMd5, partNumber);
+            String uploadUrl = minioEngineService.retryUploadPart(
+                    fileMd5,
+                    partNumber,
+                    getUserId());
             return success(uploadUrl);
         } catch (Exception e) {
             log.error("Failed to generate retry upload url", e);
             throw new RuntimeException(e);
         }
+    }
+
+
+    private String getUserId(){
+        return AppContextHolder.userContextHolder.getUser().getId().toString();
     }
 }
 

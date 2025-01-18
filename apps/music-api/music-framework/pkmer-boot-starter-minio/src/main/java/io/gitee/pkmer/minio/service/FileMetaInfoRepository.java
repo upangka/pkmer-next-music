@@ -1,5 +1,6 @@
 package io.gitee.pkmer.minio.service;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -16,7 +17,13 @@ public interface FileMetaInfoRepository {
 
     /**
      * 根据md5加载文件元数据
-     * @param md5
+     * @param md5 文件md5
      */
-    Optional<FileMetaInfoDto> loadByMd5(String md5);
+    List<FileMetaInfoDto> loadByMd5(String md5);
+
+    /**
+     * 根据md5加载指定用户上传的文件元数据
+     * @param md5 文件md5
+     */
+    FileMetaInfoDto loadByMd5(String md5,String userId);
 }

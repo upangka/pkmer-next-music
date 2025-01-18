@@ -6,7 +6,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     implementation 'io.gitee.pkmer:pkmer-boot-starter-mybatis'
-    implementation "io.gitee.pkmer:pkmer-boot-starter-security"
+    api "io.gitee.pkmer:pkmer-boot-starter-security"
 }
 
 /**
