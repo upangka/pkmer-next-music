@@ -158,7 +158,7 @@ public class MinioEngineService {
                 .bucket(metaInfo.getBucket())
                 .bucketPath(metaInfo.getBucketPath())
                 .uploadId(metaInfo.getUploadId())
-                .isFinished(false)
+                .isFinished(metaInfo.getIsFinished())
                 .partNumber(metaInfo.getPartNumber())
                 .parts(unUploadedParts)
                 .build();
@@ -203,7 +203,8 @@ public class MinioEngineService {
                     objectName,
                     metaInfo.getUploadId(),
                     partNumber,
-                    start);
+                    start,
+                    metaInfo.getFileSize());
 
             allFutureParts.add(futurePart);
         }
@@ -317,14 +318,15 @@ public class MinioEngineService {
         /**
          * 文件分片的总数
          */
-        int chunckTotal = bigFileHelper.computeChunks(fileSize);
+        int chunkSize = bigFileHelper.computeChunks(fileSize);
         long start = 0L;
         List<FileInitView.Part> parts = generateShardingParts(
-                chunckTotal,
+                chunkSize,
                 start,
                 bucketName,
                 objectName,
-                uploadId);
+                uploadId,
+                fileSize);
 
         return FileInitView.builder()
                 .fileKey(fileKey)
@@ -337,7 +339,7 @@ public class MinioEngineService {
                 .bucketPath(filePath)
                 .uploadId(uploadId)
                 .isFinished(false)
-                .partNumber(chunckTotal)
+                .partNumber(chunkSize)
                 .parts(parts)
                 .build();
     }
@@ -357,7 +359,8 @@ public class MinioEngineService {
                                                           long start,
                                                           final String bucketName,
                                                           final String objectName,
-                                                          final String uploadId) {
+                                                          final String uploadId,
+                                                          final long fileSize) {
 
 
         List<CompletableFuture<FileInitView.Part>> futureParts = new ArrayList<>();
@@ -369,7 +372,8 @@ public class MinioEngineService {
                     objectName,
                     uploadId,
                     partNumber,
-                    start);
+                    start,
+                    fileSize);
 
             futureParts.add(futurePart);
 
@@ -395,7 +399,8 @@ public class MinioEngineService {
             final String objectName,
             final String uploadId,
             final int finalPartNumber,
-            final long finalStart) {
+            final long finalStart,
+            final long fileSize) {
 
         return  CompletableFuture.supplyAsync(() -> {
             // 异步创建上传URL
@@ -405,13 +410,16 @@ public class MinioEngineService {
                     uploadId,
                     String.valueOf(finalPartNumber));
 
+
+            long end = Math.min(fileSize,finalStart + bigFileHelper.getChunkSize());
+
             // 创建文件分片信息
             return FileInitView.Part.builder()
                     .uploadId(uploadId)
                     .uploadUrl(uploadUrl)
                     .partNumber(finalPartNumber)
                     .shardingStart(finalStart)
-                    .shardingEnd(finalStart + bigFileHelper.getChunkSize())
+                    .shardingEnd(end)
                     .build();
         });
     }
@@ -526,5 +534,35 @@ public class MinioEngineService {
                 metaInfo.getUploadId(),
                 String.valueOf(partNumber)
         );
+    }
+
+
+    /**
+     * 计算预分片的信息
+     * @param fileSize 文件大小
+     */
+    public ShardingView sharding(Long fileSize){
+        int totalChunk = bigFileHelper.computeChunks(fileSize);
+        long chunkSize = bigFileHelper.getChunkSize();
+
+        List<ShardingView.Part> parts = new ArrayList<>();
+        for(int i = 1; i <= totalChunk; i++){
+            long start = (i - 1) * chunkSize;
+            long end = Math.min(fileSize,i * chunkSize);
+            ShardingView.Part part = ShardingView.Part.builder()
+                    .partNumber(i)
+                    .start(start)
+                    .end(end)
+                    .build();
+            parts.add(part);
+        }
+
+        return ShardingView.builder()
+                .totalParts(totalChunk)
+                .fileSize(fileSize)
+                .chunkSize(chunkSize)
+                .parts(parts)
+                .build();
+
     }
 }

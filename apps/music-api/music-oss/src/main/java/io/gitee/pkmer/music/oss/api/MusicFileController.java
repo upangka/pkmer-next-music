@@ -5,10 +5,12 @@ import io.gitee.pkmer.convention.controller.BaseController;
 import io.gitee.pkmer.convention.result.Result;
 import io.gitee.pkmer.minio.api.BigFileInitReq;
 import io.gitee.pkmer.minio.api.MinioBigFileOssApi;
+import io.gitee.pkmer.minio.api.PreShardingReq;
 import io.gitee.pkmer.minio.s3.PkmerMinioClientAdapter;
 import io.gitee.pkmer.minio.service.FileInitView;
 import io.gitee.pkmer.minio.service.MinioAdapter;
 import io.gitee.pkmer.minio.service.MinioEngineService;
+import io.gitee.pkmer.minio.service.ShardingView;
 import io.gitee.pkmer.security.context.AppContextHolder;
 import io.minio.messages.Bucket;
 import lombok.RequiredArgsConstructor;
@@ -178,6 +180,12 @@ public class MusicFileController extends BaseController implements MinioBigFileO
             log.error("Failed to generate retry upload url", e);
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public Result<ShardingView> sharding(PreShardingReq req) {
+        ShardingView view = minioEngineService.sharding(req.getFileSize());
+        return success(view);
     }
 
 

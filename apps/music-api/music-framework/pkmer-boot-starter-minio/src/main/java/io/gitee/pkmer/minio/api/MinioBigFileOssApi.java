@@ -3,6 +3,7 @@ package io.gitee.pkmer.minio.api;
 
 import io.gitee.pkmer.convention.result.Result;
 import io.gitee.pkmer.minio.service.FileInitView;
+import io.gitee.pkmer.minio.service.ShardingView;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -51,5 +52,9 @@ public interface MinioBigFileOssApi extends MinioBasicOssApi {
     @PostMapping("/retry")
     Result<String> retryUploadPart(@RequestParam("fileMd5") String fileMd5,
                                           @RequestParam("partNumber") int partNumber);
+
+    @Operation(summary = "预上传分片信息")
+    @PostMapping("/bigfile/sharding")
+    Result<ShardingView> sharding(@Valid @RequestBody PreShardingReq req);
 
 }
