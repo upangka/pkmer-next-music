@@ -1,23 +1,38 @@
 'use client'
 import { Icon } from '@iconify-icon/react'
 import { useRef, useState } from 'react'
+import useComputeFileMd5 from '@/hooks/useComputeFileMd5'
 
 export default function UploadFile() {
   const size = 60
   const inputRef = useRef<HTMLInputElement | null>(null)
   const [fileName, setFileName] = useState('')
+  const { fileMd5, computeFileMd5, clear } = useComputeFileMd5()
+
+  const showSubContext = !!fileName
+  const showSubmitBtn = fileName && fileMd5
+
   function handleChooseFile() {
-    if (inputRef && inputRef.current) {
-      console.log('Running???')
+    if (inputRef.current) {
+      reset()
       inputRef.current.click()
     }
   }
 
-  function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
+  function reset() {
+    setFileName('')
+    clear()
+  }
+
+  async function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]
     if (file) {
-      console.log('Selected file: ', file.name)
       setFileName(file.name)
+      try {
+        await computeFileMd5(file)
+      } catch (err) {
+        console.error('Error computing file MD5:', err)
+      }
     }
   }
 
@@ -40,7 +55,6 @@ export default function UploadFile() {
             hidden
             id='file-id'
             accept='audio/*,video/*'
-            className='hidden'
             onChange={handleFile}
           />
           <button
@@ -49,12 +63,19 @@ export default function UploadFile() {
           >
             Choose File
           </button>
-          {fileName && (
+
+          {showSubContext && (
             <section className='m-2 flex w-full flex-col items-center justify-center border-t-2 border-black'>
               <p className='mt-2 text-sm text-green-500'>Selected file: {fileName}</p>
-              <button onClick={handleSubmit} className='mt-2 rounded bg-blue-500 p-2 text-white'>
-                Submit
-              </button>
+              {fileMd5 && <section>文件的md5:{fileMd5}</section>}
+              {showSubmitBtn && (
+                <button
+                  onClick={handleSubmit}
+                  className='mt-5 rounded-md bg-blue-500 p-3 text-white hover:bg-blue-700'
+                >
+                  Upload
+                </button>
+              )}
             </section>
           )}
         </div>
