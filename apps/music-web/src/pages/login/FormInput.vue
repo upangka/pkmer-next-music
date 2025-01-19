@@ -1,33 +1,39 @@
 <script lang="ts" setup>
-import { PkmerIcon } from "@pkmer-music-ui/vue/icon"
+import { PkmerIcon } from '@pkmer-music-ui/vue/icon'
+
+const model = defineModel()
+
 interface Props {
-  width?: number,
-  height?: number,
-  placeholder: string,
-  icon: string,
-  type?: string,
-  require?: boolean,
+  width?: number
+  height?: number
+  placeholder: string
+  icon: string
+  type?: string
+  require?: boolean
   name: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
   width: 20,
   height: 20,
-  type: "text",
+  type: 'text',
   require: true
 })
-
-
 </script>
 
 <template>
-  <div class="mb-[30px] flex justify-center items-center px-5">
-    <label class="relative w-full flex justify-center items-center">
-      <PkmerIcon :width="props.width" :height="props.height" :icon="props.icon"
-        class="absolute left-1 top-1/2 -translate-y-1/2" />
-      <input :name="props.name" :type="props.type" class="input" required />
+  <div class="mb-[30px] flex items-center justify-center px-5">
+    <label class="relative flex w-full items-center justify-center">
+      <PkmerIcon
+        :width="props.width"
+        :height="props.height"
+        :icon="props.icon"
+        class="absolute left-1 top-1/2 -translate-y-1/2"
+      />
+      <input v-model="model" :name="props.name" :type="props.type" class="input" required />
       <span class="absolute left-[30px] top-1/2 -translate-y-1/2 text-black">
-        {{ props.placeholder }}</span>
+        {{ props.placeholder }}</span
+      >
     </label>
   </div>
 </template>
@@ -52,15 +58,14 @@ const props = withDefaults(defineProps<Props>(), {
     /* 确保字体颜色一致 */
   }
 
-
-  &:focus~span,
-  &:valid~span {
+  &:focus ~ span,
+  &:valid ~ span {
     top: -5px;
     color: black;
     font-size: 12px;
   }
 
-  &~span {
+  & ~ span {
     transition: all 0.3s ease-in-out;
   }
 }

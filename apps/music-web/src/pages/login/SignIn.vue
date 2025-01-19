@@ -1,12 +1,17 @@
 <script lang="ts" setup>
 import bgs from './bgs'
-import { computed, ref, type CSSProperties, watch } from 'vue'
+import { computed, ref, reactive, type CSSProperties, watch } from 'vue'
 import FormInput from './FormInput.vue'
 import FormButton from './FormButton.vue'
 const isLogin = ref(true)
 const firstTimeLoad = ref(true)
 const loginBg = bgs[Math.floor(Math.random() * bgs.length)]
 
+const state = reactive({
+  username: '',
+  email: '',
+  password: ''
+})
 
 const stopWatch = watch(isLogin, () => {
   if (firstTimeLoad.value) {
@@ -34,6 +39,31 @@ const overlayMoveStyle = computed<CSSProperties>(() => {
     transform: `translateX(${isLogin.value ? '0' : '-101%'})`
   }
 })
+
+function handleLogin(e: Event) {
+  console.log(state.email, state.password)
+}
+
+function handleRegister() {
+  console.log(state.email, state.password)
+}
+
+// 重置 state 的函数
+function resetState() {
+  state.email = ''
+  state.password = ''
+  state.username = ''
+}
+
+function switchToLogin() {
+  isLogin.value = true
+  resetState()
+}
+
+function switchRegister() {
+  isLogin.value = false
+  resetState()
+}
 </script>
 
 <template>
@@ -42,21 +72,47 @@ const overlayMoveStyle = computed<CSSProperties>(() => {
       <!-- 表单start -->
       <section :style="formMoveStyle" class="move-transition form-container">
         <!-- 登录表单start -->
-        <form class="login-container">
+        <form class="login-container" @submit.prevent="handleLogin">
           <h1 class="p-4 text-center text-xl">登录</h1>
-          <FormInput icon="uil:user" placeholder="用户名" name="username" />
-          <FormInput icon="formkit:password" placeholder=" 密码" type="password" name="password" />
+          <FormInput v-model="state.email" icon="uil:user" placeholder="用户名" name="username" />
+          <FormInput
+            v-model="state.password"
+            icon="formkit:password"
+            placeholder=" 密码"
+            type="password"
+            name="password"
+          />
           <div class="flex justify-center">
             <FormButton>登录</FormButton>
           </div>
         </form>
         <!-- 登录表单end -->
         <!-- 注册表单start -->
-        <form :style="{ animationDuration: firstTimeLoad ? '0s' : '0.6s' }" class="signup-container">
+        <form
+          :style="{ animationDuration: firstTimeLoad ? '0s' : '0.6s' }"
+          class="signup-container"
+          @submit.prevent="handleRegister"
+        >
           <h1 class="title">注册</h1>
-          <FormInput icon="uil:user" placeholder="用户名" name="username" />
-          <FormInput icon="iconamoon:email-thin" placeholder="邮箱" name="email" />
-          <FormInput icon="formkit:password" placeholder=" 密码" type="password" name="password" />
+          <FormInput
+            v-model="state.username"
+            icon="uil:user"
+            placeholder="用户名"
+            name="username"
+          />
+          <FormInput
+            v-model="state.email"
+            icon="iconamoon:email-thin"
+            placeholder="邮箱"
+            name="email"
+          />
+          <FormInput
+            v-model="state.password"
+            icon="formkit:password"
+            placeholder=" 密码"
+            type="password"
+            name="password"
+          />
           <div class="flex justify-center">
             <FormButton>注册</FormButton>
           </div>
@@ -69,10 +125,10 @@ const overlayMoveStyle = computed<CSSProperties>(() => {
         <div :style="bgStyle" class="inner-overlay__container">
           <div class="absolute h-full w-1/2">
             <div v-if="isLogin" class="register-btn__container">
-              <FormButton @click="isLogin = false">注册</FormButton>
+              <FormButton @click="switchRegister">注册</FormButton>
             </div>
             <div v-else className="login-btn__container">
-              <FormButton @click="isLogin = true">登录</FormButton>
+              <FormButton @click="switchToLogin">登录</FormButton>
             </div>
           </div>
         </div>
@@ -135,7 +191,6 @@ $formHeight: 650px;
         background-color: $bgColor;
 
         @keyframes hidden-signup {
-
           0%,
           49.99% {
             opacity: 1;
