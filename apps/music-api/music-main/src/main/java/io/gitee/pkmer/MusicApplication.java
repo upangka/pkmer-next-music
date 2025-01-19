@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
  * At 2024/12/31
  */
 @SpringBootApplication
-@RestController
 public class MusicApplication {
 
     public static void main(String[] args) {

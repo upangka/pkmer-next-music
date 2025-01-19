@@ -3,6 +3,8 @@ import bgs from './bgs'
 import { computed, ref, reactive, type CSSProperties, watch } from 'vue'
 import FormInput from './FormInput.vue'
 import FormButton from './FormButton.vue'
+import { login } from '@pkmer-music/web/api/user'
+
 const isLogin = ref(true)
 const firstTimeLoad = ref(true)
 const loginBg = bgs[Math.floor(Math.random() * bgs.length)]
@@ -42,6 +44,7 @@ const overlayMoveStyle = computed<CSSProperties>(() => {
 
 function handleLogin(e: Event) {
   console.log(state.email, state.password)
+  login(state.email, state.password)
 }
 
 function handleRegister() {

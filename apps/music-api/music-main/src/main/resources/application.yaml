@@ -42,7 +42,7 @@ app:
   auth:
     ignore-urls:
       - "/user/login"
-      - "/user/sign"
+      - "/user/signup"
       - "/doc.html"
       - "/webjars/**"
       - "/v3/**"
