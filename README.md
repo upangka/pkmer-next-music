@@ -44,7 +44,14 @@ pnpm dev --filter=@pkmer-music-ui/vue --filter=music-web
 - [react](./packages/react/) react组件库
 - [vue](./packages/vue/) vue组件库
 
-
 # 环境
 
 - node v22.13.0
+
+## 安装包
+
+> 为指定的子项目安装包
+
+```sh
+pnpm add -D @iconify/react --filter=子项目名称
+```
