@@ -1,5 +1,9 @@
-import Image from 'next/image'
-
+import UploadFile from '@/components/upload-file'
+import { Alert } from '@/components/alert'
 export default function Home() {
-  return <div>Hello World</div>
+  return (
+    <>
+      <UploadFile />
+    </>
+  )
 }
