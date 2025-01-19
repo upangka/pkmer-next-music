@@ -11,17 +11,8 @@ export default function useComputeFileMd5() {
   function computeFileMd5(file: File): Promise<string> {
     const reader = new FileReader()
     const md5 = CryptoJS.algo.MD5.create()
-    let offset = 0
-    let count = 1 // 加载文件次数
     const chunkSize = 2 * 1024 * 1024 // 2MB
-
-    function readNextChunk() {
-      console.log('加载文件', count++, '部分')
-      const sliceFile = file.slice(offset, offset + chunkSize)
-      reader.readAsArrayBuffer(sliceFile)
-    }
-
-    readNextChunk()
+    let offset = 0
 
     return new Promise((resolve, reject) => {
       reader.onload = function (event) {
@@ -34,7 +25,6 @@ export default function useComputeFileMd5() {
           readNextChunk()
         } else {
           const hash = md5.finalize().toString()
-          console.log('文件的MD5', hash)
           setFileMd5(hash)
           resolve(hash)
         }
@@ -43,6 +33,13 @@ export default function useComputeFileMd5() {
       reader.onerror = function (error) {
         reject(error)
       }
+
+      function readNextChunk() {
+        const sliceFile = file.slice(offset, offset + chunkSize)
+        reader.readAsArrayBuffer(sliceFile)
+      }
+
+      readNextChunk()
     })
   }
 
