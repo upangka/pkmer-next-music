@@ -57,8 +57,12 @@ function handleLogin() {
       <!-- 右边start -->
       <section>
         <PkmerAvatarRoot v-if="isLogin">
-          <PkmerAvatarFallback>pk1</PkmerAvatarFallback>
+          <PkmerAvatarFallback
+            class="flex h-[50px] w-[50px] items-center justify-center rounded-full bg-gray-500 text-lg font-bold text-white"
+            >pk</PkmerAvatarFallback
+          >
           <PkmerAvatarImage
+            class="h-[50px] w-[50px] rounded-full object-fill"
             src="https://p1.music.126.net/6y-UleORITEDbvrOLV0Q8A==/5639395138885805.jpg?param=180y180"
           />
         </PkmerAvatarRoot>
