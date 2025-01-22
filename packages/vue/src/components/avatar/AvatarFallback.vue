@@ -7,7 +7,7 @@ const isShow = computed(() => context.imageLoadingStatus.value !== 'loaded')
 </script>
 
 <template>
-  <span v-if="isShow">
+  <div v-if="isShow">
     <slot></slot>
-  </span>
+  </div>
 </template>
