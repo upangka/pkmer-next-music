@@ -1,16 +1,35 @@
 <script lang="ts" setup>
-import { ref } from "vue"
-import { RouterLink } from 'vue-router'
-import { SearchInput } from '@pkmer-music/web/components';
-import { NavigationRoot, NavigationList, NavigationItem, NavigationIndicator, PkmerIcon } from "@pkmer-music-ui/vue"
+import { storeToRefs } from 'pinia'
+import { ref } from 'vue'
+import { RouterLink, useRouter } from 'vue-router'
+import { SearchInput } from '@pkmer-music/web/components'
+import {
+  NavigationRoot,
+  NavigationList,
+  NavigationItem,
+  NavigationIndicator,
+  PkmerIcon,
+  PkmerAvatarFallback,
+  PkmerAvatarRoot,
+  PkmerAvatarImage
+} from '@pkmer-music-ui/vue'
+
+import { useUserCenterStore } from '@pkmer-music/web/stores'
+const router = useRouter()
 
 const showLoginIndicator = ref(false)
+const { isLogin } = storeToRefs(useUserCenterStore())
+
+function handleLogin() {
+  showLoginIndicator.value = true
+  router.push('/login')
+}
 </script>
 
 <template>
   <div class="header-container flex items-center justify-between px-10 py-5">
     <!-- 左边start -->
-    <section class="flex items-center justify-evenly w-full">
+    <section class="flex w-full items-center justify-evenly">
       <div class="flex items-center justify-start gap-3">
         <PkmerIcon icon="tdesign:music-rectangle-add-filled" :height="36" :width="36" />
         <h1 class="text-xl font-bold">Pkmer-Next-Music</h1>
@@ -36,28 +55,34 @@ const showLoginIndicator = ref(false)
       </div>
 
       <!-- 右边start -->
-      <NavigationRoot>
-        <NavigationList :item-gap="0">
-          <NavigationItem>
-            <section class="flex justify-start gap-5" @click="showLoginIndicator = !showLoginIndicator">
-              <RouterLink to="/login">登录</RouterLink>
-            </section>
-          </NavigationItem>
-        </NavigationList>
-        <NavigationIndicator color="black" v-show="showLoginIndicator" />
-      </NavigationRoot>
-
+      <section>
+        <PkmerAvatarRoot v-if="isLogin">
+          <PkmerAvatarFallback>pk1</PkmerAvatarFallback>
+          <PkmerAvatarImage
+            src="https://p1.music.126.net/6y-UleORITEDbvrOLV0Q8A==/5639395138885805.jpg?param=180y180"
+          />
+        </PkmerAvatarRoot>
+        <NavigationRoot v-else>
+          <NavigationList :item-gap="0">
+            <NavigationItem>
+              <section class="flex justify-start gap-5" @click="handleLogin">
+                <RouterLink to="/login">登录</RouterLink>
+              </section>
+            </NavigationItem>
+          </NavigationList>
+          <NavigationIndicator color="black" v-show="showLoginIndicator" />
+        </NavigationRoot>
+      </section>
 
       <!-- 右边end -->
     </section>
     <!-- 左边end -->
-
   </div>
 </template>
 
 <style lang="scss" scoped>
 /* @import "@pkmer-music/web/assets/styles/__variables.scss"; */
-@use "@pkmer-music/web/assets/styles/__variables.scss" as *;
+@use '@pkmer-music/web/assets/styles/__variables.scss' as *;
 
 .header-container {
   height: $header-height;

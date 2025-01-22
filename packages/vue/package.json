@@ -51,6 +51,12 @@
         "default": "./dist/esm/components/container/index.js"
       }
     },
+    "./avatar": {
+      "import": {
+        "types": "./dist/types/components/avatar/index.d.ts",
+        "default": "./dist/esm/components/avatar/index.js"
+      }
+    },
     "./carsourel": {
       "import": {
         "types": "./dist/types/components/carsourel/index.d.ts",

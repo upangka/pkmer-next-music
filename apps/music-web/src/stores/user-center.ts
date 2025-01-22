@@ -1,12 +1,24 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-export const useUserCenter = defineStore('user-center', () => {
+import type { UserLogin } from '@pkmer-music/web/api/user'
+export const useUserCenterStore = defineStore('user-center', () => {
   const username = ref('')
+  const id = ref('')
 
-  const getUsername = computed(() => username.value)
+  const getUserEmail = computed(() => username.value)
+  const isLogin = computed(() => !!username.value)
+
+  function setUser(user: UserLogin) {
+    console.log(user)
+    username.value = user.username
+    id.value = user.id
+  }
 
   return {
     username,
-    getUsername
+    id,
+    getUserEmail,
+    setUser,
+    isLogin
   }
 })

@@ -5,6 +5,9 @@ import { useRouter } from 'vue-router'
 import FormInput from './FormInput.vue'
 import FormButton from './FormButton.vue'
 import { login } from '@pkmer-music/web/api/user'
+import { useUserCenterStore } from '@pkmer-music/web/stores'
+
+const userCenter = useUserCenterStore()
 const router = useRouter()
 const isLogin = ref(true)
 const loginWaiting = ref(false)
@@ -50,8 +53,8 @@ async function handleLogin(e: Event) {
 
   if (user) {
     localStorage.setItem('token', user.token)
-    console.log('进来吗')
     loginWaiting.value = false
+    userCenter.setUser(user)
     router.push('/')
   }
 }

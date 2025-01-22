@@ -1,9 +1,9 @@
 import http from './http'
 import type { AppResponse } from '@pkmer-music/web//types/http-base'
 
-interface UserLogin {
+export interface UserLogin {
   token: string
-  email: string
+  username: string
   id: string
 }
 
