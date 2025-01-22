@@ -43,7 +43,11 @@ public class LoginUserHandler implements CommandHandler<LoginUserCmd,LoginView> 
             String token = userGateway.generateJWT(user.getId(), user.getEmail(),user.getUsername());
             log.info("{} 登录的token {}",user.getUsername(),token);
 
-            return new LoginView().setToken(token);
+            return new LoginView()
+                    .setId(user.getId().toString())
+                    .setAvatar(user.getAvator())
+                    .setUsername(user.getUsername())
+                    .setToken(token);
         }else{
             throw new RuntimeException("密码错误");
         }

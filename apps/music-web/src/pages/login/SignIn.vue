@@ -1,11 +1,13 @@
 <script lang="ts" setup>
 import bgs from './bgs'
 import { computed, ref, reactive, type CSSProperties, watch } from 'vue'
+import { useRouter } from 'vue-router'
 import FormInput from './FormInput.vue'
 import FormButton from './FormButton.vue'
 import { login } from '@pkmer-music/web/api/user'
-
+const router = useRouter()
 const isLogin = ref(true)
+const loginWaiting = ref(false)
 const firstTimeLoad = ref(true)
 const loginBg = bgs[Math.floor(Math.random() * bgs.length)]
 
@@ -42,9 +44,16 @@ const overlayMoveStyle = computed<CSSProperties>(() => {
   }
 })
 
-function handleLogin(e: Event) {
-  console.log(state.email, state.password)
-  login(state.email, state.password)
+async function handleLogin(e: Event) {
+  loginWaiting.value = true
+  const user = await login(state.email, state.password)
+
+  if (user) {
+    localStorage.setItem('token', user.token)
+    console.log('进来吗')
+    loginWaiting.value = false
+    router.push('/')
+  }
 }
 
 function handleRegister() {
@@ -86,7 +95,10 @@ function switchRegister() {
             name="password"
           />
           <div class="flex justify-center">
-            <FormButton>登录</FormButton>
+            <FormButton>
+              <span v-if="loginWaiting">登录中...</span>
+              <span v-else>登录</span>
+            </FormButton>
           </div>
         </form>
         <!-- 登录表单end -->

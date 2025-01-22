@@ -9,4 +9,11 @@ import lombok.experimental.Accessors;
 public class LoginView {
     @Schema(description = "token")
     private String token;
+    @Schema(description = "用户id")
+    private String id;
+    @Schema(description = "用户名")
+    private String username;
+    @Schema(description = "头像")
+    private String avatar;
+
 }

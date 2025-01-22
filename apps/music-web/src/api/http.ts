@@ -27,7 +27,9 @@ axiosInstance.interceptors.request.use(
 
 // 响应拦截器
 axiosInstance.interceptors.response.use(
-  (response: AxiosResponse) => response.data, // 直接返回响应数据
+  (response: AxiosResponse) => {
+    return response
+  }, // 直接返回响应数据
   error => Promise.reject(error) // 响应错误时，直接返回错误信息
 )
 
@@ -46,7 +48,7 @@ const http: AppHTTP = {
         params: data,
         ...config
       })
-      return response.data
+      return response.data.data
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.log(error.message) // 打印错误信息
@@ -65,7 +67,7 @@ const http: AppHTTP = {
   async post<T>(url: string, data?: Data, config?: AxiosRequestConfig): AppResponse<T> {
     try {
       const response = await axiosInstance.post<AppBaseResponse<T>>(url, data, config)
-      return response.data
+      return response.data.data
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.log(error.message) // 打印错误信息
@@ -84,7 +86,7 @@ const http: AppHTTP = {
   async put<T>(url: string, data?: Data, config?: AxiosRequestConfig): AppResponse<T> {
     try {
       const response = await axiosInstance.put<AppBaseResponse<T>>(url, data, config)
-      return response.data
+      return response.data.data
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.log(error.message) // 打印错误信息
@@ -106,7 +108,7 @@ const http: AppHTTP = {
         params: data,
         ...config
       })
-      return response.data
+      return response.data.data
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.log(error.message) // 打印错误信息
