@@ -27,7 +27,7 @@ import org.springframework.context.annotation.Bean;
 @AutoConfiguration
 @ConditionalOnMissingBean(MinioClient.class)
 @EnableConfigurationProperties(PkmerMinioProps.class)
-@MapperScan(basePackages = "io.gitee.pkmer.minio.repository.mybatis")
+//@MapperScan(basePackages = "io.gitee.pkmer.minio.repository.mybatis")
 public class PkmerMinioAutoConfiguration {
 
     @Bean

@@ -7,4 +7,5 @@ dependencies {
     implementation projects.musicCore.musicInfrastructure.musicInfrastructurePersistence
     api projects.musicCore.musicInfrastructure.musicInfrastructureGateway
     implementation projects.musicCore.musicDomain
+    implementation projects.musicFramework.pkmerBootStarterMinio
 }

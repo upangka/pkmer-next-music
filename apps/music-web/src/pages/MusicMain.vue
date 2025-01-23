@@ -1,7 +1,15 @@
 <script lang="ts" setup>
+import { ref, onMounted } from 'vue'
 import { PlayList } from '@pkmer-music/web/components'
 import { PkmerCarousel, PkmerCarouselItem } from '@pkmer-music-ui/vue/carsourel'
 import songs from '@pkmer-music/web/assets/songs.json'
+import { type Banner, getAllBanners } from '@pkmer-music/web/api/banner'
+
+const banners = ref<Banner[]>([])
+
+onMounted(async () => {
+  banners.value.push(...(await getAllBanners()))
+})
 </script>
 
 <template>
@@ -9,11 +17,11 @@ import songs from '@pkmer-music/web/assets/songs.json'
     <!-- 幻灯片start -->
     <PkmerCarousel type="card" :autoplay="true" arrow="hover">
       <PkmerCarouselItem
-        v-for="i in 3"
-        :key="i"
+        v-for="banner in banners"
+        :key="banner.id"
         class="flex h-full justify-center text-2xl text-white"
       >
-        {{ i }}
+        <img :src="banner.url" class="h-full w-full object-cover" />
       </PkmerCarouselItem>
     </PkmerCarousel>
   </section>
