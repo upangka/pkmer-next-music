@@ -3,7 +3,8 @@ import axios from 'axios'
 import type { AppHTTP, Data, AppBaseResponse, AppResponse } from '../types/http-base'
 
 // 从环境变量中获取 API 基础路径
-const baseURL = import.meta.env.VITE_API_BASE_URL
+const isDev = import.meta.env.MODE === 'development'
+const baseURL = isDev ? '/api' : import.meta.env.VITE_API_BASE_URL || ''
 
 // 创建 Axios 实例
 const axiosInstance: AxiosInstance = axios.create({
