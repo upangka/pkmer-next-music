@@ -63,6 +63,12 @@
         "default": "./dist/esm/components/carsourel/index.js"
       }
     },
+    "./dropdown": {
+      "import": {
+        "types": "./dist/types/components/dropdown/index.d.ts",
+        "default": "./dist/esm/components/dropdown/index.js"
+      }
+    },
     "./icon": {
       "import": {
         "types": "./dist/types/components/icon/index.d.ts",
