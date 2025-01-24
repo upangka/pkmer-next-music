@@ -1,22 +1,27 @@
 <script lang="ts" setup>
-import { PlayList } from "@pkmer-music/web/components"
-import { NavigationIndicator, NavigationItem, NavigationList, NavigationRoot } from "@pkmer-music-ui/vue/navigation"
-import { singerStyles } from "@pkmer-music/web/enums"
+import { PlayList } from '@pkmer-music/web/components'
+import {
+  PkmerNavigationIndicator,
+  PkmerNavigationItem,
+  PkmerNavigationList,
+  PkmerNavigationRoot
+} from '@pkmer-music-ui/vue/navigation'
+import { singerStyles } from '@pkmer-music/web/enums'
 import songs from '@pkmer-music/web/assets/songs.json'
 </script>
 
 <template>
   <div class="singer-list__container">
-    <NavigationRoot>
-      <NavigationList :show-border="false" :item-gap="10">
+    <PkmerNavigationRoot>
+      <PkmerNavigationList :show-border="false" :item-gap="10">
         <template v-for="singerStyle in singerStyles" :key="singerStyle.type">
-          <NavigationItem>
+          <PkmerNavigationItem>
             {{ singerStyle.name }}
-          </NavigationItem>
+          </PkmerNavigationItem>
         </template>
-      </NavigationList>
-      <NavigationIndicator color="#ec4899" />
-    </NavigationRoot>
+      </PkmerNavigationList>
+      <PkmerNavigationIndicator color="#ec4899" />
+    </PkmerNavigationRoot>
 
     <!-- 歌手列表展示start -->
     <section class="mt-3">
@@ -27,7 +32,7 @@ import songs from '@pkmer-music/web/assets/songs.json'
 </template>
 
 <style lang="scss" scoped>
-@use "@pkmer-music/web/assets/styles/mixins.scss" as PkmerMixin;
+@use '@pkmer-music/web/assets/styles/mixins.scss' as PkmerMixin;
 
 .singer-list__container {
   @include PkmerMixin.play-list__container();

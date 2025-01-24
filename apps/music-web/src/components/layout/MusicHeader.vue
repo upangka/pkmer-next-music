@@ -4,10 +4,10 @@ import { ref } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
 import { SearchInput } from '@pkmer-music/web/components'
 import {
-  NavigationRoot,
-  NavigationList,
-  NavigationItem,
-  NavigationIndicator,
+  PkmerNavigationRoot,
+  PkmerNavigationList,
+  PkmerNavigationItem,
+  PkmerNavigationIndicator,
   PkmerIcon,
   PkmerAvatarFallback,
   PkmerAvatarRoot,
@@ -39,23 +39,23 @@ function handleLogin() {
         <h1 class="text-xl font-bold">Pkmer-Next-Music</h1>
       </div>
       <div @click="showLoginIndicator = false">
-        <NavigationRoot>
-          <NavigationList :item-gap="30">
-            <NavigationItem>
+        <PkmerNavigationRoot>
+          <PkmerNavigationList :item-gap="30">
+            <PkmerNavigationItem>
               <RouterLink to="/">首页</RouterLink>
-            </NavigationItem>
-            <NavigationItem>
+            </PkmerNavigationItem>
+            <PkmerNavigationItem>
               <RouterLink to="/songs">歌单</RouterLink>
-            </NavigationItem>
-            <NavigationItem>
+            </PkmerNavigationItem>
+            <PkmerNavigationItem>
               <RouterLink to="/singers">歌手</RouterLink>
-            </NavigationItem>
-            <NavigationItem>
+            </PkmerNavigationItem>
+            <PkmerNavigationItem>
               <SearchInput />
-            </NavigationItem>
-          </NavigationList>
-          <NavigationIndicator color="black" v-show="!showLoginIndicator" />
-        </NavigationRoot>
+            </PkmerNavigationItem>
+          </PkmerNavigationList>
+          <PkmerNavigationIndicator color="black" v-show="!showLoginIndicator" />
+        </PkmerNavigationRoot>
       </div>
 
       <!-- 右边start -->
@@ -86,16 +86,16 @@ function handleLogin() {
           </PkmerDropdownMenuContent>
         </PkmerDropdownMenu>
 
-        <NavigationRoot v-else>
-          <NavigationList :item-gap="0">
-            <NavigationItem>
+        <PkmerNavigationRoot v-else>
+          <PkmerNavigationList :item-gap="0">
+            <PkmerNavigationItem>
               <section class="flex justify-start gap-5" @click="handleLogin">
                 <RouterLink to="/login">登录</RouterLink>
               </section>
-            </NavigationItem>
-          </NavigationList>
-          <NavigationIndicator color="black" v-show="showLoginIndicator" />
-        </NavigationRoot>
+            </PkmerNavigationItem>
+          </PkmerNavigationList>
+          <PkmerNavigationIndicator color="black" v-show="showLoginIndicator" />
+        </PkmerNavigationRoot>
       </section>
 
       <!-- 右边end -->
