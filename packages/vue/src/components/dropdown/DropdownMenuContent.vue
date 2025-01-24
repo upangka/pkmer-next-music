@@ -5,7 +5,7 @@ import { dropdownMenuKey } from './constants'
 const { visible } = inject(dropdownMenuKey)!
 </script>
 <template>
-  <ul v-if="visible" class="relative w-fit rounded-md p-2 text-white">
+  <ul v-if="visible" class="relative w-fit select-none rounded-md p-2 text-white">
     <Indicator />
     <slot></slot>
   </ul>
