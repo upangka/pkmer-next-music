@@ -19,6 +19,16 @@ const routes: RouteRecordRaw[] = [
         component: () => import('@pkmer-music/web/pages/singer/SingerList.vue')
       },
       {
+        path: 'personal',
+        name: '个人中心',
+        component: () => import('@pkmer-music/web/pages/person/Personal.vue')
+      },
+      {
+        path: 'setting',
+        name: '设置',
+        component: () => import('@pkmer-music/web/pages/setting/Setting.vue')
+      },
+      {
         path: 'login',
         name: '登录注册页面',
         component: () => import('@pkmer-music/web/pages/login/SignIn.vue')

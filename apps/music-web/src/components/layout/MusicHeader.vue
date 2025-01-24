@@ -75,8 +75,14 @@ function handleLogin() {
             </PkmerAvatarRoot>
           </PkmerDropdownMenuTrigger>
           <PkmerDropdownMenuContent>
-            <PkmerDropdownMenuItem>个人中心</PkmerDropdownMenuItem>
-            <PkmerDropdownMenuItem>退出登录</PkmerDropdownMenuItem>
+            <PkmerDropdownMenuItem>
+              <RouterLink to="/personal">个人中心</RouterLink>
+            </PkmerDropdownMenuItem>
+
+            <PkmerDropdownMenuItem>
+              <RouterLink to="/setting">设置</RouterLink>
+            </PkmerDropdownMenuItem>
+            <PkmerDropdownMenuItem> 退出登录 </PkmerDropdownMenuItem>
           </PkmerDropdownMenuContent>
         </PkmerDropdownMenu>
 
