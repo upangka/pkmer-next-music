@@ -11,7 +11,11 @@ import {
   PkmerIcon,
   PkmerAvatarFallback,
   PkmerAvatarRoot,
-  PkmerAvatarImage
+  PkmerAvatarImage,
+  PkmerDropdownMenu,
+  PkmerDropdownMenuContent,
+  PkmerDropdownMenuTrigger,
+  PkmerDropdownMenuItem
 } from '@pkmer-music-ui/vue'
 
 import { useUserCenterStore } from '@pkmer-music/web/stores'
@@ -55,17 +59,27 @@ function handleLogin() {
       </div>
 
       <!-- 右边start -->
+
       <section>
-        <PkmerAvatarRoot v-if="isLogin">
-          <PkmerAvatarFallback
-            class="flex h-[50px] w-[50px] items-center justify-center rounded-full bg-gray-500 text-lg font-bold text-white"
-            >pk</PkmerAvatarFallback
-          >
-          <PkmerAvatarImage
-            class="h-[50px] w-[50px] rounded-full object-fill"
-            src="https://p1.music.126.net/6y-UleORITEDbvrOLV0Q8A==/5639395138885805.jpg?param=180y180"
-          />
-        </PkmerAvatarRoot>
+        <PkmerDropdownMenu v-if="isLogin">
+          <PkmerDropdownMenuTrigger>
+            <PkmerAvatarRoot>
+              <PkmerAvatarFallback
+                class="flex h-[50px] w-[50px] items-center justify-center rounded-full bg-gray-500 text-lg font-bold text-white"
+                >pk</PkmerAvatarFallback
+              >
+              <PkmerAvatarImage
+                class="h-[50px] w-[50px] rounded-full object-fill"
+                src="https://p1.music.126.net/6y-UleORITEDbvrOLV0Q8A==/5639395138885805.jpg?param=180y180"
+              />
+            </PkmerAvatarRoot>
+          </PkmerDropdownMenuTrigger>
+          <PkmerDropdownMenuContent>
+            <PkmerDropdownMenuItem>个人中心</PkmerDropdownMenuItem>
+            <PkmerDropdownMenuItem>退出登录</PkmerDropdownMenuItem>
+          </PkmerDropdownMenuContent>
+        </PkmerDropdownMenu>
+
         <NavigationRoot v-else>
           <NavigationList :item-gap="0">
             <NavigationItem>

@@ -19,7 +19,7 @@ function hide() {
 </script>
 
 <template>
-  <details class="flex flex-col items-center justify-center gap-3">
+  <details class="relative flex flex-col items-center justify-center gap-3">
     <slot></slot>
   </details>
 </template>
