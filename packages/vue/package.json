@@ -69,6 +69,12 @@
         "default": "./dist/esm/components/dropdown/index.js"
       }
     },
+    "./tabs": {
+      "import": {
+        "types": "./dist/types/components/tabs/index.d.ts",
+        "default": "./dist/esm/components/tabs/index.js"
+      }
+    },
     "./icon": {
       "import": {
         "types": "./dist/types/components/icon/index.d.ts",

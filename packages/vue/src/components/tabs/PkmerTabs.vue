@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang="tsx">
 interface Props {
   tabPosition: 'left'
 }
