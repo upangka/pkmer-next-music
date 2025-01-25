@@ -1,11 +1,19 @@
+<script lang="ts">
+interface Props {
+  label: string
+  name: string
+}
+</script>
 <script setup lang="ts">
 import { TabPanneName } from './constants'
-import { inject, onMounted, getCurrentInstance } from 'vue'
+import { inject, onMounted, getCurrentInstance, computed } from 'vue'
 import { tabsKey } from './constants'
 defineOptions({
   name: TabPanneName
 })
 
+const props = defineProps<Props>()
+const paneName = computed(() => props.name!)
 const context = inject(tabsKey)!
 const vm = getCurrentInstance()!
 
@@ -14,6 +22,8 @@ onMounted(() => {
 })
 </script>
 <template>
-  <div></div>
+  <div :id="paneName">
+    <slot></slot>
+  </div>
 </template>
 <style lang="scss" scoped></style>

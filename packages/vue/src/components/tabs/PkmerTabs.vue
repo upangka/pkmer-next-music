@@ -1,30 +1,34 @@
+<script lang="ts">
+interface Props {
+  tabPosition: 'left'
+}
+</script>
+
 <script setup lang="tsx">
-import { getCurrentInstance, provide, createVNode } from 'vue'
+import { getCurrentInstance, provide, createVNode, ref } from 'vue'
 import PkmerTabNav from './PkmerTabNav.vue'
-import { TabNavRenderer } from './TabNavRenderer'
 import { TabPanneName, tabsKey } from './constants'
 import getAllSlotByComponentName from './flat'
 const vm = getCurrentInstance()!
 
-const { children, addChild } = getAllSlotByComponentName(vm, TabPanneName)
-
-provide(tabsKey, {
-  addChild
+const props = withDefaults(defineProps<Props>(), {
+  tabPosition: 'left'
 })
 
-// 获取所有的pannel
+const { children, addChild } = getAllSlotByComponentName(vm, TabPanneName)
 
-function render() {
-  return createVNode(PkmerTabNav, {
-    pannes: children.value
-  })
+const currentPanne = ref('first')
+
+provide(tabsKey, {
+  currentPanne,
+  tabPosition: props.tabPosition,
+  addChild,
+  changeCurrentPanne
+})
+
+function changeCurrentPanne(name: string) {
+  currentPanne.value = name
 }
-
-const header = (
-  <div>
-    <TabNavRenderer render={render} />
-  </div>
-)
 </script>
 <template>
   <div>
@@ -32,6 +36,7 @@ const header = (
     <div class="content">
       <slot></slot>
     </div>
-    {{ header }}
+    <!-- headers -->
+    <PkmerTabNav :pannes="children" />
   </div>
 </template>
