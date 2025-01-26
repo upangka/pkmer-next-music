@@ -4,7 +4,7 @@ interface Props {
 }
 </script>
 <script setup lang="ts">
-import { inject, computed, type CSSProperties } from 'vue'
+import { inject, computed, watch, type CSSProperties, ref } from 'vue'
 import { tabsKey } from './constants'
 
 defineOptions({
@@ -13,14 +13,22 @@ defineOptions({
 
 const context = inject(tabsKey)!
 const props = defineProps<Props>()
+const barStyle = ref<CSSProperties>()
 
-//todo 优化 这里，此时props els是空的
-const barStyle = computed<CSSProperties>(() => {
-  // todo pannel加active
-  const el = props.els.find(el => el.classList.contains('active')) as HTMLElement
-  console.log(el)
-  if (!el) return {}
+watch(
+  () => context.currentPanne.value,
+  newValue => {
+    const el = props.els.find(el => el.id === newValue)
+    if (el) {
+      barStyle.value = updateStyle(el)
+      console.log('bar 更新样式 success')
+    } else {
+      console.warn('没有找到对应的元素')
+    }
+  }
+)
 
+const updateStyle = (el: HTMLElement): CSSProperties => {
   const position = ['left', 'right'] as const
   // 开始计算他的属性
   const positionName = position.includes(context.tabPosition) ? 'height' : 'width'
@@ -38,7 +46,7 @@ const barStyle = computed<CSSProperties>(() => {
     [positionName]: `${size}px`,
     transform: `translate${capitalize(axis)}(${offset}px)`
   } satisfies CSSProperties
-})
+}
 
 function capitalize(str: string): string {
   if (!str) return ''

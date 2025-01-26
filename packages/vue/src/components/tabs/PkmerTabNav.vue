@@ -40,6 +40,7 @@ function handleClick(name: string | unknown) {
     <!-- 标签 -->
     <div
       v-for="pane in props.pannes"
+      :id="pane.props.name as string"
       :class="[context.currentPanne.value === pane.props.name && 'active', 'tab']"
       :key="pane.uid"
       :ref="el => getRef(el, pane.uid)"
