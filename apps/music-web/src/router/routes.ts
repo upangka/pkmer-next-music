@@ -44,6 +44,11 @@ const routes: RouteRecordRaw[] = [
         path: 'dropdown', // Updated path to be relative
         name: '测试dropdown',
         component: () => import('@pkmer-music/web/pages/test/TestDropdown.vue')
+      },
+      {
+        path: 'tabs', // Updated path to be relative
+        name: '测试tabs',
+        component: () => import('@pkmer-music/web/pages/test/TestTabs.vue')
       }
     ]
   }

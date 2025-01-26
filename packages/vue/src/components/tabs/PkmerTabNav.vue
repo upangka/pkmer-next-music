@@ -27,7 +27,9 @@ const els = computed(() => {
 })
 
 function handleClick(name: string | unknown) {
+  console.log('激活标签', name)
   context.changeCurrentPanne(name as string)
+  console.log(context)
 }
 </script>
 
@@ -38,7 +40,7 @@ function handleClick(name: string | unknown) {
     <!-- 标签 -->
     <div
       v-for="pane in props.pannes"
-      :class="[context.currentPanne === pane.props.name && 'active']"
+      :class="[context.currentPanne.value === pane.props.name && 'active', 'tab']"
       :key="pane.uid"
       :ref="el => getRef(el, pane.uid)"
       @click="handleClick(pane.props.name)"
@@ -48,4 +50,12 @@ function handleClick(name: string | unknown) {
   </div>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.active {
+  color: red;
+}
+
+.tab {
+  cursor: pointer;
+}
+</style>

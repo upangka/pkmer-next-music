@@ -1,6 +1,6 @@
 <script lang="tsx">
 interface Props {
-  tabPosition: 'left'
+  tabPosition?: 'left'
 }
 </script>
 
@@ -27,6 +27,7 @@ provide(tabsKey, {
 })
 
 function changeCurrentPanne(name: string) {
+  console.log('看见我了吗')
   currentPanne.value = name
 }
 </script>
