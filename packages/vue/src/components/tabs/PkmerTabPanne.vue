@@ -17,12 +17,16 @@ const paneName = computed(() => props.name!)
 const context = inject(tabsKey)!
 const vm = getCurrentInstance()!
 
+const isActive = computed(() => {
+  return context.currentPanne.value === props.name
+})
+
 onMounted(() => {
   context.addChild(vm)
 })
 </script>
 <template>
-  <div :id="paneName">
+  <div :id="paneName" v-show="isActive">
     <slot></slot>
   </div>
 </template>

@@ -14,11 +14,12 @@ defineOptions({
 const context = inject(tabsKey)!
 const props = defineProps<Props>()
 
+//todo 优化 这里，此时props els是空的
 const barStyle = computed<CSSProperties>(() => {
   // todo pannel加active
   const el = props.els.find(el => el.classList.contains('active')) as HTMLElement
-
-  // if(!el) return {}
+  console.log(el)
+  if (!el) return {}
 
   const position = ['left', 'right'] as const
   // 开始计算他的属性
@@ -46,6 +47,6 @@ function capitalize(str: string): string {
 </script>
 <template>
   <!-- 指示器 -->
-  <div></div>
+  <div :style="barStyle"></div>
 </template>
 <style lang="scss" scoped></style>

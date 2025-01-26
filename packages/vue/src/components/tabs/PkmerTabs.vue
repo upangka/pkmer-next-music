@@ -27,17 +27,16 @@ provide(tabsKey, {
 })
 
 function changeCurrentPanne(name: string) {
-  console.log('看见我了吗')
   currentPanne.value = name
 }
 </script>
 <template>
-  <div>
-    <!-- pannes -->
-    <div class="content">
-      <slot></slot>
-    </div>
+  <div class="flex gap-3">
     <!-- headers -->
     <PkmerTabNav :pannes="children" />
+    <!-- pannes -->
+    <div class="content border-2 border-black">
+      <slot></slot>
+    </div>
   </div>
 </template>
