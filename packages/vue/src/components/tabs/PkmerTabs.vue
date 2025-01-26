@@ -31,12 +31,14 @@ function changeCurrentPanne(name: string) {
 }
 </script>
 <template>
-  <div class="flex gap-3">
-    <!-- headers -->
+  <div class="flex gap-4">
+    <!-- nav header start -->
     <PkmerTabNav :pannes="children" />
-    <!-- pannes -->
-    <div class="content border-2 border-black">
+    <!-- nav header end -->
+    <!-- 内容start -->
+    <div>
       <slot></slot>
     </div>
+    <!-- 内容end -->
   </div>
 </template>

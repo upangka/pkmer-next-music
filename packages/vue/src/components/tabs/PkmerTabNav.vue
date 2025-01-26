@@ -6,44 +6,45 @@ interface Props {
 }
 </script>
 <script setup lang="ts">
-import { getCurrentInstance, computed, inject } from 'vue'
+import { computed, inject, ref } from 'vue'
 import PkmerNavBar from './PkmerNavBar.vue'
 import { tabsKey } from './constants'
 
 const props = defineProps<Props>()
-const vm = getCurrentInstance()!
 const context = inject(tabsKey)!
+const els = ref<HTMLElement[]>([])
 
-const getRef = (el: ComponentPublicInstance | Element | null, i: number) => {
+const position = computed(() => 'is-' + context.tabPosition)
+
+const addEl = (el: HTMLElement) => {
   if (el) {
-    vm.refs[`tab-${i}`] = el
+    els.value.push(el)
   }
 }
 
-const els = computed(() => {
-  return props.pannes.map(pane => {
-    return pane.subTree.el as HTMLElement
-  })
-})
-
 function handleClick(name: string | unknown) {
-  console.log('激活标签', name)
   context.changeCurrentPanne(name as string)
-  console.log(context)
+}
+
+function changeToStr(pane: ComponentInternalInstance) {
+  return pane.props.name as string
 }
 </script>
 
 <template>
-  <div class="relative">
+  <div
+    class="tab-nav__container relative flex h-fit flex-col items-center justify-center gap-3 px-3"
+    :class="position"
+  >
     <!-- bar -->
     <PkmerNavBar :els="els" />
     <!-- 标签 -->
     <div
       v-for="pane in props.pannes"
-      :id="pane.props.name as string"
+      :id="changeToStr(pane)"
       :class="[context.currentPanne.value === pane.props.name && 'active', 'tab']"
       :key="pane.uid"
-      :ref="el => getRef(el, pane.uid)"
+      :ref="el => addEl(el as HTMLElement)"
       @click="handleClick(pane.props.name)"
     >
       {{ pane.props.label }}
@@ -52,11 +53,18 @@ function handleClick(name: string | unknown) {
 </template>
 
 <style lang="scss" scoped>
-.active {
-  color: red;
-}
+@use './variables.scss' as tabs;
+.tab-nav__container {
+  &.is-left {
+    border-right: 5px double rgb(125, 123, 123);
+  }
 
-.tab {
-  cursor: pointer;
+  .active {
+    color: tabs.$bar-color;
+  }
+
+  .tab {
+    cursor: pointer;
+  }
 }
 </style>
