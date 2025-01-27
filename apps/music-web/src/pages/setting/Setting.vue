@@ -1,21 +1,16 @@
 <script setup lang="ts">
-import {
-  PkmerNavigationIndicator,
-  PkmerNavigationItem,
-  PkmerNavigationList,
-  PkmerNavigationRoot
-} from '@pkmer-music-ui/vue'
+import { PkmerTabPanne, PkmerTabs } from '@pkmer-music-ui/vue/tabs'
+import Password from './Password.vue'
 </script>
 
 <template>
-  <section class="mx-auto my-4 w-1/2">
-    <PkmerNavigationRoot>
-      <PkmerNavigationList :item-gap="60" direction="vertical">
-        <PkmerNavigationItem>个人资料</PkmerNavigationItem>
-        <PkmerNavigationItem> 更改密码 </PkmerNavigationItem>
-        <PkmerNavigationItem> 账号安全 </PkmerNavigationItem>
-      </PkmerNavigationList>
-      <!-- <PkmerNavigationIndicator color="black" /> -->
-    </PkmerNavigationRoot>
+  <section class="mx-auto my-5 h-fit w-3/4">
+    <PkmerTabs tab-position="left">
+      <PkmerTabPanne label="个人资料" name="first">1 </PkmerTabPanne>
+      <PkmerTabPanne label="更改密码" name="second">
+        <Password />
+      </PkmerTabPanne>
+      <PkmerTabPanne label="账号和安全" name="third"> 3</PkmerTabPanne>
+    </PkmerTabs>
   </section>
 </template>

@@ -2,10 +2,9 @@
 import bgs from './bgs'
 import { computed, ref, reactive, type CSSProperties, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import FormInput from './FormInput.vue'
-import FormButton from './FormButton.vue'
 import { login } from '@pkmer-music/web/api/user'
 import { useUserCenterStore } from '@pkmer-music/web/stores'
+import { FormButton, FormInput } from '@pkmer-music/web/components'
 
 const userCenter = useUserCenterStore()
 const router = useRouter()

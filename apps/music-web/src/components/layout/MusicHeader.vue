@@ -80,7 +80,7 @@ function handleLogin() {
             </PkmerDropdownMenuItem>
 
             <PkmerDropdownMenuItem>
-              <RouterLink to="/setting">设置</RouterLink>
+              <RouterLink to="/setting">资料设置</RouterLink>
             </PkmerDropdownMenuItem>
             <PkmerDropdownMenuItem> 退出登录 </PkmerDropdownMenuItem>
           </PkmerDropdownMenuContent>
