@@ -2,9 +2,10 @@
 import { reactive } from 'vue'
 import { FormButton, FormInput } from '@pkmer-music/web/components'
 import { PkmerRadioGroup, PkmerRadio } from '@pkmer-music-ui/vue/radio'
-
+import { PkmerDatePicker } from '@pkmer-music-ui/vue/date'
 const person = reactive({
-  sex: ''
+  sex: '',
+  birthDay: ''
 })
 </script>
 <template>
@@ -17,6 +18,9 @@ const person = reactive({
         <PkmerRadio value="1">女</PkmerRadio>
         <PkmerRadio value="2">保密</PkmerRadio>
       </PkmerRadioGroup>
+      <PkmerDatePicker v-model="person.birthDay">
+        <template #header>生日</template>
+      </PkmerDatePicker>
     </form>
   </section>
 </template>

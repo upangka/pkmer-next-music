@@ -81,6 +81,12 @@
         "default": "./dist/esm/components/radio/index.js"
       }
     },
+    "./date": {
+      "import": {
+        "types": "./dist/types/components/date/index.d.ts",
+        "default": "./dist/esm/components/date/index.js"
+      }
+    },
     "./icon": {
       "import": {
         "types": "./dist/types/components/icon/index.d.ts",
