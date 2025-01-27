@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "@pkmer-music-ui/vue": "workspace:*",
+    "@pkmer/libs": "workspace:*",
     "axios": "^1.7.9",
     "iconify-icon": "^2.1.0",
     "pinia": "catalog:vue3",

@@ -168,6 +168,9 @@ importers:
       '@pkmer-music-ui/vue':
         specifier: workspace:*
         version: link:../../packages/vue
+      '@pkmer/libs':
+        specifier: workspace:*
+        version: link:../../packages/libs
       axios:
         specifier: ^1.7.9
         version: 1.7.9

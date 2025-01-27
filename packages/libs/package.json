@@ -36,6 +36,12 @@
         "types": "./dist/types/utils/index.d.ts",
         "default": "./dist/index.js"
       }
+    },
+    "./constants": {
+      "import": {
+        "types": "./dist/types/constants/index.d.ts",
+        "default": "./dist/index.js"
+      }
     }
   }
 }
