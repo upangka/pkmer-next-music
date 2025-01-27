@@ -75,6 +75,12 @@
         "default": "./dist/esm/components/tabs/index.js"
       }
     },
+    "./radio": {
+      "import": {
+        "types": "./dist/types/components/radio/index.d.ts",
+        "default": "./dist/esm/components/radio/index.js"
+      }
+    },
     "./icon": {
       "import": {
         "types": "./dist/types/components/icon/index.d.ts",

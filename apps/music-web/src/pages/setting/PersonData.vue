@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { reactive } from 'vue'
-import { FormButton, FormInput, PkmerRadioGroup, PkmerRadio } from '@pkmer-music/web/components'
+import { FormButton, FormInput } from '@pkmer-music/web/components'
+import { PkmerRadioGroup, PkmerRadio } from '@pkmer-music-ui/vue/radio'
+
 const person = reactive({
   sex: ''
 })
@@ -9,7 +11,6 @@ const person = reactive({
   <section>
     <form>
       <FormInput icon="bxs:user" name="用户名" label="用户名" placeholder="请输入用户名" />
-
       <PkmerRadioGroup v-model="person.sex">
         <template #header>性别</template>
         <PkmerRadio value="0">男</PkmerRadio>
