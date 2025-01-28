@@ -26,10 +26,10 @@ function changeModel(value: string) {
 </script>
 <template>
   <div class="flex flex-col gap-2">
-    <header>
+    <header class="flex items-center justify-start gap-2">
       <slot name="header"></slot>
     </header>
-    <section class="flex items-center justify-start gap-2" ref="contentRef">
+    <section class="flex items-center justify-start gap-2 pl-[5px]" ref="contentRef">
       <slot></slot>
     </section>
   </div>

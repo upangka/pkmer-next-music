@@ -17,7 +17,7 @@ const isShowText = computed(() => props.type === 'text')
 </script>
 <template>
   <div class="flex flex-col gap-3">
-    <header>
+    <header class="flex items-center justify-start gap-2">
       <slot name="header"></slot>
     </header>
     <!-- text start -->

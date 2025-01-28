@@ -14,11 +14,11 @@ function handleChange(e: Event) {
 </script>
 <template>
   <div class="flex flex-col gap-2">
-    <header>
+    <header class="flex items-center justify-start gap-2">
       <slot name="header"></slot>
     </header>
     <label>
-      <input type="date" :value="model" @change="handleChange" />
+      <input class="border border-black" type="date" :value="model" @change="handleChange" />
     </label>
   </div>
 </template>

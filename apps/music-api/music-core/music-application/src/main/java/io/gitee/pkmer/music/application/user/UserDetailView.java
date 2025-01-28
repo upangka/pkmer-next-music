@@ -16,7 +16,7 @@ public class UserDetailView {
     private String username;
 
     @Schema(description = "性别", example = "男")
-    private String sex;
+    private Byte sex;
 
     @Schema(description = "手机号码", example = "13800138000")
     private String phoneNum;

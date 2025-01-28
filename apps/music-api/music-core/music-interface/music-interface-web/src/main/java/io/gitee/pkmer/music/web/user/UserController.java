@@ -44,4 +44,12 @@ public class UserController extends BaseController implements UserApi {
         userDetailCmd.setUserId(user.getId());
         return success(cmdDispatcher.dispatch(userDetailCmd));
     }
+
+    @Override
+    public Result<Void> updateUserDetail(UpdateUserCmd cmd) {
+        Long userId = AppContextHolder.userContextHolder.getUser().getId();
+        cmd.setUserId(userId);
+        cmdDispatcher.dispatch(cmd);
+        return success();
+    }
 }

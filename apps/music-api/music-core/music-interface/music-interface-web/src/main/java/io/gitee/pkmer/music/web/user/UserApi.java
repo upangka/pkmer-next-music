@@ -40,4 +40,9 @@ public interface UserApi {
     @Operation(summary = "获取用户详情")
     @GetMapping("/detail")
     Result<UserDetailView> getUserDetail();
+
+    @Operation(summary = "更新用户资料")
+    @PostMapping("/detail")
+    Result<Void> updateUserDetail(@Valid @RequestBody
+                                            UpdateUserCmd cmd);
 }

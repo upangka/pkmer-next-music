@@ -17,9 +17,10 @@ axiosInstance.interceptors.request.use(
   config => {
     // 从本地存储中获取 token
     const token = localStorage.getItem('token')
+    console.log({ token })
     if (token) {
       // 如果存在 token，则将其添加到请求头中
-      config.headers.Authorization = `Bearer ${token}`
+      config.headers.Authorization = `Bear ${token}`
     }
     return config
   },

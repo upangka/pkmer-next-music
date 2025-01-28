@@ -22,11 +22,16 @@ public class ConsumerConverter {
      * 数据模型转换成领域对象
      */
     public UserAggregate toDomainModel(Consumer consumer){
+
+        Sex sex = Sex.UNKNOWN;
+        if(consumer.getSex() != null){
+           sex = Sex.valueOf(consumer.getSex());
+       }
         UserAggregate userAggregate = UserAggregate.builder()
                 .id(new UserId(consumer.getId()))
                 .username(consumer.getUsername())
                 .password(consumer.getPassword())
-                .sex(Sex.valueOf(consumer.getSex()))
+                .sex(sex)
                 .phoneNum(consumer.getPhoneNum())
                 .email(consumer.getEmail())
                 .birth(consumer.getBirth())

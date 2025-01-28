@@ -88,8 +88,15 @@ function switchRegister() {
         <!-- 登录表单start -->
         <form class="login-container" @submit.prevent="handleLogin">
           <h1 class="p-4 text-center text-xl">登录</h1>
-          <FormInput v-model="state.email" icon="uil:user" placeholder="用户名" name="username" />
           <FormInput
+            class="item"
+            v-model="state.email"
+            icon="uil:user"
+            placeholder="用户名"
+            name="username"
+          />
+          <FormInput
+            class="item"
             v-model="state.password"
             icon="formkit:password"
             placeholder=" 密码"
@@ -112,18 +119,21 @@ function switchRegister() {
         >
           <h1 class="title">注册</h1>
           <FormInput
+            class="item"
             v-model="state.username"
             icon="uil:user"
             placeholder="用户名"
             name="username"
           />
           <FormInput
+            class="item"
             v-model="state.email"
             icon="iconamoon:email-thin"
             placeholder="邮箱"
             name="email"
           />
           <FormInput
+            class="item"
             v-model="state.password"
             icon="formkit:password"
             placeholder=" 密码"
@@ -175,6 +185,10 @@ $formHeight: 650px;
     background-color: $bgColor;
     overflow: hidden;
 
+    .item {
+      margin-bottom: 30px;
+    }
+
     .form-container {
       position: relative;
       height: fit-content;
@@ -197,6 +211,7 @@ $formHeight: 650px;
         @extend .container-share;
         z-index: 2;
         background-color: $bgColor;
+        padding: 16px;
       }
 
       .signup-container {
@@ -206,6 +221,7 @@ $formHeight: 650px;
         animation: hidden-signup;
         z-index: 1;
         background-color: $bgColor;
+        padding: 16px;
 
         @keyframes hidden-signup {
           0%,

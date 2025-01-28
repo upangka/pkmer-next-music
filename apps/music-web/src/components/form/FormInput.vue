@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { PkmerIcon } from '@pkmer-music-ui/vue/icon'
 
-const model = defineModel()
+const model = defineModel({ type: String })
 
 interface Props {
   width?: number
@@ -22,7 +22,7 @@ const props = withDefaults(defineProps<Props>(), {
 </script>
 
 <template>
-  <div class="mb-[30px] flex items-center justify-center px-5">
+  <div class="flex items-center justify-center">
     <label class="relative flex w-full items-center justify-center">
       <PkmerIcon
         :width="props.width"

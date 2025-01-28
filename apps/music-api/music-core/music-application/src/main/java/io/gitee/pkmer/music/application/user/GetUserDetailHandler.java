@@ -24,7 +24,7 @@ public class GetUserDetailHandler implements CommandHandler<GetUserDetailCmd,Use
         return UserDetailView.builder()
                 .id(user.getId().value())
                 .username(user.getUsername())
-                .sex(user.getSex().name())
+                .sex(user.getSex().getValue())
                 .phoneNum(user.getPhoneNum())
                 .email(user.getEmail())
                 .birth(user.getBirth())

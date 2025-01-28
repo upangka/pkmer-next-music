@@ -5,6 +5,7 @@ import io.gitee.pkmer.ddd.shared.AggregateRoot;
 import io.gitee.pkmer.music.domain.singer.Sex;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.experimental.Accessors;
 
 import java.time.LocalDateTime;
 
@@ -32,5 +33,40 @@ public class UserAggregate extends AuditableEntity implements AggregateRoot {
     private String location;
     private String avator;
 
+    public UserAggregate changeUsername(String username) {
+        this.username = username;
+        return this;
+    }
+
+
+    public UserAggregate changeSex(Sex sex) {
+        this.sex = sex;
+        return this;
+    }
+
+    public UserAggregate changePhoneNum(String phoneNum) {
+        this.phoneNum = phoneNum;
+        return this;
+    }
+
+    public UserAggregate changeEmail(String email) {
+        this.email = email;
+        return this;
+    }
+
+    public UserAggregate changeBirth(LocalDateTime birth) {
+        this.birth = birth;
+        return this;
+    }
+
+    public UserAggregate changeIntroduction(String introduction) {
+        this.introduction = introduction;
+        return this;
+    }
+
+    public UserAggregate changeLocation(String location) {
+        this.location = location;
+        return this;
+    }
 
 }
