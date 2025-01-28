@@ -31,6 +31,7 @@ $lightblue: #008997;
   .btn-name {
     color: white;
     font-size: 13px;
+    white-space: nowrap;
   }
 }
 </style>

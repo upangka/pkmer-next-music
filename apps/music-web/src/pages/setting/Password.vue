@@ -14,9 +14,12 @@ const btnStyle: CSSProperties = {
 import { FormInput, FormButton } from '@pkmer-music/web/components'
 </script>
 <template>
-  <section class="mx-auto flex w-[60vw] items-center justify-center border-2 border-black p-3">
+  <section
+    class="password-container mx-auto flex w-[60vw] items-center justify-center border-2 border-black p-3"
+  >
     <form class="w-[40%] p-5">
       <FormInput
+        class="item"
         v-model="state.oldPassword"
         icon="formkit:password"
         placeholder="旧密码"
@@ -24,6 +27,7 @@ import { FormInput, FormButton } from '@pkmer-music/web/components'
         name="password"
       />
       <FormInput
+        class="item"
         v-model="state.newPassword"
         icon="formkit:password"
         placeholder="新密码"
@@ -31,6 +35,7 @@ import { FormInput, FormButton } from '@pkmer-music/web/components'
         name="password"
       />
       <FormInput
+        class="item"
         v-model="state.confirmPassword"
         icon="formkit:password"
         placeholder="确认密码"
@@ -46,3 +51,10 @@ import { FormInput, FormButton } from '@pkmer-music/web/components'
     </form>
   </section>
 </template>
+<style lang="scss" scoped>
+.password-container {
+  .item {
+    margin-bottom: 30px;
+  }
+}
+</style>
