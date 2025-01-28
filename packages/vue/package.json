@@ -87,6 +87,12 @@
         "default": "./dist/esm/components/date/index.js"
       }
     },
+    "./form": {
+      "import": {
+        "types": "./dist/types/components/form/index.d.ts",
+        "default": "./dist/esm/components/form/index.js"
+      }
+    },
     "./icon": {
       "import": {
         "types": "./dist/types/components/icon/index.d.ts",

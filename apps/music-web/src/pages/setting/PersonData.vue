@@ -1,14 +1,16 @@
 <script setup lang="ts">
 import { reactive } from 'vue'
-import { FormButton, FormInput, PkmerSelect } from '@pkmer-music/web/components'
+import { FormButton, FormInput } from '@pkmer-music/web/components'
 import { PkmerRadioGroup, PkmerRadio } from '@pkmer-music-ui/vue/radio'
 import { PkmerDatePicker } from '@pkmer-music-ui/vue/date'
+import { PkmerSelector, PkmerInput } from '@pkmer-music-ui/vue/form'
 import { AREA } from '@pkmer/libs/constants'
 
 const person = reactive({
   sex: '',
   birthDay: '',
-  address: ''
+  address: '',
+  introduction: ''
 })
 </script>
 <template>
@@ -26,10 +28,16 @@ const person = reactive({
       </PkmerDatePicker>
 
       <!-- 地区start -->
-      <PkmerSelect v-model="person.address" :options="AREA">
+      <PkmerSelector v-model="person.address" :options="AREA">
         <template #header>地区</template>
-      </PkmerSelect>
+      </PkmerSelector>
       <!-- 地区end -->
+
+      <!-- 签名start -->
+      <PkmerInput v-model="person.introduction" type="textarea" placeholder="个性签名">
+        <template #header>个性签名</template>
+      </PkmerInput>
+      <!-- 签名end -->
     </form>
   </section>
 </template>

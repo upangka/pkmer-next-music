@@ -10,7 +10,7 @@ interface Props {
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { PkmerIcon } from '@pkmer-music-ui/vue'
+import PkmerIcon from '../icon/PkmerIcon.vue'
 const model = defineModel({ type: String })
 const props = defineProps<Props>()
 const isShowOptions = ref(false)
