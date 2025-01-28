@@ -104,7 +104,7 @@ function switchRegister() {
             name="password"
           />
           <div class="flex justify-center">
-            <FormButton>
+            <FormButton type="submit">
               <span v-if="loginWaiting">登录中...</span>
               <span v-else>登录</span>
             </FormButton>

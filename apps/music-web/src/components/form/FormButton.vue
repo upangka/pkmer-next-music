@@ -1,8 +1,16 @@
+<script lang="ts">
+interface Props {
+  type?: 'submit' | 'button' | 'reset'
+}
+</script>
 <script setup lang="ts">
-const emit = defineEmits(['click']);
+const props = withDefaults(defineProps<Props>(), {
+  type: 'button'
+})
+const emit = defineEmits(['click'])
 </script>
 <template>
-  <button class="btn-wrapper" @click="emit('click')">
+  <button :type="type" class="btn-wrapper" @click="emit('click')">
     <span class="btn-name">
       <slot></slot>
     </span>
@@ -24,6 +32,5 @@ $lightblue: #008997;
     color: white;
     font-size: 13px;
   }
-
 }
 </style>
