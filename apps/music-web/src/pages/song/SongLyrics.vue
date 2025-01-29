@@ -120,18 +120,19 @@ function collectLiElement(index: number, el: unknown) {
     overflow-y: scroll;
     text-align: center;
     color: white;
-    font-size: 105%;
+    font-size: 100%;
 
     .line {
       padding-bottom: 6px;
       opacity: 0.2;
+      transition: all 0.5s ease-in-out;
       &.active {
         color: rgb(110, 227, 110);
         opacity: 1;
         font-size: 135%;
 
         & + li {
-          font-size: 115%;
+          font-size: 108%;
           opacity: 0.7;
         }
       }
