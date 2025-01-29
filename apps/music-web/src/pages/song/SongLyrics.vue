@@ -1,20 +1,21 @@
+<script lang="ts">
+type LyricLine = {
+  time: string
+  text: string
+}
+</script>
+
 <script setup lang="ts">
-import { ref, reactive, watch, onMounted, onUnmounted } from 'vue'
+import { ref, computed, reactive, watch, onMounted, onUnmounted, type CSSProperties } from 'vue'
 import { storeToRefs } from 'pinia'
 import { getSongDetail, type SongDetail } from '@pkmer-music/web/api'
 import { useMusicPannelStore } from '@pkmer-music/web/stores'
-
 const { audioRef } = storeToRefs(useMusicPannelStore())
 
 const songDetail = ref<SongDetail>()
 const currentLine = ref(0)
 const regex = /^\[(?<time>\d{2}:\d{2}(.\d{3})?)\](?<text>.*)/
 const lisRef = ref<HTMLLIElement[]>([])
-
-type LyricLine = {
-  time: string
-  text: string
-}
 
 const lyrics = reactive<LyricLine[]>([])
 watch(
