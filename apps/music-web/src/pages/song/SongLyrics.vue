@@ -9,6 +9,7 @@ const { audioRef } = storeToRefs(useMusicPannelStore())
 const songDetail = ref<SongDetail>()
 const currentLine = ref(0)
 const regex = /^\[(?<time>\d{2}:\d{2}(.\d{3})?)\](?<text>.*)/
+const lisRef = ref<HTMLLIElement[]>([])
 
 type LyricLine = {
   time: string
@@ -20,6 +21,15 @@ watch(
   () => audioRef.value,
   () => {
     audioRef.value?.addEventListener('timeupdate', handleTimeUpdate)
+    // 清空
+    lisRef.value = []
+  }
+)
+
+watch(
+  () => currentLine.value,
+  newLine => {
+    lisRef.value[newLine].scrollIntoView({ behavior: 'smooth', block: 'center' })
   }
 )
 
@@ -72,6 +82,12 @@ function parseTime(time: string) {
   return Number(min) * 60 + Number(sec)
 }
 
+function collectLiElement(index: number, el: unknown) {
+  if (el instanceof HTMLLIElement) {
+    lisRef.value[index] = el
+  }
+}
+
 // onMounted(async () => {
 //   TODO 调用接口
 //   const data = await getSongDetail(Number(1).toString())
@@ -85,6 +101,7 @@ function parseTime(time: string) {
         :class="['line', currentLine === index && 'active']"
         v-for="(item, index) in lyrics"
         :key="index"
+        :ref="el => collectLiElement(index, el)"
       >
         {{ item.text }}
       </li>
