@@ -1,7 +1,34 @@
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, watch, onMounted, onUnmounted } from 'vue'
+import { storeToRefs } from 'pinia'
 import { getSongDetail, type SongDetail } from '@pkmer-music/web/api'
+import { useMusicPannelStore } from '@pkmer-music/web/stores'
+
+const { audioRef } = storeToRefs(useMusicPannelStore())
+
 const songDetail = ref<SongDetail>()
+
+watch(
+  () => audioRef.value,
+  () => {
+    audioRef.value?.addEventListener('timeupdate', handleTimeUpdate)
+  }
+)
+
+onMounted(() => {
+  if (audioRef.value) {
+    audioRef.value.addEventListener('timeupdate', handleTimeUpdate)
+  }
+})
+onUnmounted(() => {
+  if (audioRef.value) {
+    audioRef.value.removeEventListener('timeupdate', handleTimeUpdate)
+  }
+})
+
+function handleTimeUpdate() {
+  console.log(audioRef.value?.currentTime)
+}
 
 // onMounted(async () => {
 //   TODO 调用接口
