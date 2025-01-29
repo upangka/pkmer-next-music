@@ -1,10 +1,12 @@
 <script lang="ts" setup>
-import { ref, reactive, watch, computed } from "vue";
-import { PkmerIcon } from "@pkmer-music-ui/vue/icon"
-import { formatTime } from "@pkmer-music/web/utils"
-import { useMusicPannelStore } from "@pkmer-music/web/stores"
+import { storeToRefs } from 'pinia'
+import { ref, reactive, watch, computed } from 'vue'
+import { PkmerIcon } from '@pkmer-music-ui/vue/icon'
+import { formatTime } from '@pkmer-music/web/utils'
+import { useMusicPannelStore } from '@pkmer-music/web/stores'
 
 const musicPannelStore = useMusicPannelStore()
+const { audioRef } = storeToRefs(musicPannelStore)
 const { songs } = musicPannelStore
 
 const status = reactive({
@@ -14,63 +16,69 @@ const status = reactive({
   currentIndex: musicPannelStore.currentPlayingIndex
 })
 
-const audioRef = ref<HTMLAudioElement | null>(null)
+// const audioRef = ref<HTMLAudioElement | null>(null)
 const progressContainerRef = ref<HTMLDivElement | null>(null)
 const progressWidth = ref('0%')
-const iconBtnSize = 30;
+const iconBtnSize = 30
 
 /**
  * 监听当前播放歌曲的index
  */
-watch(() => musicPannelStore.currentPlayingIndex, (index) => {
-  status.currentIndex = index
-})
-
-watch(() => status.isPlaying, (isCurrentPlaying) => {
-  if (isCurrentPlaying) {
-    audioRef.value?.play()
-  } else {
-    audioRef.value?.pause()
+watch(
+  () => musicPannelStore.currentPlayingIndex,
+  index => {
+    status.currentIndex = index
   }
-})
+)
+
+watch(
+  () => status.isPlaying,
+  isCurrentPlaying => {
+    if (isCurrentPlaying) {
+      audioRef.value?.play()
+    } else {
+      audioRef.value?.pause()
+    }
+  }
+)
 
 /**
  * currentIndex变化的时候，会更新当前的歌曲
  * 然后audio会变化，此时我们在播放音乐。
  */
-watch(() => audioRef.value, (audio) => {
-  if (audio) {
-    console.log(audio)
-    // 更新store中的当前播放歌曲id
-    musicPannelStore.$patch((state) => {
-      state.currentPlayingSongId = songs[status.currentIndex].id
-    })
+watch(
+  () => audioRef.value,
+  audio => {
+    if (audio) {
+      console.log(audio)
+      // 更新store中的当前播放歌曲id
+      musicPannelStore.$patch(state => {
+        state.currentPlayingSongId = songs[status.currentIndex].id
+      })
 
-    if (status.isPlaying) {
-      audio.play()
+      if (status.isPlaying) {
+        audio.play()
+      }
     }
-
-  }
-}, { immediate: true })
+  },
+  { immediate: true }
+)
 
 const progressContainerWidth = computed(() => {
   if (progressContainerRef.value) {
     return progressContainerRef.value.clientWidth
   }
-  return 0;
+  return 0
 })
-
 
 const currentSong = computed(() => {
   return songs[status.currentIndex]
 })
 
-
 function togglePlaying(_isPlaying: boolean, isShowMusicInfo: boolean) {
   status.isPlaying = _isPlaying
   status.showMusicInfo = isShowMusicInfo
 }
-
 
 /**
  * 处理显示和隐藏音乐面板
@@ -101,7 +109,7 @@ function handleToggle() {
 function updateProgress(e: Event) {
   const srcElement = e.target as HTMLMediaElement
   const { currentTime, duration: totalTime } = srcElement
-  const width = `${currentTime / totalTime * 100}%`;
+  const width = `${(currentTime / totalTime) * 100}%`
   progressWidth.value = width
   // console.log(`currentTime = ${currentTime}, totalTime = ${totalTime} 播放进度:${currentTime / totalTime * 100}%`)
   // if ("100%" === width) {
@@ -133,26 +141,40 @@ function prevSong() {
  * 隐藏和现实asside
  */
 function toggleMusicAsside() {
-  musicPannelStore.$patch((state) => {
+  musicPannelStore.$patch(state => {
     state.showAssider = !state.showAssider
   })
 }
-
-
 </script>
-
+歌词怎么根据时间来往下移动，思路是是什么，js实现
 <template>
   <section class="play-bar__container">
     <!-- 音乐源start -->
     <!-- 这里用key来表明这是一个新的元素，和react渲染树差不多 -->
-    <audio :key="currentSong.name" @ended="nextSong" @timeupdate="updateProgress" :src="currentSong.link"
-      ref="audioRef"></audio>
+    <audio
+      :key="currentSong.name"
+      @ended="nextSong"
+      @timeupdate="updateProgress"
+      :src="currentSong.link"
+      ref="audioRef"
+    ></audio>
     <!-- 音乐源end -->
     <!-- 显示隐藏按钮start -->
     <button class="icon-btn" @click="handleToggle">
-      <PkmerIcon v-if="status.showPlayBar" icon="icon-park-outline:down-c" style="color: #000" :width="iconBtnSize"
-        :height="iconBtnSize" />
-      <PkmerIcon v-else icon="icon-park-outline:up-c" style="color: #000" :width="iconBtnSize" :height="iconBtnSize" />
+      <PkmerIcon
+        v-if="status.showPlayBar"
+        icon="icon-park-outline:down-c"
+        style="color: #000"
+        :width="iconBtnSize"
+        :height="iconBtnSize"
+      />
+      <PkmerIcon
+        v-else
+        icon="icon-park-outline:up-c"
+        style="color: #000"
+        :width="iconBtnSize"
+        :height="iconBtnSize"
+      />
     </button>
     <!-- 显示隐藏按钮end -->
 
@@ -160,26 +182,31 @@ function toggleMusicAsside() {
     <Transition name="expand">
       <section class="music-container" v-if="status.showPlayBar">
         <!-- 音乐进度播放start -->
-        <div :class="['music-info', (status.showMusicInfo && status.isPlaying) && 'playing']">
+        <div :class="['music-info', status.showMusicInfo && status.isPlaying && 'playing']">
           <h1 class="music-title">{{ currentSong.name }}</h1>
-          <div ref="progressContainerRef" class="progress-container" @pointerdown.prevent="jumpToTime">
-            <div :style="{
-              width: progressWidth
-            }" class="progress">
-            </div>
+          <div
+            ref="progressContainerRef"
+            class="progress-container"
+            @pointerdown.prevent="jumpToTime"
+          >
+            <div
+              :style="{
+                width: progressWidth
+              }"
+              class="progress"
+            ></div>
             <span class="current-time">
-              {{ formatTime(audioRef?.currentTime || 0) }} / {{ formatTime(audioRef?.duration ||
-                0) }}</span>
+              {{ formatTime(audioRef?.currentTime || 0) }} /
+              {{ formatTime(audioRef?.duration || 0) }}</span
+            >
           </div>
         </div>
-
-
 
         <!-- 音乐进度播放end -->
         <!-- 音乐控制面板start -->
         <div :class="['music-control__container']">
           <div :class="['img-wrapper', status.isPlaying && 'playing']">
-            <img :src="currentSong.picture" :alt="currentSong.name">
+            <img :src="currentSong.picture" :alt="currentSong.name" />
           </div>
 
           <ul class="navigation">
@@ -195,7 +222,6 @@ function toggleMusicAsside() {
               <button v-else @click="() => togglePlaying(true, true)">
                 <PkmerIcon icon="icon-park-solid:play" :width="40" :height="40" />
               </button>
-
             </li>
             <li>
               <button @click="nextSong">
@@ -231,7 +257,7 @@ function toggleMusicAsside() {
 
 <style lang="scss" scoped>
 /* @import "@pkmer-music/web/assets/styles/__variables.scss"; */
-@use "@pkmer-music/web/assets/styles/__variables.scss" as pkmerVars;
+@use '@pkmer-music/web/assets/styles/__variables.scss' as pkmerVars;
 $bar-height: 55px;
 
 .play-bar__container {
@@ -255,8 +281,6 @@ $bar-height: 55px;
     height: $bar-height;
     background-color: #e5e7eb;
 
-
-
     .music-info {
       position: absolute;
       padding: 0 20px 10px 30px;
@@ -267,14 +291,15 @@ $bar-height: 55px;
       background-color: #e5e7eb;
       border-top-right-radius: 20px;
       border-top-left-radius: 20px;
-      transition: transform 0.3s ease, opacity 0.3s ease;
+      transition:
+        transform 0.3s ease,
+        opacity 0.3s ease;
 
       &.playing {
         opacity: 1;
         z-index: pkmerVars.$music-info-show-z-index;
         transform: translateY(-100%);
       }
-
 
       .music-title {
         font-size: 18px;
@@ -323,7 +348,8 @@ $bar-height: 55px;
         animation: rotate 10s linear infinite;
         animation-play-state: paused;
 
-        @keyframes rotate {}
+        @keyframes rotate {
+        }
       }
     }
 
@@ -364,7 +390,6 @@ $bar-height: 55px;
         }
       }
 
-
       .share-layout {
         height: $bar-height;
         display: flex;
@@ -385,7 +410,6 @@ $bar-height: 55px;
     }
   }
 }
-
 
 .expand-enter-from,
 .expand-leave-to {

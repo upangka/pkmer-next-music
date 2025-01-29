@@ -7,6 +7,8 @@ export const useMusicPannelStore = defineStore('music-pannel', () => {
   const showAssider = ref(false)
   const currentPlayingSongId = ref<number | null>(null)
 
+  const audioRef = ref<HTMLAudioElement | null>(null)
+
   // getters
   const currentPlayingIndex = computed(() => {
     if (currentPlayingSongId.value === null) return 0
@@ -26,6 +28,7 @@ export const useMusicPannelStore = defineStore('music-pannel', () => {
     songs,
     currentPlayingSongId,
     currentPlayingIndex,
-    play
+    play,
+    audioRef
   }
 })

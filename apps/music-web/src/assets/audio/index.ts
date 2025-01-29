@@ -4,7 +4,7 @@ import song2 from './春庭雪 (DJ默涵Wave版) - DJ默涵.mp3'
 import song3 from './Hỷ Bi (Đức Trình Remix) - YLing、Drum7、BMZ.mp3'
 import song4 from './Hoàng Hôn (EDM Remix) - H2O Remix、Kiều Thơ Mellow.mp3'
 import song5 from './月亮里的阿妹 (DJ村长版DJ版) - DJ村长.mp3'
-
+import song6 from './黄昏 (女声版)(DJ歌者达达版) - Kag Chuu.flac'
 interface Song {
   id: number
   link: string
@@ -47,5 +47,12 @@ export const songs = [
     name: '月亮里的阿妹 (DJ村长版DJ版) - DJ村长',
     picture:
       'http://qpic.y.qq.com/music_cover/SFAOAt53mBM83vE3VTTZzU6B8lQntKRw4iaqUbZ541pCx5piaic5ePKfA/300?n=1'
+  },
+  {
+    id: 5,
+    link: song6,
+    name: '黄昏 (女声版)(DJ歌者达达版) - Kag Chuu',
+    picture:
+      'http://qpic.y.qq.com/music_cover/QoBD9LhzJusrvSqM8DM9aLPInhPqynIvqXyzNKTny6aMUU6N0EFUjA/300?n=1'
   }
 ] satisfies Song[]
