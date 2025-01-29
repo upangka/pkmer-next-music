@@ -7,7 +7,15 @@ import { useMusicPannelStore } from '@pkmer-music/web/stores'
 const { audioRef } = storeToRefs(useMusicPannelStore())
 
 const songDetail = ref<SongDetail>()
+const currentLine = ref(0)
+const regex = /^\[(?<time>\d{2}:\d{2}(.\d{3})?)\](?<text>.*)/
 
+type LyricLine = {
+  time: string
+  text: string
+}
+
+const lyrics = reactive<LyricLine[]>([])
 watch(
   () => audioRef.value,
   () => {
@@ -20,29 +28,7 @@ onMounted(() => {
     audioRef.value.addEventListener('timeupdate', handleTimeUpdate)
   }
 })
-onUnmounted(() => {
-  if (audioRef.value) {
-    audioRef.value.removeEventListener('timeupdate', handleTimeUpdate)
-  }
-})
 
-function handleTimeUpdate() {
-  console.log(audioRef.value?.currentTime)
-}
-
-// onMounted(async () => {
-//   TODO 调用接口
-//   const data = await getSongDetail(Number(1).toString())
-//   songDetail.value = data
-// })
-const regex = /^\[(?<time>\d{2}:\d{2}(.\d{3})?)\](?<text>.*)/
-
-type LyricLine = {
-  time: string
-  text: string
-}
-
-const lyrics = reactive<LyricLine[]>([])
 onMounted(async () => {
   // load lyric
   const res = await fetch(
@@ -52,18 +38,54 @@ onMounted(async () => {
   console.log(data)
   data.split('\n').forEach(line => {
     const result = line.match(regex)
-    console.log('->', line)
     if (result) {
       const { time, text } = result.groups as unknown as LyricLine
       lyrics.push({ time, text })
     }
   })
 })
+
+onUnmounted(() => {
+  if (audioRef.value) {
+    audioRef.value.removeEventListener('timeupdate', handleTimeUpdate)
+  }
+})
+
+function handleTimeUpdate() {
+  if (audioRef.value) {
+    const currentTime = audioRef.value.currentTime
+    let targetLineIndex = 0
+    for (let i = 0; i < lyrics.length; i++) {
+      const time = parseTime(lyrics[i].time)
+      if (currentTime >= time) {
+        targetLineIndex = i
+      } else {
+        currentLine.value = targetLineIndex
+        return
+      }
+    }
+  }
+}
+
+function parseTime(time: string) {
+  const [min, sec] = time.split(':')
+  return Number(min) * 60 + Number(sec)
+}
+
+// onMounted(async () => {
+//   TODO 调用接口
+//   const data = await getSongDetail(Number(1).toString())
+//   songDetail.value = data
+// })
 </script>
 <template>
   <section class="lyrics-content__container">
     <ul class="lyrics-content">
-      <li :class="['line', index === 6 && 'active']" v-for="(item, index) in lyrics" :key="index">
+      <li
+        :class="['line', currentLine === index && 'active']"
+        v-for="(item, index) in lyrics"
+        :key="index"
+      >
         {{ item.text }}
       </li>
     </ul>
@@ -80,18 +102,19 @@ onMounted(async () => {
     overflow-y: scroll;
     text-align: center;
     color: white;
-    font-size: 110%;
+    font-size: 105%;
 
     .line {
       padding-bottom: 6px;
       opacity: 0.2;
       &.active {
-        color: white;
+        color: rgb(110, 227, 110);
         opacity: 1;
         font-size: 135%;
 
         & + li {
-          font-size: 120%;
+          font-size: 115%;
+          opacity: 0.7;
         }
       }
     }
