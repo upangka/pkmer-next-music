@@ -1,10 +1,12 @@
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
 import { ref, reactive, watch, computed } from 'vue'
+import { useRouter } from 'vue-router'
 import { PkmerIcon } from '@pkmer-music-ui/vue/icon'
 import { formatTime } from '@pkmer-music/web/utils'
 import { useMusicPannelStore } from '@pkmer-music/web/stores'
 
+const router = useRouter()
 const musicPannelStore = useMusicPannelStore()
 const { audioRef } = storeToRefs(musicPannelStore)
 const { songs } = musicPannelStore
@@ -146,7 +148,6 @@ function toggleMusicAsside() {
   })
 }
 </script>
-歌词怎么根据时间来往下移动，思路是是什么，js实现
 <template>
   <section class="play-bar__container">
     <!-- 音乐源start -->
@@ -231,6 +232,11 @@ function toggleMusicAsside() {
           </ul>
 
           <ul class="tools">
+            <li class="translate-y-[2px]">
+              <button @click="() => router.push('/lyrics')">
+                <PkmerIcon icon="material-symbols-light:lyrics-outline" />
+              </button>
+            </li>
             <li>
               <button>
                 <PkmerIcon icon="weui:like-outlined" />
