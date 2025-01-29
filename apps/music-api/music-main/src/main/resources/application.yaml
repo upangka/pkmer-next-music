@@ -48,3 +48,4 @@ app:
       - "/v3/**"
       - "/favicon.ico"
       - "/banner"
+      - "/song/**"

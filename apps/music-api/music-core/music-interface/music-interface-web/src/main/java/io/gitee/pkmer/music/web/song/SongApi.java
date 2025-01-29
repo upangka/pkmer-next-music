@@ -1,6 +1,7 @@
 package io.gitee.pkmer.music.web.song;
 
 import io.gitee.pkmer.convention.result.Result;
+import io.gitee.pkmer.music.application.song.get.SongDetailView;
 import io.gitee.pkmer.music.application.song.update.UpdateSongCmd;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -43,4 +44,10 @@ public interface SongApi {
     @PostMapping("/collect/{id}")
     Result<Void> collectSongList(@PathVariable Long songId);
 
+    @Operation(summary = "获取歌曲详情")
+    @Parameters({
+            @Parameter(name = "id",description = "歌曲id",in = ParameterIn.PATH),
+    })
+    @GetMapping("/{id}")
+    Result<SongDetailView> getSongDetail(@PathVariable("id") Long id);
 }

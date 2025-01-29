@@ -21,6 +21,6 @@ public class SingerId implements Identifier<Long> {
 
     @Override
     public Long value() {
-        return null;
+        return id;
     }
 }

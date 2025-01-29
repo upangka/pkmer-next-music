@@ -5,7 +5,10 @@ import io.gitee.pkmer.convention.result.Result;
 import io.gitee.pkmer.ddd.shared.dispatch.CmdDispatcher;
 import io.gitee.pkmer.music.application.collect.CollectCmd;
 import io.gitee.pkmer.music.application.song.delete.DeleteCmd;
+import io.gitee.pkmer.music.application.song.get.GetSongCmd;
+import io.gitee.pkmer.music.application.song.get.SongDetailView;
 import io.gitee.pkmer.music.application.song.update.UpdateSongCmd;
+import io.gitee.pkmer.security.context.AppContextHolder;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
@@ -38,8 +41,19 @@ public class SongController extends BaseController implements SongApi{
 
     @Override
     public Result<Void> collectSongList(Long songId) {
-        // todo userId
-        cmdDispatcher.dispatch(new CollectCmd().setSongId(songId));
+        Long userId = AppContextHolder.userContextHolder
+                .getUser()
+                .getId();
+        CollectCmd cmd = new CollectCmd()
+                .setSongId(songId)
+                .setUserId(userId);
+        cmdDispatcher.dispatch(cmd);
         return success();
+    }
+
+    @Override
+    public Result<SongDetailView> getSongDetail(Long id) {
+        GetSongCmd cmd = GetSongCmd.commandOf(id);
+        return success(cmdDispatcher.dispatch(cmd));
     }
 }
