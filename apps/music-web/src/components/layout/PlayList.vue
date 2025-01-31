@@ -1,9 +1,10 @@
 <script lang="ts">
-import type { Song } from '@pkmer-music/web/assets/types'
+// import type { Song } from '@pkmer-music/web/assets/types'
+import type { MusicCard as MusicCardPropsType } from '@pkmer-music/web/types'
 interface Props {
   title?: string
   path: string
-  playList: Song[]
+  playList: MusicCardPropsType[]
 }
 </script>
 

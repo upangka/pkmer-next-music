@@ -1,9 +1,10 @@
 <script lang="ts">
 import type { PageQuerySongListRes } from '@pkmer-music/web/types'
+import type { MusicCard } from '@pkmer-music/web/types'
 </script>
 
 <script lang="ts" setup>
-import { onMounted, reactive } from 'vue'
+import { onMounted, ref, computed } from 'vue'
 import { PlayList } from '@pkmer-music/web/components'
 import {
   PkmerNavigationIndicator,
@@ -16,11 +17,20 @@ import { pageQuerySongList } from '@pkmer-music/web/api'
 // 模拟数据
 // import songs from '@pkmer-music/web/assets/songs.json'
 
-const songs = reactive<PageQuerySongListRes[]>([])
+const songs = ref<PageQuerySongListRes>()
 
 onMounted(async () => {
-  const data = await pageQuerySongList({})
-  console.log(data)
+  const data = await pageQuerySongList()
+  songs.value = data
+})
+
+const playList = computed<MusicCard[]>(() => {
+  return (
+    songs.value?.list.map(item => ({
+      imgurl: item.pic,
+      dissname: item.title
+    })) || []
+  )
 })
 </script>
 
@@ -38,7 +48,7 @@ onMounted(async () => {
     </PkmerNavigationRoot>
     <!-- 歌单列表展示start -->
     <section class="mt-3">
-      <PlayList path="/xxx" :play-list="songs.slice(0, 30)" />
+      <PlayList path="/xxx" :play-list="playList" />
     </section>
     <!-- 歌单列表展示end -->
   </div>

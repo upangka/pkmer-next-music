@@ -5,19 +5,25 @@ import http from './http'
 import type {
   AppResponse,
   PageQuerySongListReq,
-  PageQuerySongListRes
+  PageQuerySongListRes,
+  StyleType
 } from '@pkmer-music/web//types'
 
 /**
  * 分页查询歌单信息
  */
+
 export const pageQuerySongList = (
-  req: PageQuerySongListReq = {
-    pageNo: 1,
-    pageSize: 20,
-    title: '',
-    style: '全部'
-  }
+  pageNo: number = 1,
+  pageSize: number = 20,
+  title: string = '',
+  style: StyleType = ''
 ): AppResponse<PageQuerySongListRes> => {
-  return http.get('/songlist/pageQuerySongList', req)
+  let req: PageQuerySongListReq = {
+    pageNo,
+    pageSize,
+    title,
+    style
+  }
+  return http.post('/songList/page', req)
 }
