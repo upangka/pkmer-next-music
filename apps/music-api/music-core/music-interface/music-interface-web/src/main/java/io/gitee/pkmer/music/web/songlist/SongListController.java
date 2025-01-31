@@ -68,6 +68,12 @@ public class SongListController extends BaseController implements SongListApi{
     }
 
     @Override
+    public Result<SongDetailView> getSongListDetail(Long id) {
+        GetSongListDetailCmd cmd = GetSongListDetailCmd.commandOf(id);
+        return success(cmdDispatcher.dispatch(cmd));
+    }
+
+    @Override
     public Result<Void> updateSongListBase(UpdateSongListCmd cmd) {
         cmd.toBaseInfo();
         cmdDispatcher.dispatch(cmd);

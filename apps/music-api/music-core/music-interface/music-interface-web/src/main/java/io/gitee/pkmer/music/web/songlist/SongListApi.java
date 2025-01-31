@@ -8,10 +8,7 @@ import io.gitee.pkmer.music.application.songlist.add.AddCommentCmd;
 import io.gitee.pkmer.music.application.songlist.add.AddSongForListCmd;
 import io.gitee.pkmer.music.application.songlist.delete.DeleteCommentCmd;
 import io.gitee.pkmer.music.application.songlist.delete.DeleteSongForListCmd;
-import io.gitee.pkmer.music.application.songlist.query.SongListCommentQuery;
-import io.gitee.pkmer.music.application.songlist.query.SongListCommentsView;
-import io.gitee.pkmer.music.application.songlist.query.SongListPageQuery;
-import io.gitee.pkmer.music.application.songlist.query.SongListView;
+import io.gitee.pkmer.music.application.songlist.query.*;
 import io.gitee.pkmer.music.application.songlist.update.UpdateSongListCmd;
 import io.gitee.pkmer.music.application.songlist.update.UpdateSongListCommentCmd;
 import io.gitee.pkmer.music.web.songlist.req.AddSongListReq;
@@ -51,6 +48,13 @@ public interface SongListApi {
     @Operation(summary = "歌单分页查询")
     @PostMapping("/page")
     Result<PageResponse<SongListView>> pageQuerySongList(@Valid @RequestBody SongListPageQuery pageQuery);
+
+    @Operation(summary = "歌单详情")
+    @Parameters({
+            @Parameter(name = "id",description = "歌单id",in = ParameterIn.PATH),
+    })
+    @GetMapping("/{id}")
+    Result<SongDetailView> getSongListDetail(@PathVariable("id") Long id);
 
     @Operation(summary = "歌单基本信息")
     @PostMapping("/update/base")
