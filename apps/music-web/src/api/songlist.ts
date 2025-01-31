@@ -12,18 +12,16 @@ import type {
 /**
  * 分页查询歌单信息
  */
+const defaultPageQuery: PageQuerySongListReq = {
+  pageNo: 1,
+  pageSize: 20,
+  title: '',
+  style: ''
+}
 
 export const pageQuerySongList = (
-  pageNo: number = 1,
-  pageSize: number = 20,
-  title: string = '',
-  style: StyleType = ''
+  req: Partial<PageQuerySongListReq> = {}
 ): AppResponse<PageQuerySongListRes> => {
-  let req: PageQuerySongListReq = {
-    pageNo,
-    pageSize,
-    title,
-    style
-  }
-  return http.post('/songList/page', req)
+  const finalReq = { ...defaultPageQuery, ...req }
+  return http.post('/songList/page', finalReq)
 }

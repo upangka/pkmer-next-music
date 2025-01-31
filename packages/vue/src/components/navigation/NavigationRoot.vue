@@ -3,9 +3,12 @@ import { provide, ref, watch } from 'vue'
 import { navigationKey, initItemGap } from './constansts'
 import type { NavItem } from './types'
 
+const emit = defineEmits<{
+  change: [target: HTMLElement]
+}>()
 /**
-  * 当前激活的选项卡
-  */
+ * 当前激活的选项卡
+ */
 const currentItem = ref<NavItem | null>(null)
 const itemGap = ref(initItemGap)
 
@@ -15,6 +18,7 @@ watch(currentItem, newNavItem => {
 
 function updateCurrentActiveItem(activeCurrentItem: NavItem) {
   currentItem.value = activeCurrentItem
+  emit('change', activeCurrentItem.target)
 }
 
 function updateItemGap(newItemGap: number) {
@@ -27,7 +31,6 @@ provide(navigationKey, {
   currentActiveItem: currentItem,
   updateCurrentActiveItem
 })
-
 </script>
 
 <template>

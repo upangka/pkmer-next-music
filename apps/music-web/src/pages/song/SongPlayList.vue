@@ -1,6 +1,6 @@
 <script lang="ts">
 import type { PageQuerySongListRes } from '@pkmer-music/web/types'
-import type { MusicCard } from '@pkmer-music/web/types'
+import type { MusicCard, StyleType } from '@pkmer-music/web/types'
 </script>
 
 <script lang="ts" setup>
@@ -18,11 +18,8 @@ import { pageQuerySongList } from '@pkmer-music/web/api'
 // import songs from '@pkmer-music/web/assets/songs.json'
 
 const songs = ref<PageQuerySongListRes>()
-
-onMounted(async () => {
-  const data = await pageQuerySongList()
-  songs.value = data
-})
+const styleName = ref<StyleType>('')
+onMounted(getSongList)
 
 const playList = computed<MusicCard[]>(() => {
   return (
@@ -32,11 +29,25 @@ const playList = computed<MusicCard[]>(() => {
     })) || []
   )
 })
+
+async function getSongList() {
+  const data = await pageQuerySongList({ style: styleName.value })
+  songs.value = data
+}
+
+function handleStyleChange(target: HTMLElement) {
+  let targetStyle: StyleType = (target.textContent as unknown as StyleType) || ''
+  if (targetStyle === '全部') {
+    targetStyle = ''
+  }
+  styleName.value = targetStyle
+  getSongList()
+}
 </script>
 
 <template>
   <div class="song-play-list__container">
-    <PkmerNavigationRoot>
+    <PkmerNavigationRoot @change="handleStyleChange">
       <PkmerNavigationList :show-border="false" :item-gap="10">
         <template v-for="songPlay in songPlayList" :key="songPlay.type">
           <PkmerNavigationItem>
