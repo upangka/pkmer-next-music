@@ -14,6 +14,12 @@ const routes: RouteRecordRaw[] = [
         component: () => import('@pkmer-music/web/pages/song/SongPlayList.vue')
       },
       {
+        path: 'songsheet/:id',
+        name: '歌单详情',
+        component: () => import('@pkmer-music/web/pages/song/SongSheetDetail.vue'),
+        props: true
+      },
+      {
         path: 'lyrics',
         name: '歌词',
         component: () => import('@pkmer-music/web/pages/song/SongLyrics.vue')

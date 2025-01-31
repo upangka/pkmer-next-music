@@ -4,6 +4,7 @@ import type { MusicCard, StyleType } from '@pkmer-music/web/types'
 </script>
 
 <script lang="ts" setup>
+import { useRouter } from 'vue-router'
 import { onMounted, ref, computed, provide } from 'vue'
 import { PlayList } from '@pkmer-music/web/components'
 import { musicCardKey } from '@pkmer-music/web/components/layout/musicCardContext'
@@ -18,6 +19,7 @@ import { pageQuerySongList } from '@pkmer-music/web/api'
 // 模拟数据
 // import songs from '@pkmer-music/web/assets/songs.json'
 
+const router = useRouter()
 const songs = ref<PageQuerySongListRes>()
 const styleName = ref<StyleType>('')
 
@@ -52,7 +54,9 @@ function handleStyleChange(target: HTMLElement) {
 }
 
 function handleMusicCardClick(card: MusicCard) {
-  console.log(card)
+  router.push({
+    path: `/songsheet/${card.id}`
+  })
 }
 </script>
 
