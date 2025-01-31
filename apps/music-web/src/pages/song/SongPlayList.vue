@@ -1,4 +1,9 @@
+<script lang="ts">
+import type { PageQuerySongListRes } from '@pkmer-music/web/types'
+</script>
+
 <script lang="ts" setup>
+import { onMounted, reactive } from 'vue'
 import { PlayList } from '@pkmer-music/web/components'
 import {
   PkmerNavigationIndicator,
@@ -7,7 +12,16 @@ import {
   PkmerNavigationRoot
 } from '@pkmer-music-ui/vue/navigation'
 import { songPlayList } from '@pkmer-music/web/enums'
-import songs from '@pkmer-music/web/assets/songs.json'
+import { pageQuerySongList } from '@pkmer-music/web/api'
+// 模拟数据
+// import songs from '@pkmer-music/web/assets/songs.json'
+
+const songs = reactive<PageQuerySongListRes[]>([])
+
+onMounted(async () => {
+  const data = await pageQuerySongList({})
+  console.log(data)
+})
 </script>
 
 <template>

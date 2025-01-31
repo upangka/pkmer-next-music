@@ -14,7 +14,7 @@ export type SongPlayListType = {
   type: SongPlayListEnum
 }
 
-export const songPlayList: SongPlayListType[] = [
+export const songPlayList = [
   {
     name: '全部',
     type: SongPlayListEnum.ALL
@@ -47,4 +47,6 @@ export const songPlayList: SongPlayListType[] = [
     name: '器乐',
     type: SongPlayListEnum.Instrumental
   }
-]
+] as const
+
+export type SongPlayListName = (typeof songPlayList)[number]['name']
