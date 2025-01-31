@@ -7,6 +7,7 @@ import io.gitee.pkmer.core.infrastructure.persistence.comment.mybatis.CommentDyn
 import io.gitee.pkmer.core.infrastructure.persistence.comment.mybatis.CommentDynamicSqlSupport;
 import io.gitee.pkmer.core.infrastructure.persistence.songlist.mybatis.SongList;
 import io.gitee.pkmer.core.infrastructure.persistence.songlist.mybatis.SongListDynamicMapper;
+import io.gitee.pkmer.minio.props.PkmerMinioProps;
 import io.gitee.pkmer.music.domain.songlist.Style;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.Mapper;
@@ -32,11 +33,18 @@ import static org.mybatis.dynamic.sql.SqlBuilder.*;
  * </p>
  */
 @Service
-@RequiredArgsConstructor
 public class SongListService {
     private final SongListDynamicMapper songListMapper;
     private final CommentDynamicMapper commentMapper;
+    private final String minioServer;
 
+    public SongListService(SongListDynamicMapper songListMapper,
+                           CommentDynamicMapper commentMapper,
+                           PkmerMinioProps props){
+        this.songListMapper = songListMapper;
+        this.commentMapper = commentMapper;
+        minioServer = props.getUrl();
+    }
     /**
      * 分页查询歌单
      * @param query
@@ -136,8 +144,13 @@ public class SongListService {
                 .id(songList.getId().toString())
                 .styles(styles)
                 .title(songList.getTitle())
-                .pic(songList.getPic())
+                .pic(addMinioServerToPic(songList.getPic()))
                 .introduction(songList.getIntroduction())
                 .build();
+    }
+
+
+    private String addMinioServerToPic(String pic){
+        return minioServer + pic;
     }
 }
