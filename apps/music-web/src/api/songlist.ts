@@ -6,7 +6,7 @@ import type {
   AppResponse,
   PageQuerySongListReq,
   PageQuerySongListRes,
-  StyleType
+  SongListDetail
 } from '@pkmer-music/web//types'
 
 /**
@@ -24,4 +24,11 @@ export const pageQuerySongList = (
 ): AppResponse<PageQuerySongListRes> => {
   const finalReq = { ...defaultPageQuery, ...req }
   return http.post('/songList/page', finalReq)
+}
+
+/**
+ * 获取歌单的详情
+ */
+export const getSongListDetail = (id: string): AppResponse<SongListDetail> => {
+  return http.get(`/songList/${id}`)
 }

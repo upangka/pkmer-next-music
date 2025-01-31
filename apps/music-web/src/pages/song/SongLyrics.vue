@@ -1,4 +1,5 @@
 <script lang="ts">
+import type { SongDetail } from '@pkmer-music/web/types'
 type LyricLine = {
   time: string
   text: string
@@ -8,7 +9,7 @@ type LyricLine = {
 <script setup lang="ts">
 import { ref, computed, reactive, watch, onMounted, onUnmounted, type CSSProperties } from 'vue'
 import { storeToRefs } from 'pinia'
-import { getSongDetail, type SongDetail } from '@pkmer-music/web/api'
+import { getSongDetail } from '@pkmer-music/web/api'
 import { useMusicPannelStore } from '@pkmer-music/web/stores'
 const { audioRef } = storeToRefs(useMusicPannelStore())
 

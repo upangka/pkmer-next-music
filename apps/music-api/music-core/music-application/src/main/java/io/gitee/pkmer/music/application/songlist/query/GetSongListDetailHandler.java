@@ -7,6 +7,7 @@ import io.gitee.pkmer.minio.props.PkmerMinioProps;
 import io.gitee.pkmer.music.domain.songlist.*;
 import org.mybatis.dynamic.sql.render.RenderingStrategies;
 import org.mybatis.dynamic.sql.select.render.SelectStatementProvider;
+import org.mybatis.dynamic.sql.where.WhereApplier;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -14,9 +15,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static io.gitee.pkmer.core.infrastructure.persistence.banner.mybatis.BannerDynamicSqlSupport.id;
 import static io.gitee.pkmer.core.infrastructure.persistence.song.mybatis.SongDynamicSqlSupport.*;
-import static org.mybatis.dynamic.sql.SqlBuilder.isIn;
-import static org.mybatis.dynamic.sql.SqlBuilder.select;
+import static org.mybatis.dynamic.sql.SqlBuilder.*;
+import static org.mybatis.dynamic.sql.SqlBuilder.where;
 
 @Component
 public class GetSongListDetailHandler implements CommandHandler<GetSongListDetailCmd, SongDetailView> {
@@ -44,9 +46,14 @@ public class GetSongListDetailHandler implements CommandHandler<GetSongListDetai
     private Map<Long, SongDetailView.SongView> getSongs(SongListAggregate songList) {
         List<Long> songIds = songList.getBindSongs().stream().map(s -> s.getSongId().value()).toList();
 
+        WhereApplier whereApplier = where().toWhereApplier();
+        if(!songIds.isEmpty()){
+            whereApplier = where(id, isIn(songIds)).toWhereApplier();
+        }
         SelectStatementProvider selectProvider = select(id, singerId, introduction, name, pic, url)
                 .from(song)
-                .where(id, isIn(songIds))
+                .applyWhere(whereApplier)
+                .configureStatement(c -> c.setNonRenderingWhereClauseAllowed(true))
                 .build()
                 .render(RenderingStrategies.MYBATIS3);
 

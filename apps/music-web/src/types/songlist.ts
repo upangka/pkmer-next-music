@@ -22,3 +22,47 @@ export interface SongList {
   styles: SongPlayListName[]
   introduction: string
 }
+
+/**
+ * 歌曲详情
+ */
+export interface SongDetail {
+  /**
+   * 歌曲id
+   */
+  id: string
+
+  /**
+   * 歌手id
+   */
+  singerId: string
+
+  /**
+   * 歌曲名称
+   */
+  name: string
+
+  /**
+   * 歌曲简介
+   */
+  introduction: string
+
+  /**
+   * 歌曲封面
+   */
+  pic: string
+
+  /**
+   * 歌曲地址
+   */
+  url: string
+
+  /**
+   * 歌词
+   */
+  lyric: string
+}
+
+export type SongListDetail = SongList & {
+  songs: SongDetail[]
+}
