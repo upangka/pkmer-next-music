@@ -4,8 +4,9 @@ import type { MusicCard, StyleType } from '@pkmer-music/web/types'
 </script>
 
 <script lang="ts" setup>
-import { onMounted, ref, computed } from 'vue'
+import { onMounted, ref, computed, provide } from 'vue'
 import { PlayList } from '@pkmer-music/web/components'
+import { musicCardKey } from '@pkmer-music/web/components/layout/musicCardContext'
 import {
   PkmerNavigationIndicator,
   PkmerNavigationItem,
@@ -19,11 +20,17 @@ import { pageQuerySongList } from '@pkmer-music/web/api'
 
 const songs = ref<PageQuerySongListRes>()
 const styleName = ref<StyleType>('')
+
+provide(musicCardKey, {
+  onClick: handleMusicCardClick
+})
+
 onMounted(getSongList)
 
 const playList = computed<MusicCard[]>(() => {
   return (
     songs.value?.list.map(item => ({
+      id: item.id,
       imgurl: item.pic,
       dissname: item.title
     })) || []
@@ -43,6 +50,10 @@ function handleStyleChange(target: HTMLElement) {
   styleName.value = targetStyle
   getSongList()
 }
+
+function handleMusicCardClick(card: MusicCard) {
+  console.log(card)
+}
 </script>
 
 <template>
@@ -59,7 +70,7 @@ function handleStyleChange(target: HTMLElement) {
     </PkmerNavigationRoot>
     <!-- 歌单列表展示start -->
     <section class="mt-3">
-      <PlayList path="/xxx" :play-list="playList" />
+      <PlayList :play-list="playList" />
     </section>
     <!-- 歌单列表展示end -->
   </div>

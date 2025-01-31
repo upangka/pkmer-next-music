@@ -3,7 +3,6 @@
 import type { MusicCard as MusicCardPropsType } from '@pkmer-music/web/types'
 interface Props {
   title?: string
-  path: string
   playList: MusicCardPropsType[]
 }
 </script>

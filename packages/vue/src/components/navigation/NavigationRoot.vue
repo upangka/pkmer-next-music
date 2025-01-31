@@ -11,6 +11,7 @@ const emit = defineEmits<{
  */
 const currentItem = ref<NavItem | null>(null)
 const itemGap = ref(initItemGap)
+let isFirstTimeUpdate = true
 
 watch(currentItem, newNavItem => {
   console.log(newNavItem)
@@ -18,6 +19,10 @@ watch(currentItem, newNavItem => {
 
 function updateCurrentActiveItem(activeCurrentItem: NavItem) {
   currentItem.value = activeCurrentItem
+  if (isFirstTimeUpdate) {
+    isFirstTimeUpdate = false
+    return
+  }
   emit('change', activeCurrentItem.target)
 }
 
