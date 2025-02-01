@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 interface IconProps {
-  width?: number,
-  height?: number,
+  width?: number
+  height?: number
   icon: string
 }
 const props = withDefaults(defineProps<IconProps>(), {
