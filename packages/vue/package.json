@@ -81,6 +81,12 @@
         "default": "./dist/esm/components/radio/index.js"
       }
     },
+    "./rating": {
+      "import": {
+        "types": "./dist/types/components/rating/index.d.ts",
+        "default": "./dist/esm/components/rating/index.js"
+      }
+    },
     "./date": {
       "import": {
         "types": "./dist/types/components/date/index.d.ts",

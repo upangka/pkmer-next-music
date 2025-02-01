@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import { PkmerRating } from '@pkmer-music/web/components/star'
+import { PkmerRating } from '@pkmer-music-ui/vue/rating'
 </script>
 
 <template>
-  <PkmerRating :rating="3.5" :max-rating="6" activeColor="red" />
+  <PkmerRating :rating="3.5" :max-rating="5" />
 </template>

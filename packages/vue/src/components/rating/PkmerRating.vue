@@ -10,7 +10,7 @@ interface Props {
 
 <script lang="tsx" setup>
 import { computed } from 'vue'
-import { PkmerIcon } from '@pkmer-music-ui/vue/icon'
+import PkmerIcon from '../icon/PkmerIcon.vue'
 import type { JSX } from 'vue/jsx-runtime'
 
 const props = withDefaults(defineProps<Props>(), {
