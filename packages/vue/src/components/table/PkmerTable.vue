@@ -52,7 +52,7 @@ const getColStyle = (col: TableColumnProps): CSSProperties => {
 }
 </script>
 <template>
-  <div class="table-grid__container">
+  <div class="table-grid__container rounded-md shadow-lg">
     <!-- 表头start -->
     <div class="table-header__container" :style="gridStyle">
       <div
@@ -97,11 +97,15 @@ const getColStyle = (col: TableColumnProps): CSSProperties => {
     text-overflow: ellipsis;
     white-space: nowrap;
     line-height: 1.5;
+    padding: 10px 0;
+    border-bottom: 1px solid #cbcbcb;
   }
   .table-header__container {
     display: grid;
+
     .header-cell {
       @extend .share-cell;
+      font-weight: 700;
     }
   }
 

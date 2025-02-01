@@ -17,7 +17,7 @@ const users: User[] = [
 ]
 </script>
 <template>
-  <PkmerTable :data="users" hover-color="green">
+  <PkmerTable :data="users">
     <PkmerColumn prop="id" label="ID" width="100px" align="center" />
     <PkmerColumn prop="name" label="姓名" align="center" />
     <PkmerColumn prop="age" label="年龄" align="center" />
