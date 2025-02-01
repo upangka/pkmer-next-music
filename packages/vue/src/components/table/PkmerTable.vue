@@ -18,29 +18,32 @@ const normalizedColumns = computed<TableColumnProps[]>(() => {
   return (
     slots
       .default?.({})
-      .flatMap((slot: any) => {
-        return (slot.children as any[])?.map(child => {
-          if (child.type?.name === columnCompName) {
-            if (child.props) {
-              const childProps = child.props as TableColumnProps
-              return {
-                prop: childProps.prop,
-                label: childProps.label,
-                width: childProps.width,
-                align: childProps.align
-              }
+      .map((slot: any) => {
+        if (slot.type?.name === columnCompName) {
+          if (slot.props) {
+            const childProps = slot.props as TableColumnProps
+            const value = {
+              prop: childProps.prop!,
+              label: childProps.label!,
+              width: childProps.width || '1fr', // 设置默认值
+              align: childProps.align || 'left' // 设置默认值
             }
-            return null
+            return value
           }
-        })
+        }
+        return null
       })
       .filter(Boolean) || []
   )
 })
 
-const gridStyle = computed<CSSProperties>(() => ({
-  gridTemplateColumns: normalizedColumns.value.map(col => col.width).join(' ')
-}))
+const gridStyle = computed<CSSProperties>(() => {
+  const value = normalizedColumns.value.map(col => col.width).join(' ')
+  console.log({ value })
+  return {
+    gridTemplateColumns: value
+  }
+})
 
 const getColStyle = (col: TableColumnProps): CSSProperties => {
   return {
@@ -84,7 +87,6 @@ const getColStyle = (col: TableColumnProps): CSSProperties => {
     </section>
     <!-- 表格内容end -->
   </div>
-
   <!-- 收集子组件的配置 -->
   <slot></slot>
 </template>

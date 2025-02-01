@@ -93,6 +93,12 @@
         "default": "./dist/esm/components/form/index.js"
       }
     },
+    "./table": {
+      "import": {
+        "types": "./dist/types/components/table/index.d.ts",
+        "default": "./dist/esm/components/table/index.js"
+      }
+    },
     "./icon": {
       "import": {
         "types": "./dist/types/components/icon/index.d.ts",
