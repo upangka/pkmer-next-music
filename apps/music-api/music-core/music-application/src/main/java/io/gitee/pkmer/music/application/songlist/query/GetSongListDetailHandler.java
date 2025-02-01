@@ -1,5 +1,7 @@
 package io.gitee.pkmer.music.application.songlist.query;
 
+import io.gitee.pkmer.core.infrastructure.persistence.singer.mybatis.Singer;
+import io.gitee.pkmer.core.infrastructure.persistence.singer.mybatis.SingerDynamicMapper;
 import io.gitee.pkmer.core.infrastructure.persistence.song.mybatis.Song;
 import io.gitee.pkmer.core.infrastructure.persistence.song.mybatis.SongDynamicMapper;
 import io.gitee.pkmer.ddd.shared.command.CommandHandler;
@@ -11,11 +13,13 @@ import org.mybatis.dynamic.sql.where.WhereApplier;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 import static io.gitee.pkmer.core.infrastructure.persistence.banner.mybatis.BannerDynamicSqlSupport.id;
+import static io.gitee.pkmer.core.infrastructure.persistence.singer.mybatis.SingerDynamicSqlSupport.singer;
 import static io.gitee.pkmer.core.infrastructure.persistence.song.mybatis.SongDynamicSqlSupport.*;
 import static org.mybatis.dynamic.sql.SqlBuilder.*;
 import static org.mybatis.dynamic.sql.SqlBuilder.where;
@@ -24,14 +28,17 @@ import static org.mybatis.dynamic.sql.SqlBuilder.where;
 public class GetSongListDetailHandler implements CommandHandler<GetSongListDetailCmd, SongDetailView> {
     private final SongListRepository songListrepository;
     private final SongDynamicMapper songDynamicMapper;
+    private final SingerDynamicMapper singerDynamicMapper;
     private final String minioServer;
 
     public GetSongListDetailHandler(SongListRepository songListrepository,
                                     SongDynamicMapper songDynamicMapper,
+                                    SingerDynamicMapper singerDynamicMapper,
                                     PkmerMinioProps props) {
         this.songListrepository = songListrepository;
         this.songDynamicMapper = songDynamicMapper;
         this.minioServer = props.getUrl();
+        this.singerDynamicMapper = singerDynamicMapper;
     }
 
     @Override
@@ -40,6 +47,7 @@ public class GetSongListDetailHandler implements CommandHandler<GetSongListDetai
                 () -> new RuntimeException("歌单不存在")
         );
         Map<Long, SongDetailView.SongView> songs = getSongs(songList);
+
         return buildSongDetailView(songList,songs);
     }
 
@@ -57,18 +65,53 @@ public class GetSongListDetailHandler implements CommandHandler<GetSongListDetai
                 .build()
                 .render(RenderingStrategies.MYBATIS3);
 
-        return songDynamicMapper.selectMany(selectProvider).stream()
-                .map(this::toSongView)
+        List<Song> songs = songDynamicMapper.selectMany(selectProvider);
+        Map<Long, String> singers;
+        if(!songs.isEmpty()){
+            // 将返回的结果合并到singers map
+            singers = getSingerName(songs);
+        } else {
+            singers = new HashMap<>();
+        }
+
+
+        return songs.stream()
+                .map(song -> toSongView(song,singers))
                 .collect(Collectors.toMap(
                         song -> Long.parseLong(song.getId()),
                         song -> song
                 ));
     }
 
-    private SongDetailView.SongView toSongView(Song song) {
+    /**
+     * 根据歌曲列表获取对应的歌手名称
+     * 该方法通过歌手ID查询歌手表，以获取每个歌手的名称，并以Map形式返回，键为歌手ID，值为歌手名称
+     *
+     * @param songs 歌曲列表，用于提取歌手ID
+     * @return 返回一个Map，键为歌手ID，值为歌手名称
+     */
+    private Map<Long, String> getSingerName(List<Song> songs){
+        List<Long> singerId = songs.stream().map(Song::getSingerId).toList();
+
+        SelectStatementProvider selectProvider = select(id, name)
+                .from(singer)
+                .where(id, isIn(singerId))
+                .build()
+                .render(RenderingStrategies.MYBATIS3);
+
+       return singerDynamicMapper.selectMany(selectProvider)
+               .stream()
+               .collect(Collectors.toMap(
+                       Singer::getId,
+                       Singer::getName
+               ));
+    }
+
+    private SongDetailView.SongView toSongView(Song song,final Map<Long,String> singers) {
         return SongDetailView.SongView.builder()
                 .id(song.getId().toString())
                 .singerId(song.getSingerId().toString())
+                .singerName(singers.get(song.getSingerId()))
                 .name(song.getName())
                 .introduction(song.getIntroduction())
                 .pic(addMinioServer(song.getPic()))

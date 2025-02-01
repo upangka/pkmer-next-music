@@ -37,6 +37,9 @@ public class SongDetailView {
         @Schema(description = "歌手id")
         private String singerId;
 
+        @Schema(description = "歌手名称")
+        private String singerName;
+
 
         @Schema(description = "歌曲名称")
         private String name;

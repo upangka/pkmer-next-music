@@ -38,6 +38,11 @@ export interface SongDetail {
   singerId: string
 
   /**
+   * 歌手名称
+   */
+  singerName: string
+
+  /**
    * 歌曲名称
    */
   name: string
