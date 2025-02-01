@@ -4,6 +4,7 @@ import type { SongListDetail } from '@pkmer-music/web/types'
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { getSongListDetail } from '@pkmer-music/web/api'
+import { PkmerColumn, PkmerTable, PkmerRating } from '@pkmer-music-ui/vue'
 
 const props = defineProps({
   id: String
@@ -31,29 +32,12 @@ onMounted(async () => {
     </section>
     <!-- left end -->
     <!-- right start -->
-    <section class="flex-1 border border-green-600">
-      <div>
-        <h1>简介</h1>
-        <p v-html="songList?.introduction"></p>
-      </div>
-      <div>
-        <table>
-          <!-- 表格头 -->
-          <tr>
-            <th class="">序号</th>
-            <th>歌曲</th>
-            <th>歌手</th>
-            <th>专辑</th>
-          </tr>
-          <tr v-for="(item, index) in songList?.songs" :key="item.id">
-            <td>{{ index }}</td>
-            <td>{{ item.name }}</td>
-            <td>{{ item.name }}</td>
-            <td>{{ item.introduction }}</td>
-          </tr>
-        </table>
-      </div>
-    </section>
+
+    <PkmerTable :data="songList?.songs">
+      <PkmerColumn label="歌曲" prop="name" align="center" />
+      <PkmerColumn label="歌手" prop="singerId" align="center" />
+      <PkmerColumn label="专辑" prop="introduction" align="center" />
+    </PkmerTable>
     <!-- right end -->
   </section>
 </template>
