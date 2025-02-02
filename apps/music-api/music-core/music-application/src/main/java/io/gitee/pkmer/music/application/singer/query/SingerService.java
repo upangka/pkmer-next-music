@@ -3,6 +3,7 @@ package io.gitee.pkmer.music.application.singer.query;
 import io.gitee.pkmer.convention.page.PageResponse;
 import io.gitee.pkmer.core.infrastructure.persistence.singer.mybatis.Singer;
 import io.gitee.pkmer.core.infrastructure.persistence.singer.mybatis.SingerDynamicMapper;
+import io.gitee.pkmer.minio.props.PkmerMinioProps;
 import io.gitee.pkmer.music.domain.singer.Sex;
 import org.mybatis.dynamic.sql.where.WhereApplier;
 import org.springframework.stereotype.Service;
@@ -27,9 +28,10 @@ import static org.mybatis.dynamic.sql.SqlBuilder.*;
 public class SingerService {
 
     private final SingerDynamicMapper singerDynamicMapper;
-
-    public SingerService(SingerDynamicMapper singerDynamicMapper){
+    private final String minioServer;
+    public SingerService(SingerDynamicMapper singerDynamicMapper, PkmerMinioProps props){
         this.singerDynamicMapper = singerDynamicMapper;
+        this.minioServer = props.getUrl();
     }
 
 
@@ -41,11 +43,15 @@ public class SingerService {
 
         List<Singer> singers = singerDynamicMapper.select(c ->
                 c.applyWhere(whereApplier)
+                        .configureStatement(s -> s.setNonRenderingWhereClauseAllowed(true))
                         .limit(query.getPageSize())
                         .offset(query.offset()));
 
 
-        long total = singerDynamicMapper.count(c -> c.applyWhere(whereApplier));
+        long total = singerDynamicMapper.count(c -> c
+                .applyWhere(whereApplier)
+                .configureStatement(s -> s.setNonRenderingWhereClauseAllowed(true))
+        );
 
         List<SingerView> list = singers.stream().map(this::toView).toList();
         return handleResults((int) total, list, query);
@@ -64,7 +70,7 @@ public class SingerService {
 
     private Byte handleSexValue(String sexStr){
         Byte sexValue = null;
-        if(!sexStr.trim().isEmpty()){
+        if(sexStr != null && !sexStr.trim().isEmpty()){
             sexValue = Sex.valueOf(sexStr).getValue();
         }
         return sexValue;
@@ -75,10 +81,14 @@ public class SingerService {
         view.setId(singer.getId());
         view.setName(singer.getName());
         view.setSex(Sex.valueOf(singer.getSex()).name());
-        view.setPic(singer.getPic());
+        view.setPic(addMinioServer(singer.getPic()));
         view.setBirth(singer.getBirth());
         view.setLocation(singer.getLocation());
         view.setIntroduction(singer.getIntroduction());
         return view;
+   }
+
+   private String addMinioServer(String url){
+        return minioServer + url;
    }
 }

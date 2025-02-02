@@ -49,4 +49,5 @@ app:
       - "/favicon.ico"
       - "/banner"
       - "/song/**"
+      - "/singer/**"
 #      - "/songList/**"
