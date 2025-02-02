@@ -33,12 +33,27 @@ const score = computed(() => {
   return 0
 })
 
-const userScore = computed(() => {
-  if (userSongListScore.value && userSongListScore.value.score) {
-    return +(userSongListScore.value.score / 2).toFixed(1)
-  }
-  return 0
-})
+const userScore = ref(0)
+
+const disabled = ref(false)
+
+function handleUserScoreSubmit(score: number) {
+  console.log('接收到用户的提交', score)
+  disabled.value = true
+}
+
+// const userScore = computed({
+//   get() {
+//     console.log('触发了吗')
+//     if (userSongListScore.value && userSongListScore.value.score) {
+//       return +(userSongListScore.value.score / 2).toFixed(1)
+//     }
+//     return 0
+//   },
+//   set(newValue) {
+
+//   }
+// })
 </script>
 <template>
   <section class="flex gap-5 p-5">
@@ -63,14 +78,14 @@ const userScore = computed(() => {
       <section class="flex items-center justify-start gap-5">
         <div class="relative pr-[100px]">
           <p class="mb-3 font-bold text-gray-500">歌单评分</p>
-          <PkmerRating :rating="score" />
+          <PkmerRating :rating="score" disabled />
           <span class="absolute bottom-0 right-0 text-6xl font-bold text-black"> {{ score }}</span>
         </div>
         <div>
           <p class="mb-3 font-bold text-gray-500">
             已评价<span class="px-2 text-lg text-black">{{ userScore }}</span>
           </p>
-          <PkmerRating :rating="userScore" />
+          <PkmerRating v-model:model-value="userScore" @change="handleUserScoreSubmit" :disabled />
         </div>
       </section>
       <!-- 评分end -->
