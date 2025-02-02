@@ -1,11 +1,13 @@
 <script lang="ts">
-import type { SongListDetail, UserSongListRating } from '@pkmer-music/web/types'
+import type { Song, SongListDetail, SongDetail, UserSongListRating } from '@pkmer-music/web/types'
 </script>
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import { getSongListDetail, getUserSonglistScore, userAddScore } from '@pkmer-music/web/api'
 import { PkmerColumn, PkmerTable, PkmerRating } from '@pkmer-music-ui/vue'
+import { useMusicPannelStore } from '@pkmer-music/web/stores'
 
+const musicPannelStore = useMusicPannelStore()
 const props = defineProps({
   id: String
 })
@@ -56,8 +58,15 @@ async function handleUserScoreSubmit(_score: number) {
   }
 }
 
-function handleTableRowClick(row: any) {
-  console.log(row)
+function handleTableRowClick(row: unknown) {
+  const songDetail = row as SongDetail
+
+  musicPannelStore.addSongAndPlay({
+    id: +songDetail.id,
+    name: songDetail.name,
+    picture: songDetail.pic,
+    link: songDetail.url
+  } satisfies Song)
 }
 </script>
 <template>

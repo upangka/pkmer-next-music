@@ -22,6 +22,15 @@ export const useMusicPannelStore = defineStore('music-pannel', () => {
   }
 
   /**
+   * 增加播放的歌曲并播放
+   * @param song
+   */
+  function addSongAndPlay(song: Song) {
+    songList.value.push(song)
+    play(song.id)
+  }
+
+  /**
    * 这里返回的songs并不是state，而是getter
    */
   return {
@@ -30,6 +39,7 @@ export const useMusicPannelStore = defineStore('music-pannel', () => {
     currentPlayingSongId,
     currentPlayingIndex,
     play,
-    audioRef
+    audioRef,
+    addSongAndPlay
   }
 })
