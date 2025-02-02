@@ -8,13 +8,13 @@ import { useMusicPannelStore } from '@pkmer-music/web/stores'
 
 const router = useRouter()
 const musicPannelStore = useMusicPannelStore()
-const { audioRef, currentPlayingSongId } = storeToRefs(musicPannelStore)
+const { audioRef, currentPlayingSongId, playBayStatus } = storeToRefs(musicPannelStore)
 const { songs } = musicPannelStore
 
 const status = reactive({
   showPlayBar: true,
-  showMusicInfo: false,
-  isPlaying: false,
+  // showMusicInfo: false,
+  // isPlaying: false,
   currentIndex: musicPannelStore.currentPlayingIndex
 })
 
@@ -34,7 +34,7 @@ watch(
 )
 
 watch(
-  () => status.isPlaying,
+  () => playBayStatus.value.isPlaying,
   isCurrentPlaying => {
     if (isCurrentPlaying) {
       audioRef.value?.play()
@@ -58,7 +58,7 @@ watch(
         state.currentPlayingSongId = songs[status.currentIndex].id
       })
 
-      if (status.isPlaying) {
+      if (playBayStatus.value.isPlaying) {
         audio.play()
       }
     }
@@ -78,8 +78,8 @@ const currentSong = computed(() => {
 })
 
 function togglePlaying(_isPlaying: boolean, isShowMusicInfo: boolean) {
-  status.isPlaying = _isPlaying
-  status.showMusicInfo = isShowMusicInfo
+  playBayStatus.value.isPlaying = _isPlaying
+  playBayStatus.value.showMusicInfo = isShowMusicInfo
 }
 
 /**
@@ -88,16 +88,16 @@ function togglePlaying(_isPlaying: boolean, isShowMusicInfo: boolean) {
 function handleToggle() {
   if (status.showPlayBar) {
     // 处理关闭
-    status.showMusicInfo = false
+    playBayStatus.value.showMusicInfo = false
     window.setTimeout(() => {
       status.showPlayBar = false
     }, 300)
   } else {
     // 处理展开
-    if (status.isPlaying) {
+    if (playBayStatus.value.isPlaying) {
       status.showPlayBar = true
       window.setTimeout(() => {
-        status.showMusicInfo = true
+        playBayStatus.value.showMusicInfo = true
       }, 300)
     } else {
       status.showPlayBar = true
@@ -187,7 +187,12 @@ function routeToSongDetail() {
     <Transition name="expand">
       <section class="music-container" v-if="status.showPlayBar">
         <!-- 音乐进度播放start -->
-        <div :class="['music-info', status.showMusicInfo && status.isPlaying && 'playing']">
+        <div
+          :class="[
+            'music-info',
+            playBayStatus.showMusicInfo && playBayStatus.isPlaying && 'playing'
+          ]"
+        >
           <h1 class="music-title">{{ currentSong.name }}</h1>
           <div
             ref="progressContainerRef"
@@ -210,7 +215,7 @@ function routeToSongDetail() {
         <!-- 音乐进度播放end -->
         <!-- 音乐控制面板start -->
         <div :class="['music-control__container']">
-          <div :class="['img-wrapper', status.isPlaying && 'playing']">
+          <div :class="['img-wrapper', playBayStatus.isPlaying && 'playing']">
             <img :src="currentSong.picture" :alt="currentSong.name" />
           </div>
 
@@ -221,7 +226,7 @@ function routeToSongDetail() {
               </button>
             </li>
             <li>
-              <button v-if="status.showMusicInfo" @click="() => togglePlaying(false, false)">
+              <button v-if="playBayStatus.showMusicInfo" @click="() => togglePlaying(false, false)">
                 <PkmerIcon icon="gridicons:pause" :width="40" :height="40" />
               </button>
               <button v-else @click="() => togglePlaying(true, true)">

@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
+import { ref, computed, reactive } from 'vue'
 import { songs } from '@pkmer-music/web/assets/audio'
 import type { Song } from '@pkmer-music/web/types'
 export const useMusicPannelStore = defineStore('music-pannel', () => {
@@ -9,6 +9,14 @@ export const useMusicPannelStore = defineStore('music-pannel', () => {
   const songList = ref<Song[]>(songs)
 
   const audioRef = ref<HTMLAudioElement | null>(null)
+
+  /**
+   * 音乐栏播放状态
+   */
+  const playBayStatus = reactive({
+    isPlaying: false,
+    showMusicInfo: false
+  })
 
   // getters
   const currentPlayingIndex = computed(() => {
@@ -40,6 +48,7 @@ export const useMusicPannelStore = defineStore('music-pannel', () => {
     currentPlayingIndex,
     play,
     audioRef,
-    addSongAndPlay
+    addSongAndPlay,
+    playBayStatus
   }
 })
