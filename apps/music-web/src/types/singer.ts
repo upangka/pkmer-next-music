@@ -13,7 +13,7 @@ export interface PageQueryRes<T> {
   totalPages: number
 }
 
-type SingerSong = Song & {
+export type SingerSong = Song & {
   singerName: string
 }
 

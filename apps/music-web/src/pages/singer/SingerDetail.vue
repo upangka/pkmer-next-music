@@ -1,5 +1,5 @@
 <script lang="ts">
-import type { Singer } from '@pkmer-music/web/types'
+import type { Singer, Song, SingerSong } from '@pkmer-music/web/types'
 interface Props {
   singerId: string
 }
@@ -8,8 +8,10 @@ interface Props {
 import { onMounted, ref } from 'vue'
 import { getSingerDetail } from '@pkmer-music/web/api'
 import { PkmerTable, PkmerColumn } from '@pkmer-music-ui/vue/table'
-const props = defineProps<Props>()
+import { useMusicPannelStore } from '@pkmer-music/web/stores'
 
+const props = defineProps<Props>()
+const musicPannelStore = useMusicPannelStore()
 const singer = ref<Singer>()
 onMounted(async () => {
   const data = await getSingerDetail(props.singerId)
@@ -24,6 +26,18 @@ onMounted(async () => {
     singer.value = data
   }
 })
+
+function handleTableRowClick(row: unknown) {
+  if (row) {
+    const singerSong = row as SingerSong
+    musicPannelStore.addSongAndPlay({
+      id: +singerSong.id,
+      link: singerSong.link,
+      name: singerSong.name,
+      picture: singerSong.picture
+    })
+  }
+}
 </script>
 <template>
   <section class="flex gap-6 p-5">
@@ -53,7 +67,7 @@ onMounted(async () => {
       </div>
 
       <!-- 列表start -->
-      <PkmerTable :data="singer?.songs || []">
+      <PkmerTable :data="singer?.songs || []" @row-click="handleTableRowClick">
         <PkmerColumn label="歌曲名" prop="name" align="center" />
         <PkmerColumn label="歌手" prop="singerName" align="center" />
         <PkmerColumn label="专辑" prop="introduction" align="center" />
