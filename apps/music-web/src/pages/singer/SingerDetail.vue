@@ -60,7 +60,7 @@ function handleTableRowClick(row: unknown) {
     </div>
     <!-- 左边end -->
     <!-- 右边start -->
-    <div class="flex flex-col gap-5 p-5">
+    <div class="flex flex-1 flex-col gap-5 p-5">
       <div>
         <h1 class="py-3 text-2xl font-bold">简介</h1>
         <p class="text-sm text-gray-500">{{ singer?.introduction }}</p>
