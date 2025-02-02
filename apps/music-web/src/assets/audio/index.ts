@@ -1,3 +1,5 @@
+import type { Song } from '@pkmer-music/web/types'
+
 import song1 from './黄昏(Dj版) - 刘汉成.mp3'
 
 import song2 from './春庭雪 (DJ默涵Wave版) - DJ默涵.mp3'
@@ -5,12 +7,6 @@ import song3 from './Hỷ Bi (Đức Trình Remix) - YLing、Drum7、BMZ.mp3'
 import song4 from './Hoàng Hôn (EDM Remix) - H2O Remix、Kiều Thơ Mellow.mp3'
 import song5 from './月亮里的阿妹 (DJ村长版DJ版) - DJ村长.mp3'
 import song6 from './黄昏 (女声版)(DJ歌者达达版) - Kag Chuu.flac'
-interface Song {
-  id: number
-  link: string
-  name: string
-  picture: string
-}
 
 export const songs = [
   {

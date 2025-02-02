@@ -2,6 +2,7 @@ package io.gitee.pkmer.music.application.song.get;
 
 import io.gitee.pkmer.convention.converter.TargetAndSourceConverter;
 import io.gitee.pkmer.ddd.shared.command.CommandHandler;
+import io.gitee.pkmer.minio.props.PkmerMinioProps;
 import io.gitee.pkmer.music.domain.song.SongAggregate;
 import io.gitee.pkmer.music.domain.song.SongId;
 import io.gitee.pkmer.music.domain.song.SongRepository;
@@ -11,10 +12,15 @@ import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Component;
 
-@RequiredArgsConstructor
 @Component
 public class GetSongHandler implements CommandHandler<GetSongCmd, SongDetailView> {
     private final SongRepository songRepository;
+    private final String minioServer;
+    public GetSongHandler(SongRepository songRepository,
+                          PkmerMinioProps props) {
+        this.songRepository = songRepository;
+        this.minioServer = props.getUrl();
+    }
 
     @Override
     public SongDetailView execute(GetSongCmd cmd) {
@@ -31,10 +37,14 @@ public class GetSongHandler implements CommandHandler<GetSongCmd, SongDetailView
                 .singerId(song.getSingerId().value().toString())
                 .name(song.getName())
                 .introduction(song.getIntroduction())
-                .pic(song.getPic())
-                .url(song.getUrl())
+                .pic(buildMinioServerUrl(song.getPic()))
+                .url(buildMinioServerUrl(song.getUrl()))
                 .lyric(song.getLyric())
                 .build();
+    }
+
+    private String buildMinioServerUrl(String url){
+        return minioServer + url;
     }
 
 }

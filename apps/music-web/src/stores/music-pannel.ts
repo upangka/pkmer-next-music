@@ -1,11 +1,12 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { songs } from '@pkmer-music/web/assets/audio'
-
+import type { Song } from '@pkmer-music/web/types'
 export const useMusicPannelStore = defineStore('music-pannel', () => {
   // state
   const showAssider = ref(false)
   const currentPlayingSongId = ref<number | null>(null)
+  const songList = ref<Song[]>(songs)
 
   const audioRef = ref<HTMLAudioElement | null>(null)
 
@@ -25,7 +26,7 @@ export const useMusicPannelStore = defineStore('music-pannel', () => {
    */
   return {
     showAssider,
-    songs,
+    songs: songList,
     currentPlayingSongId,
     currentPlayingIndex,
     play,

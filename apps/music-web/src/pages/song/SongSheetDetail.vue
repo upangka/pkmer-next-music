@@ -55,6 +55,10 @@ async function handleUserScoreSubmit(_score: number) {
     disabled.value = false
   }
 }
+
+function handleTableRowClick(row: any) {
+  console.log(row)
+}
 </script>
 <template>
   <section class="flex gap-5 p-5">
@@ -93,7 +97,7 @@ async function handleUserScoreSubmit(_score: number) {
       <!-- 评分end -->
 
       <!-- 表格start -->
-      <PkmerTable :data="songList?.songs || []">
+      <PkmerTable :data="songList?.songs || []" @row-click="handleTableRowClick">
         <PkmerColumn label="歌曲" prop="name" align="center" />
         <PkmerColumn label="歌手" prop="singerName" align="center" />
         <PkmerColumn label="专辑" prop="introduction" align="center" />

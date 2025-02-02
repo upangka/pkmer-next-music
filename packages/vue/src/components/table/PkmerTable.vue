@@ -8,6 +8,11 @@ interface Props {
 <script setup lang="ts">
 import { ref, useSlots, computed, type CSSProperties } from 'vue'
 import { columnCompName } from './constants'
+
+const emits = defineEmits<{
+  rowClick: [row: any]
+}>()
+
 withDefaults(defineProps<Props>(), {
   hoverColor: '#f5f5f5'
 })
@@ -74,6 +79,7 @@ const getColStyle = (col: TableColumnProps): CSSProperties => {
         :style="gridStyle"
         @mouseenter="hoverRow = rowIndex"
         @mouseleave="hoverRow = -1"
+        @click="emits('rowClick', row)"
       >
         <div
           v-for="(col, colIndex) in normalizedColumns"
