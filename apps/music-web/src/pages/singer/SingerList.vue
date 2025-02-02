@@ -3,8 +3,11 @@ import type { PageQuerySingerRes, MusicCard, SexType } from '@pkmer-music/web/ty
 </script>
 
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, provide } from 'vue'
+import { useRouter } from 'vue-router'
 import { PlayList } from '@pkmer-music/web/components'
+import { musicCardKey } from '@pkmer-music/web/components'
+
 import {
   PkmerNavigationIndicator,
   PkmerNavigationItem,
@@ -15,9 +18,13 @@ import { singerStyles } from '@pkmer-music/web/enums'
 import { getAllSong } from '@pkmer-music/web/api'
 
 // import songs from '@pkmer-music/web/assets/songs.json'
-
+const router = useRouter()
 const singersPage = ref<PageQuerySingerRes>()
 const singers = ref<MusicCard[]>([])
+
+provide(musicCardKey, {
+  onClick: handleClick
+})
 onMounted(fetchSingerData)
 
 async function fetchSingerData(name?: string | undefined, sex?: SexType) {
@@ -46,6 +53,10 @@ function handleChange(target: HTMLElement) {
     const sex = style[0].type as unknown as SexType
     fetchSingerData(undefined, sex)
   }
+}
+
+function handleClick(card: MusicCard) {
+  router.push(`singer-detail/${card.id}`)
 }
 </script>
 
