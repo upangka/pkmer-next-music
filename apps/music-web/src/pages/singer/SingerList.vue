@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { onMounted } from 'vue'
 import { PlayList } from '@pkmer-music/web/components'
 import {
   PkmerNavigationIndicator,
@@ -7,7 +8,16 @@ import {
   PkmerNavigationRoot
 } from '@pkmer-music-ui/vue/navigation'
 import { singerStyles } from '@pkmer-music/web/enums'
+import { getAllSong } from '@pkmer-music/web/api'
+
 import songs from '@pkmer-music/web/assets/songs.json'
+
+onMounted(async () => {
+  const data = await getAllSong({
+    sex: 'MALE'
+  })
+  console.log({ data })
+})
 </script>
 
 <template>

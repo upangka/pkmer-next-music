@@ -9,3 +9,14 @@ import type { AppResponse, SongDetail } from '@pkmer-music/web/types'
 export const getSongDetail = (id: string): AppResponse<SongDetail> => {
   return http.get(`/song/${id}`)
 }
+
+type SexType = 'UNKNOWN' | 'MALE' | 'FEMALE'
+
+interface GetAllSongParams {
+  name?: string
+  sex?: SexType
+}
+
+export const getAllSong = (data: GetAllSongParams = {}): AppResponse<any> => {
+  return http.get('/singer/query', data)
+}
