@@ -1,12 +1,10 @@
 package io.gitee.pkmer.music.application.singer.query;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * <p>
@@ -50,4 +48,29 @@ public class SingerView {
 
     @Schema(description = "歌手介绍")
     private String introduction;
+
+    @Schema(description = "歌手歌曲")
+    List<SongView> songs;
+
+
+    @Builder
+    @Data
+    public static class SongView{
+        @Schema(description = "歌曲id")
+        private String id;
+
+        @Schema(description = "歌曲名称")
+        private String name;
+
+        @Schema(description = "歌曲简介")
+        private String introduction;
+
+        @Schema(description = "歌曲封面")
+        private String picture;
+
+        @Schema(description = "歌曲地址")
+        private String link;
+    }
+
+
 }

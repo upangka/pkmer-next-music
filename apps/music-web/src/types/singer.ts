@@ -1,3 +1,4 @@
+import type { Song } from './song'
 export type SexType = 'UNKNOWN' | 'MALE' | 'FEMALE'
 
 export interface GetAllSongParams {
@@ -12,6 +13,10 @@ export interface PageQueryRes<T> {
   totalPages: number
 }
 
+type SingerSong = Song & {
+  singerName: string
+}
+
 export interface Singer {
   id: string
   name: string
@@ -20,6 +25,7 @@ export interface Singer {
   birth: string
   location: string
   introduction: string
+  songs: SingerSong[]
 }
 
 export type PageQuerySingerRes = PageQueryRes<Singer>
