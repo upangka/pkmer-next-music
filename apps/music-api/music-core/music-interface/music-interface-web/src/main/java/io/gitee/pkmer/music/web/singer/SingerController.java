@@ -6,6 +6,7 @@ import io.gitee.pkmer.convention.result.Result;
 import io.gitee.pkmer.ddd.shared.dispatch.CmdDispatcher;
 import io.gitee.pkmer.music.application.singer.add.AddSingerCmd;
 import io.gitee.pkmer.music.application.singer.delete.DeleteSingerCmd;
+import io.gitee.pkmer.music.application.singer.query.GetSingerDetailCmd;
 import io.gitee.pkmer.music.application.singer.query.SingerQuery;
 import io.gitee.pkmer.music.application.singer.query.SingerService;
 import io.gitee.pkmer.music.application.singer.query.SingerView;
@@ -33,6 +34,12 @@ public class SingerController extends BaseController implements SingerApi {
     @Setter(onMethod_ = @Autowired)
     private SingerService singerService;
 
+
+    @Override
+    public Result<SingerView> getSingerDetail(Long id) {
+        GetSingerDetailCmd cmd = GetSingerDetailCmd.commandOf(id);
+        return success(cmdDispatcher.dispatch(cmd));
+    }
 
     @Override
     public Result<Void> addSinger(AddSingerCmd addSingerCmd) {

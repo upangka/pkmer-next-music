@@ -27,6 +27,13 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/singer")
 public interface SingerApi {
 
+    @Operation(summary = "查询歌手详情")
+    @Parameters({
+            @Parameter(name = "id",description = "歌手id",required = true,in = ParameterIn.PATH),
+    })
+    @GetMapping("/{id}")
+    Result<SingerView> getSingerDetail(@PathVariable("id") Long id);
+
     @Operation(summary = "添加歌手")
     @PostMapping("/add")
     Result<Void> addSinger(@Valid

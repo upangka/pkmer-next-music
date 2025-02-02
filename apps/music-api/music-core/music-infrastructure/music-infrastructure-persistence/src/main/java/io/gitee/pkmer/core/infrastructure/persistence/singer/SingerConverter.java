@@ -55,6 +55,7 @@ public class SingerConverter {
                 .sex(Sex.valueOf(singer.getSex()))
                 .pic(singer.getPic())
                 .birth(singer.getBirth())
+                .introduction(singer.getIntroduction())
                 .location(singer.getLocation())
                 .songs(songList)
                 .build();

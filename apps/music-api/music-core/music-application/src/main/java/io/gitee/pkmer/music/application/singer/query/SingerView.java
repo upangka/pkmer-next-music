@@ -1,7 +1,10 @@
 package io.gitee.pkmer.music.application.singer.query;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
@@ -15,11 +18,14 @@ import java.time.LocalDateTime;
  * @since 2025/1/10
  * </p>
  */
+@Builder
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class SingerView {
 
     @Schema(description = "歌手id")
-    private Long id;
+    private String id;
 
 
     @Schema(description = "歌手名称")

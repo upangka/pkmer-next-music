@@ -78,7 +78,7 @@ public class SingerService {
 
     private SingerView toView(Singer singer){
         SingerView view = new SingerView();
-        view.setId(singer.getId());
+        view.setId(singer.getId().toString());
         view.setName(singer.getName());
         view.setSex(Sex.valueOf(singer.getSex()).name());
         view.setPic(addMinioServer(singer.getPic()));
