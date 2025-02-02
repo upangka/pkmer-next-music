@@ -21,6 +21,7 @@ public class SongListBuilder {
     private String pic;
     private String styles;
     private String introduction;
+    private double score;
     private List<BindSongValueObj> songIds;
     private List<CommentEntity> comments;
 
@@ -54,6 +55,11 @@ public class SongListBuilder {
         return this;
     }
 
+    public SongListBuilder score(double score) {
+        this.score = score;
+        return this;
+    }
+
     public SongListBuilder songIds(List<BindSongValueObj> songIds) {
         this.songIds = songIds;
         return this;
@@ -77,6 +83,7 @@ public class SongListBuilder {
                 .styles(songListStyles)
                 .introduction(introduction)
                 .songIds(songIds)
+                .score(score)
                 .comments(comments)
                 .build();
 

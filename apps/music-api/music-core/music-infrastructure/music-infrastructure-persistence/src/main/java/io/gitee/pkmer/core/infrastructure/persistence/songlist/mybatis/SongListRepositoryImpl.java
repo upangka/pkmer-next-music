@@ -3,22 +3,28 @@ package io.gitee.pkmer.core.infrastructure.persistence.songlist.mybatis;
 import io.gitee.pkmer.core.infrastructure.persistence.comment.mybatis.Comment;
 import io.gitee.pkmer.core.infrastructure.persistence.comment.mybatis.CommentDynamicMapper;
 import io.gitee.pkmer.core.infrastructure.persistence.comment.mybatis.CommentDynamicSqlSupport;
+import io.gitee.pkmer.core.infrastructure.persistence.rank.mybatis.RankDynamicMapper;
+import io.gitee.pkmer.core.infrastructure.persistence.rank.mybatis.RankList;
+import io.gitee.pkmer.core.infrastructure.persistence.rank.mybatis.RankListDynamicSqlSupport;
 import io.gitee.pkmer.ddd.common.ChangingStatus;
 import io.gitee.pkmer.music.domain.comment.CommentEntity;
 import io.gitee.pkmer.music.domain.songlist.BindSongValueObj;
 import io.gitee.pkmer.music.domain.songlist.SongListAggregate;
 import io.gitee.pkmer.music.domain.songlist.SongListId;
 import io.gitee.pkmer.music.domain.songlist.SongListRepository;
+import lombok.extern.slf4j.Slf4j;
+import org.mybatis.dynamic.sql.render.RenderingStrategies;
+import org.mybatis.dynamic.sql.select.render.SelectStatementProvider;
 import org.springframework.stereotype.Repository;
 
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static io.gitee.pkmer.core.infrastructure.persistence.songlist.mybatis.SongListDynamicSqlSupport.id;
-import static org.mybatis.dynamic.sql.SqlBuilder.isEqualTo;
-import static org.mybatis.dynamic.sql.SqlBuilder.isIn;
+import static org.mybatis.dynamic.sql.SqlBuilder.*;
 
 /**
  * @author <a href="mailto:1193094618@qq.com">pkmer</a>
@@ -26,20 +32,24 @@ import static org.mybatis.dynamic.sql.SqlBuilder.isIn;
  * <a href = "https://gitee.com/developeros/videos-online">Code Repository</a>
  * At 2025/1/5
  */
+@Slf4j
 @Repository
 public class SongListRepositoryImpl implements SongListRepository {
     private final SongListDynamicMapper songListMapper;
     private final ListSongDynamicMapper listSongMapper;
     private final CommentDynamicMapper commentMapper;
+    private final RankDynamicMapper rankMapper;
     private final SongListConverter converter;
 
     public SongListRepositoryImpl(SongListDynamicMapper songListDynamicMapper,
                                   ListSongDynamicMapper listSongDynamicMapper,
                                   CommentDynamicMapper commentDynamicMapper,
+                                  RankDynamicMapper rankDynamicMapper,
                                   SongListConverter converter) {
         this.songListMapper = songListDynamicMapper;
         this.listSongMapper = listSongDynamicMapper;
         this.commentMapper = commentDynamicMapper;
+        this.rankMapper = rankDynamicMapper;
         this.converter = converter;
     }
 
@@ -58,10 +68,33 @@ public class SongListRepositoryImpl implements SongListRepository {
         List<Comment> comments = commentMapper.select(c ->
                 c.where(CommentDynamicSqlSupport.songListId, isEqualTo(songList.getId())));
 
+        double sumScore = getSumScore(songList);
+
         return Optional.of(
-                converter.buildAggregate(songList, songIds, comments)
+                converter.buildAggregate(songList, songIds, comments,sumScore)
         );
 
+    }
+
+    private double getSumScore(SongList songList) {
+        // 处理歌单的评分
+        SelectStatementProvider selectSumScore = select(sum(RankListDynamicSqlSupport.score).as("score"))
+                .from(RankListDynamicSqlSupport.rankList)
+                .where(RankListDynamicSqlSupport.songListId, isEqualTo(songList.getId()))
+                .build()
+                .render(RenderingStrategies.MYBATIS3);
+
+        int sum = rankMapper.selectOne(selectSumScore)
+                .map(RankList::getScore)
+                .orElse(0);
+
+        if(sum == 0){
+            return sum;
+        }else{
+            long count = rankMapper.count(c -> c.where(
+                    RankListDynamicSqlSupport.songListId, isEqualTo(songList.getId())));
+            return (double) sum / count;
+        }
     }
 
 

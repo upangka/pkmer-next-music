@@ -139,6 +139,7 @@ public class GetSongListDetailHandler implements CommandHandler<GetSongListDetai
                 .title(songList.getTitle())
                 .pic(addMinioServer(songList.getPic()))
                 .introduction(songList.getIntroduction())
+                .score(songList.getScore())
                 .songs(songViews)
                 .build();
     }

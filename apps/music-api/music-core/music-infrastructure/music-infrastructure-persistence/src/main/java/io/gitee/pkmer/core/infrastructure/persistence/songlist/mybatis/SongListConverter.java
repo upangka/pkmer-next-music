@@ -36,7 +36,8 @@ public class SongListConverter {
      */
     public SongListAggregate buildAggregate(SongList songList,
                                             List<ListSong> listSongs,
-                                            List<Comment> comments) {
+                                            List<Comment> comments,
+                                            double score) {
         // 歌曲信息
         List<BindSongValueObj> bindSongDomainModel = toBindSongDomainModel(listSongs);
 
@@ -48,6 +49,7 @@ public class SongListConverter {
                 .pic(songList.getPic())
                 .title(songList.getTitle())
                 .styles(songList.getStyle())
+                .score(score)
                 .introduction(songList.getIntroduction())
                 .songIds(bindSongDomainModel)
                 .comments(commentDomainModels)

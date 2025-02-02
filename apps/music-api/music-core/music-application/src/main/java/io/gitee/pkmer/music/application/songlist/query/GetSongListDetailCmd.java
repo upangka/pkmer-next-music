@@ -7,5 +7,5 @@ import lombok.Value;
 @Data
 @Value(staticConstructor = "commandOf")
 public class GetSongListDetailCmd implements Command {
-    private Long songListId;
+    Long songListId;
 }

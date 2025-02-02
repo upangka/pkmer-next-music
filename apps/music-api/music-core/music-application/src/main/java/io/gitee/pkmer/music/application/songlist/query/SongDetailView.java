@@ -25,6 +25,9 @@ public class SongDetailView {
     @Schema(description = "歌单介绍")
     private String introduction;
 
+    @Schema(description = "歌单评分")
+    private Double score;
+
     @Schema(description = "歌单包含的歌曲")
     List<SongView> songs;
 

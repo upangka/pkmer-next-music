@@ -37,6 +37,11 @@ public class SongListAggregate extends AuditableEntity implements AggregateRoot 
     private List<BindSongValueObj> songIds;
 
     /**
+     * 歌单评分
+     */
+    private double score;
+
+    /**
      * 歌单的评论
      */
     private List<CommentEntity> comments;

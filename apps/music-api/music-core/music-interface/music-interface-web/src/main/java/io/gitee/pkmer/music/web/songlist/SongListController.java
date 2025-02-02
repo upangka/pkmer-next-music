@@ -17,6 +17,7 @@ import io.gitee.pkmer.music.application.songlist.update.UpdateSongListCmd;
 import io.gitee.pkmer.music.application.songlist.update.UpdateSongListCommentCmd;
 import io.gitee.pkmer.music.web.songlist.converter.AddSongListConverter;
 import io.gitee.pkmer.music.web.songlist.req.AddSongListReq;
+import io.gitee.pkmer.security.context.AppContextHolder;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
@@ -152,8 +153,7 @@ public class SongListController extends BaseController implements SongListApi{
 
     @Override
     public Result<RankView> getUserSongListRank(Long songListId) {
-        // todo 处理登录用户的userId
-        Long userId = null;
+        Long userId = AppContextHolder.userContextHolder.getUser().getId();
         return success(rankService.getUserSongListRank(userId,songListId));
     }
 }
