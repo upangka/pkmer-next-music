@@ -36,6 +36,12 @@ export const useMusicPannelStore = defineStore('music-pannel', () => {
   function addSongAndPlay(song: Song) {
     songList.value.push(song)
     play(song.id)
+    showMusicBar()
+  }
+
+  function showMusicBar() {
+    playBayStatus.isPlaying = true
+    playBayStatus.showMusicInfo = true
   }
 
   /**
