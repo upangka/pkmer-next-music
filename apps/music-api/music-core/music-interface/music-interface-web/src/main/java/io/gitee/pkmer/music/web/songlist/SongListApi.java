@@ -110,7 +110,7 @@ public interface SongListApi {
     Result<Void> collectSongList(@PathVariable Long songListId);
 
 
-    @Operation(summary = "添加歌单排行榜")
+    @Operation(summary = "添加用户对歌单的评分")
     @PostMapping("/addrank")
     Result<Void> addRank(@Valid @RequestBody AddRankCmd cmd);
 

@@ -7,7 +7,8 @@ import type {
   PageQuerySongListReq,
   PageQuerySongListRes,
   SongListDetail,
-  UserSongListRating
+  UserSongListRating,
+  AddUserSongListRatingReq
 } from '@pkmer-music/web/types'
 
 /**
@@ -34,6 +35,15 @@ export const getSongListDetail = (id: string): AppResponse<SongListDetail> => {
   return http.get(`/songList/${id}`)
 }
 
+/**
+ * 获取当前用户的评分
+ * @param id
+ * @returns
+ */
 export const getUserSonglistScore = (id: string): AppResponse<UserSongListRating> => {
   return http.get(`/songList/user/rank/${id}`)
+}
+
+export const userAddScore = (data: AddUserSongListRatingReq): AppResponse<any> => {
+  return http.post('/songList/addrank', data)
 }

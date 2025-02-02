@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
  * At 2025/1/5
  */
 @RestController
-public class SongListController extends BaseController implements SongListApi{
+public class SongListController extends BaseController implements SongListApi {
 
     @Setter(onMethod_ = @Autowired)
     private CmdDispatcher cmdDispatcher;
@@ -46,9 +46,9 @@ public class SongListController extends BaseController implements SongListApi{
     @Override
     public Result<Void> delete(String id) {
         Long id_ = 0L;
-        try{
+        try {
             id_ = Long.parseLong(id);
-        }catch (Exception e){
+        } catch (Exception e) {
             return Result.error("id不正确");
         }
         DeleteSongListCmd cmd = DeleteSongListCmd.commandOf(id_);
@@ -133,13 +133,15 @@ public class SongListController extends BaseController implements SongListApi{
 
     @Override
     public Result<Void> addRank(AddRankCmd cmd) {
+        Long userId = AppContextHolder.userContextHolder.getUser().getId();
+        cmd.setConsumerId(userId);
         cmdDispatcher.dispatch(cmd);
         return success();
     }
 
     @Override
     public Result<Void> deleteRank(Long songListId) {
-       cmdDispatcher.dispatch( DeleteRankCmd.commandOf(songListId));
+        cmdDispatcher.dispatch(DeleteRankCmd.commandOf(songListId));
         return success();
     }
 
@@ -154,6 +156,6 @@ public class SongListController extends BaseController implements SongListApi{
     @Override
     public Result<RankView> getUserSongListRank(Long songListId) {
         Long userId = AppContextHolder.userContextHolder.getUser().getId();
-        return success(rankService.getUserSongListRank(userId,songListId));
+        return success(rankService.getUserSongListRank(userId, songListId));
     }
 }

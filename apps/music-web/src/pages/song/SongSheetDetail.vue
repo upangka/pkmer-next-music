@@ -3,7 +3,7 @@ import type { SongListDetail, UserSongListRating } from '@pkmer-music/web/types'
 </script>
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
-import { getSongListDetail, getUserSonglistScore } from '@pkmer-music/web/api'
+import { getSongListDetail, getUserSonglistScore, userAddScore } from '@pkmer-music/web/api'
 import { PkmerColumn, PkmerTable, PkmerRating } from '@pkmer-music-ui/vue'
 
 const props = defineProps({
@@ -23,6 +23,7 @@ onMounted(async () => {
 onMounted(async () => {
   if (props.id) {
     userSongListScore.value = await getUserSonglistScore(props.id)
+    console.log('todo', userSongListScore.value)
   }
 })
 
@@ -37,23 +38,17 @@ const userScore = ref(0)
 
 const disabled = ref(false)
 
-function handleUserScoreSubmit(score: number) {
-  console.log('接收到用户的提交', score)
-  disabled.value = true
+async function handleUserScoreSubmit(_score: number) {
+  try {
+    disabled.value = true
+    await userAddScore({
+      score: _score * 2,
+      songListId: props.id!
+    })
+  } catch (error: any) {
+    disabled.value = false
+  }
 }
-
-// const userScore = computed({
-//   get() {
-//     console.log('触发了吗')
-//     if (userSongListScore.value && userSongListScore.value.score) {
-//       return +(userSongListScore.value.score / 2).toFixed(1)
-//     }
-//     return 0
-//   },
-//   set(newValue) {
-
-//   }
-// })
 </script>
 <template>
   <section class="flex gap-5 p-5">

@@ -28,7 +28,9 @@ public class RankConverter {
     public RankList toDataModel(RankAggregate rankAggregate){
         // 用set方法赋值
         RankList rank = new RankList();
-        rank.setId(rankAggregate.getId().value());
+        if(null != rankAggregate.getId()){
+            rank.setId(rankAggregate.getId().value());
+        }
         rank.setSongListId(rankAggregate.getSongListId().value());
         rank.setConsumerId(rankAggregate.getConsumerId().value());
         rank.setScore(rankAggregate.getScore());

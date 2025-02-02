@@ -21,7 +21,7 @@ public class AddRankCmd implements Command {
     @Schema(description = "歌单id")
     @NotNull(message = "歌单id不能为空")
     private Long songListId;
-    @Schema(description = "用户id")
+    @Schema(description = "用户id",requiredMode = Schema.RequiredMode.NOT_REQUIRED)
     private Long consumerId;
     @Schema(description = "评分")
     @NotNull(message = "评分不能为空")

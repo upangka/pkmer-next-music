@@ -49,4 +49,4 @@ app:
       - "/favicon.ico"
       - "/banner"
       - "/song/**"
-      - "/songList/**"
+#      - "/songList/**"
