@@ -87,7 +87,7 @@ export interface UserSongListRating {
 /**
  * 添加用户评分
  */
-interface AddUserSongListRatingReq {
+export interface AddUserSongListRatingReq {
   songListId: string
   score: number
 }

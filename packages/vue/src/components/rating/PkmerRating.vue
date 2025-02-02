@@ -64,14 +64,13 @@ const renderStars = computed<JSX.Element[]>(() => {
 })
 
 function handleHover(index: number) {
-  console.log('see me', index)
   if (props.disabled) return
   modelValue.value = index + 1
 }
 
 function handleClick(index: number) {
-  console.log('see click', index)
-  emit('change', index * 2)
+  // 因为数组下表是以0开始的，所以+1
+  emit('change', index + 1)
 }
 </script>
 

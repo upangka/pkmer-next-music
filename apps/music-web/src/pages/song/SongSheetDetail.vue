@@ -12,6 +12,8 @@ const props = defineProps({
 
 const songList = ref<SongListDetail>()!
 const userSongListScore = ref<UserSongListRating>()
+// 评分倍数计算
+const SCORE_DOUBLE = 2
 
 onMounted(async () => {
   if (props.id) {
@@ -22,14 +24,18 @@ onMounted(async () => {
 
 onMounted(async () => {
   if (props.id) {
-    userSongListScore.value = await getUserSonglistScore(props.id)
-    console.log('todo', userSongListScore.value)
+    const data = await getUserSonglistScore(props.id)
+    if (data) {
+      userSongListScore.value = data
+      userScore.value = +(data.score / SCORE_DOUBLE).toFixed(1)
+      disabled.value = true
+    }
   }
 })
 
 const score = computed(() => {
   if (songList.value && songList.value.score) {
-    return +(songList.value.score / 2).toFixed(1)
+    return +(songList.value.score / SCORE_DOUBLE).toFixed(1)
   }
   return 0
 })
@@ -42,7 +48,7 @@ async function handleUserScoreSubmit(_score: number) {
   try {
     disabled.value = true
     await userAddScore({
-      score: _score * 2,
+      score: _score * SCORE_DOUBLE,
       songListId: props.id!
     })
   } catch (error: any) {
@@ -77,9 +83,10 @@ async function handleUserScoreSubmit(_score: number) {
           <span class="absolute bottom-0 right-0 text-6xl font-bold text-black"> {{ score }}</span>
         </div>
         <div>
-          <p class="mb-3 font-bold text-gray-500">
+          <p v-if="disabled" class="mb-3 font-bold text-gray-500">
             已评价<span class="px-2 text-lg text-black">{{ userScore }}</span>
           </p>
+          <p v-else>您未评价</p>
           <PkmerRating v-model:model-value="userScore" @change="handleUserScoreSubmit" :disabled />
         </div>
       </section>
