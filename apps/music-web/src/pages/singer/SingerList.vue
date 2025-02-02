@@ -1,5 +1,5 @@
 <script lang="ts">
-import type { PageQuerySingerRes, MusicCard } from '@pkmer-music/web/types'
+import type { PageQuerySingerRes, MusicCard, SexType } from '@pkmer-music/web/types'
 </script>
 
 <script lang="ts" setup>
@@ -18,11 +18,17 @@ import { getAllSong } from '@pkmer-music/web/api'
 
 const singersPage = ref<PageQuerySingerRes>()
 const singers = ref<MusicCard[]>([])
-onMounted(async () => {
-  const data = await getAllSong()
+onMounted(fetchSingerData)
+
+async function fetchSingerData(name?: string | undefined, sex?: SexType) {
+  const data = await getAllSong({
+    name,
+    sex
+  })
   singersPage.value = data
 
   if (data && data.list) {
+    singers.value = []
     data.list.forEach(item => {
       singers.value.push({
         id: item.id,
@@ -31,12 +37,21 @@ onMounted(async () => {
       })
     })
   }
-})
+}
+
+function handleChange(target: HTMLElement) {
+  const name = target.textContent
+  const style = singerStyles.filter(item => item.name === name)
+  if (style) {
+    const sex = style[0].type as unknown as SexType
+    fetchSingerData(undefined, sex)
+  }
+}
 </script>
 
 <template>
   <div class="singer-list__container">
-    <PkmerNavigationRoot>
+    <PkmerNavigationRoot @change="handleChange">
       <PkmerNavigationList :show-border="false" :item-gap="10">
         <template v-for="singerStyle in singerStyles" :key="singerStyle.type">
           <PkmerNavigationItem>

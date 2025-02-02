@@ -1,10 +1,9 @@
 export enum SingerType {
-  ALL = -1,
-  Male,
-  Female,
-  Group
+  ALL = '',
+  MALE = 'MALE',
+  FEMALE = 'FEMALE',
+  Group = 'UNKNOWN' // TODO 乐队/组合 目前用unknown代替
 }
-
 export type SingerStyle = {
   name: string
   type: SingerType
@@ -17,11 +16,11 @@ export const singerStyles: SingerStyle[] = [
   },
   {
     name: '男歌手',
-    type: SingerType.Male
+    type: SingerType.MALE
   },
   {
     name: '女歌手',
-    type: SingerType.Female
+    type: SingerType.FEMALE
   },
   {
     name: '乐队/组合',

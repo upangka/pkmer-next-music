@@ -14,9 +14,9 @@ import io.gitee.pkmer.ddd.shared.ValueObject;
  */
 public enum Sex implements ValueObject {
 
-    UNKNOWN((byte)0),
+    FEMALE((byte)0),
     MALE((byte)1),
-    FEMALE((byte)2);
+    UNKNOWN((byte)2); // UNKNOWN目前对应的是乐队
 
     private final byte value;
 
