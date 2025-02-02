@@ -21,6 +21,7 @@ export interface SongList {
   pic: string
   styles: SongPlayListName[]
   introduction: string
+  score: number
 }
 
 /**
@@ -70,4 +71,15 @@ export interface SongDetail {
 
 export type SongListDetail = SongList & {
   songs: SongDetail[]
+}
+
+/**
+ * 用户歌单评分
+ */
+export interface UserSongListRating {
+  id: number
+  songListId: number
+  songListName: string
+  consumerId: number
+  score: number
 }

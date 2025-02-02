@@ -1,9 +1,9 @@
 <script lang="ts">
-import type { SongListDetail } from '@pkmer-music/web/types'
+import type { SongListDetail, UserSongListRating } from '@pkmer-music/web/types'
 </script>
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
-import { getSongListDetail } from '@pkmer-music/web/api'
+import { getSongListDetail, getUserSonglistScore } from '@pkmer-music/web/api'
 import { PkmerColumn, PkmerTable, PkmerRating } from '@pkmer-music-ui/vue'
 
 const props = defineProps({
@@ -11,12 +11,33 @@ const props = defineProps({
 })
 
 const songList = ref<SongListDetail>()!
+const userSongListScore = ref<UserSongListRating>()
 
 onMounted(async () => {
   if (props.id) {
     const data = await getSongListDetail(props.id)
     songList.value = data
   }
+})
+
+onMounted(async () => {
+  if (props.id) {
+    userSongListScore.value = await getUserSonglistScore(props.id)
+  }
+})
+
+const score = computed(() => {
+  if (songList.value && songList.value.score) {
+    return +(songList.value.score / 2).toFixed(1)
+  }
+  return 0
+})
+
+const userScore = computed(() => {
+  if (userSongListScore.value && userSongListScore.value.score) {
+    return +(userSongListScore.value.score / 2).toFixed(1)
+  }
+  return 0
 })
 </script>
 <template>
@@ -42,14 +63,14 @@ onMounted(async () => {
       <section class="flex items-center justify-start gap-5">
         <div class="relative pr-[100px]">
           <p class="mb-3 font-bold text-gray-500">歌单评分</p>
-          <PkmerRating :rating="3.5" />
-          <span class="absolute bottom-0 right-0 text-6xl font-bold text-black"> 3.5</span>
+          <PkmerRating :rating="score" />
+          <span class="absolute bottom-0 right-0 text-6xl font-bold text-black"> {{ score }}</span>
         </div>
         <div>
           <p class="mb-3 font-bold text-gray-500">
-            已评价<span class="px-2 text-lg text-black">2.5</span>
+            已评价<span class="px-2 text-lg text-black">{{ userScore }}</span>
           </p>
-          <PkmerRating :rating="2.5" />
+          <PkmerRating :rating="userScore" />
         </div>
       </section>
       <!-- 评分end -->
