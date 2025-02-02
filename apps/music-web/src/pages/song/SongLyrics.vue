@@ -4,6 +4,9 @@ type LyricLine = {
   time: string
   text: string
 }
+interface Props {
+  songId: string
+}
 </script>
 
 <script setup lang="ts">
@@ -13,9 +16,11 @@ import { getSongDetail } from '@pkmer-music/web/api'
 import { useMusicPannelStore } from '@pkmer-music/web/stores'
 const { audioRef } = storeToRefs(useMusicPannelStore())
 
+const props = defineProps<Props>()
+
 const songDetail = ref<SongDetail>()
 const currentLine = ref(0)
-const regex = /^\[(?<time>\d{2}:\d{2}(.\d{3})?)\](?<text>.*)/
+const regex = /^\[(?<time>\d{2}:\d{2}(?:\.\d{1,3})?)\](?<text>.*)/
 const lisRef = ref<HTMLLIElement[]>([])
 
 const lyrics = reactive<LyricLine[]>([])
@@ -43,12 +48,15 @@ onMounted(() => {
 
 onMounted(async () => {
   // load lyric
-  const res = await fetch(
-    'http://localhost:5173/%E9%BB%84%E6%98%8F%20(%E5%A5%B3%E5%A3%B0%E7%89%88)(DJ%E6%AD%8C%E8%80%85%E8%BE%BE%E8%BE%BE%E7%89%88)%20-%20Kag%20Chuu.lrc'
-  )
-  const data = await res.text()
+  // 测试数据
+  // const res = await fetch(
+  //   'http://localhost:5173/%E9%BB%84%E6%98%8F%20(%E5%A5%B3%E5%A3%B0%E7%89%88)(DJ%E6%AD%8C%E8%80%85%E8%BE%BE%E8%BE%BE%E7%89%88)%20-%20Kag%20Chuu.lrc'
+  // )
+  // const data = await res.text()
+  const data = await getSongDetail(props.songId)
   console.log(data)
-  data.split('\n').forEach(line => {
+  console.log(data.lyric)
+  data.lyric.split('\n').forEach(line => {
     const result = line.match(regex)
     if (result) {
       const { time, text } = result.groups as unknown as LyricLine

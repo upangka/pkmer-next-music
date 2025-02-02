@@ -8,7 +8,7 @@ import { useMusicPannelStore } from '@pkmer-music/web/stores'
 
 const router = useRouter()
 const musicPannelStore = useMusicPannelStore()
-const { audioRef } = storeToRefs(musicPannelStore)
+const { audioRef, currentPlayingSongId } = storeToRefs(musicPannelStore)
 const { songs } = musicPannelStore
 
 const status = reactive({
@@ -147,6 +147,10 @@ function toggleMusicAsside() {
     state.showAssider = !state.showAssider
   })
 }
+
+function routeToSongDetail() {
+  router.push(`/lyrics/${currentPlayingSongId.value}`)
+}
 </script>
 <template>
   <section class="play-bar__container">
@@ -233,7 +237,7 @@ function toggleMusicAsside() {
 
           <ul class="tools">
             <li class="translate-y-[2px]">
-              <button @click="() => router.push('/lyrics')">
+              <button @click="routeToSongDetail">
                 <PkmerIcon icon="material-symbols-light:lyrics-outline" />
               </button>
             </li>
