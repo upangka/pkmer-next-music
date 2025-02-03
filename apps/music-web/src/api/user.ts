@@ -1,22 +1,5 @@
 import http from './http'
-import type { AppResponse } from '@pkmer-music/web//types/http-base'
-
-export interface UserLogin {
-  token: string
-  username: string
-  id: string
-}
-
-export interface UserDetails {
-  id: string
-  username: string
-  sex: number
-  phoneNum: string
-  email: string
-  birth: string
-  introduction: string
-  location: string
-}
+import type { AppResponse, UserLogin, UserDetails } from '@pkmer-music/web/types'
 
 type UserDetailsWithoutId = Omit<UserDetails, 'id'>
 
@@ -34,6 +17,10 @@ export const updateUserDetails = (user: UserDetailsWithoutId): AppResponse<any> 
   return http.post('/user/detail', user)
 }
 
+/**
+ * 获取用户详情
+ * @returns
+ */
 export const getUserDetails = (): AppResponse<UserDetails> => {
   return http.get('/user/detail')
 }

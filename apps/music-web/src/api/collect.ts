@@ -30,3 +30,7 @@ export const collectSong = (songId: string): AppResponse<unknown> => {
 export const cancelCollectSong = (songId: string): AppResponse<unknown> => {
   return http.delete(`/collect/song/${songId}`)
 }
+
+export const getUserCollectSong = (): AppResponse<unknown> => {
+  return http.get('/collect')
+}
