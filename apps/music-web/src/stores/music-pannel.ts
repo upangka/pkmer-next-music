@@ -21,7 +21,6 @@ export const useMusicPannelStore = defineStore('music-pannel', () => {
         isCollectCurrentSong.value = false
         if (newSongId !== null) {
           const r = await isCollectSong(newSongId.toString())
-          console.log({ r })
           isCollectCurrentSong.value = r
         }
       } catch (error) {
