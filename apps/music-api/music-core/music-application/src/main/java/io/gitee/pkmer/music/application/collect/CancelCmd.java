@@ -6,7 +6,7 @@ import lombok.Value;
 
 /**
  * <p>
- *
+ *  取消收藏命令
  * @author <a href="mailto:3149374525@qq.com">pkmer</a>
  * <br>
  * <a href = "https://gitee.com/pkmer">Code Repository</a>
@@ -17,5 +17,23 @@ import lombok.Value;
 @Getter
 @Value(staticConstructor = "commandOf")
 public class CancelCmd implements Command {
-    Long id;
+    Long userId;
+    Long songId;
+    Long songListId;
+
+    /**
+     * 是否是取消收藏歌曲
+     * @return
+     */
+    public boolean isCanelCollectSong() {
+        return songId != null && songListId == null;
+    }
+
+    /**
+     * 是否是取消收藏歌单
+     * @return
+     */
+    public boolean isCanelCollectSongList() {
+        return songId == null && songListId != null;
+    }
 }

@@ -31,10 +31,15 @@ public class CollectRepositoryImpl implements CollectRepository {
 
     @Override
     public Optional<CollectAggregate> load(CollectId collectId) {
-        Collect collect = collectDynamicMapper.selectByPrimaryKey(collectId.value()).orElseThrow();
-        CollectAggregate domainModel = collectConverter.toDomainModel(collect);
+        Optional<Collect> collectOptional = collectDynamicMapper.selectByPrimaryKey(collectId.value());
+        if(collectOptional.isPresent()){
+            Collect collect = collectOptional.get();
+            CollectAggregate domainModel = collectConverter.toDomainModel(collect);
+            return Optional.of(domainModel);
+        }else{
+            return Optional.empty();
+        }
 
-        return Optional.of(domainModel);
     }
 
     @Override

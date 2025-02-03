@@ -6,7 +6,7 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- *
+ * 收藏命令
  * @author <a href="mailto:3149374525@qq.com">pkmer</a>
  * <br>
  * <a href = "https://gitee.com/pkmer">Code Repository</a>

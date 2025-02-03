@@ -3,10 +3,11 @@ package io.gitee.pkmer.music.web.collect;
 import io.gitee.pkmer.convention.controller.BaseController;
 import io.gitee.pkmer.convention.page.PageResponse;
 import io.gitee.pkmer.convention.result.Result;
-import io.gitee.pkmer.music.application.collect.CollectQuery;
-import io.gitee.pkmer.music.application.collect.CollectService;
-import io.gitee.pkmer.music.application.collect.CollectView;
+import io.gitee.pkmer.ddd.shared.dispatch.CmdDispatcher;
+import io.gitee.pkmer.music.application.collect.*;
+import io.gitee.pkmer.security.context.AppContextHolder;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.DispatcherServlet;
 
 /**
  * <p>
@@ -22,14 +23,66 @@ import org.springframework.web.bind.annotation.RestController;
 public class CollectController extends BaseController implements CollectApi {
 
     private final CollectService service;
+    private final CmdDispatcher cmdDispatcher;
+    private final DispatcherServlet dispatcherServlet;
 
-    public CollectController(CollectService service) {
+    public CollectController(CollectService service, CmdDispatcher cmdDispatcher, DispatcherServlet dispatcherServlet) {
         this.service = service;
+        this.cmdDispatcher = cmdDispatcher;
+        this.dispatcherServlet = dispatcherServlet;
     }
 
     @Override
     public Result<PageResponse<CollectView>> pageQuery(CollectQuery query) {
-        // todo 处理用户登录后那id
+        query.setUserId(getCurrentUserId());
         return success(service.pageQuery(query));
+    }
+
+    @Override
+    public Result<Boolean> isCollectSong(Long songId) {
+        boolean collectSong = service.isCollectSong(getCurrentUserId(), songId);
+        return success(collectSong);
+    }
+
+    @Override
+    public Result<Void> cancelCollectSong(Long id) {
+        CancelCmd cmd = CancelCmd.commandOf(
+                getCurrentUserId(),
+                id,
+                null
+        );
+        cmdDispatcher.dispatch(cmd);
+        return success();
+    }
+
+    @Override
+    public Result<Void> cancelCollectSongList(Long id) {
+        CancelCmd cmd = CancelCmd.commandOf(
+                getCurrentUserId(),
+                null,
+                id
+        );
+        cmdDispatcher.dispatch(cmd);
+        return success();
+    }
+
+    @Override
+    public Result<Void> collectSongList(Long id) {
+        CollectCmd cmd = new CollectCmd().setUserId(getCurrentUserId())
+                .setSongListId(id);
+        cmdDispatcher.dispatch(cmd);
+        return success();
+    }
+
+    @Override
+    public Result<Void> collectSong(Long id) {
+        CollectCmd cmd = new CollectCmd().setUserId(getCurrentUserId())
+                .setSongId(id);
+        cmdDispatcher.dispatch(cmd);
+        return success();
+    }
+
+    private Long getCurrentUserId(){
+        return AppContextHolder.userContextHolder.getUser().getId();
     }
 }
