@@ -6,6 +6,10 @@ import type { UserDetails, CollectSong } from '@pkmer-music/web/types'
 import { onMounted, ref } from 'vue'
 import { getUserDetails, getUserCollectSong } from '@pkmer-music/web/api'
 import { PkmerTable, PkmerColumn } from '@pkmer-music-ui/vue/table'
+import { useMusicPannelStore } from '@pkmer-music/web/stores'
+
+const musicPannelStore = useMusicPannelStore()
+
 const user = ref<UserDetails>()
 const songs = ref<CollectSong[]>()
 onMounted(async () => {
@@ -20,6 +24,19 @@ onMounted(async () => {
   })
   songs.value = _songs
 })
+
+function handleRowChange(row: unknown) {
+  if (row) {
+    const targetSong = row as CollectSong
+
+    musicPannelStore.addSongAndPlay({
+      id: +targetSong.songId,
+      link: targetSong.link,
+      name: targetSong.name,
+      picture: targetSong.picture
+    })
+  }
+}
 </script>
 
 <template>
@@ -40,7 +57,7 @@ onMounted(async () => {
     <!-- 用户详情end -->
     <!-- 用户喜欢的歌曲start -->
     <div class="px-10 pb-10">
-      <PkmerTable :data="songs || []">
+      <PkmerTable :data="songs || []" @row-click="handleRowChange">
         <PkmerColumn label="歌曲名" prop="name" align="center" />
         <PkmerColumn label="歌手" prop="singerName" align="center" />
         <PkmerColumn label="专辑" prop="introduction" align="center" />
