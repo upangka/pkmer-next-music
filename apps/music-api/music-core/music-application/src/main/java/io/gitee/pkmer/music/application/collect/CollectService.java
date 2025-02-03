@@ -5,15 +5,16 @@ import io.gitee.pkmer.core.infrastructure.persistence.collect.mybatis.Collect;
 import io.gitee.pkmer.core.infrastructure.persistence.collect.mybatis.CollectDynamicMapper;
 import io.gitee.pkmer.core.infrastructure.persistence.collect.mybatis.CollectDynamicSqlSupport;
 import io.gitee.pkmer.music.domain.enums.SongAndListType;
+import org.mybatis.dynamic.sql.render.RenderingStrategies;
+import org.mybatis.dynamic.sql.select.render.SelectStatementProvider;
 import org.mybatis.dynamic.sql.where.WhereApplier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
-import static org.mybatis.dynamic.sql.SqlBuilder.isEqualTo;
-import static org.mybatis.dynamic.sql.SqlBuilder.where;
-
+import static org.mybatis.dynamic.sql.SqlBuilder.*;
+import static io.gitee.pkmer.core.infrastructure.persistence.collect.mybatis.CollectDynamicSqlSupport.*;
 /**
  * DDD CQSR 查询分离
  * <p>
@@ -85,8 +86,16 @@ public class CollectService {
     }
 
     private Optional<CollectView> getCollectView(WhereApplier whereApplier){
-        Optional<Collect> collectOptional = collectDynamicMapper.selectOne(c ->
-                c.applyWhere(whereApplier));
+
+        SelectStatementProvider selectProvider = select(collect.allColumns())
+                .from(collect)
+                .applyWhere(whereApplier)
+                .build()
+                .render(RenderingStrategies.MYBATIS3);
+        System.out.println(selectProvider.getSelectStatement());
+        Optional<Collect> collectOptional = collectDynamicMapper.selectOne(selectProvider);
+//        Optional<Collect> collectOptional = collectDynamicMapper.selectOne(c ->
+//                c.applyWhere(whereApplier));
         if(collectOptional.isEmpty()){
             return Optional.empty();
         }else{
@@ -99,6 +108,7 @@ public class CollectService {
     private CollectView toView(Collect collect) {
         String type = SongAndListType.valueOf(collect.getType()).getDesc();
         return CollectView.builder()
+                .id(collect.getId())
                 .songListId(collect.getSongListId())
                 .songId(collect.getSongId())
                 .type(type)

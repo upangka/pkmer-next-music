@@ -2,6 +2,7 @@ package io.gitee.pkmer.music.domain.collect;
 
 import io.gitee.pkmer.ddd.common.AuditableEntity;
 import io.gitee.pkmer.ddd.shared.AggregateRoot;
+import io.gitee.pkmer.music.domain.enums.SongAndListType;
 import io.gitee.pkmer.music.domain.song.SongId;
 import io.gitee.pkmer.music.domain.songlist.SongListId;
 import io.gitee.pkmer.music.domain.user.UserId;
@@ -29,7 +30,7 @@ public class CollectAggregate extends AuditableEntity implements AggregateRoot {
     private UserId userId;
     private SongListId songListId;
     private SongId songId;
-    private Byte type;
+    private SongAndListType type;
     private LocalDateTime createTime;
 
     public void cancel(){
@@ -38,11 +39,13 @@ public class CollectAggregate extends AuditableEntity implements AggregateRoot {
 
     public void collectSong(SongId songId){
         this.songId = songId;
+        this.type = SongAndListType.SONG;
         recordTime();
     }
 
     public void collectSongList(SongListId songListId){
         this.songListId = songListId;
+        this.type = SongAndListType.SONG_LIST;
         recordTime();
     }
 
