@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
-import { ref, computed, reactive } from 'vue'
+import { ref, computed, reactive, watch } from 'vue'
 import { songs } from '@pkmer-music/web/assets/audio'
+import { isCollectSong } from '@pkmer-music/web/api'
 import type { Song } from '@pkmer-music/web/types'
 export const useMusicPannelStore = defineStore('music-pannel', () => {
   // state
@@ -9,6 +10,26 @@ export const useMusicPannelStore = defineStore('music-pannel', () => {
   const songList = ref<Song[]>(songs)
 
   const audioRef = ref<HTMLAudioElement | null>(null)
+
+  const isCollectCurrentSong = ref(false)
+
+  // 当切换歌曲的时候，进行查询用户是否收藏了当前歌曲
+  watch(
+    () => currentPlayingSongId.value,
+    async newSongId => {
+      try {
+        isCollectCurrentSong.value = false
+        if (newSongId !== null) {
+          const r = await isCollectSong(newSongId.toString())
+          console.log({ r })
+          isCollectCurrentSong.value = r
+        }
+      } catch (error) {
+        console.log(error)
+        isCollectCurrentSong.value = false
+      }
+    }
+  )
 
   /**
    * 音乐栏播放状态
@@ -55,6 +76,7 @@ export const useMusicPannelStore = defineStore('music-pannel', () => {
     play,
     audioRef,
     addSongAndPlay,
-    playBayStatus
+    playBayStatus,
+    isCollectCurrentSong
   }
 })
