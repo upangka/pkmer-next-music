@@ -1,17 +1,22 @@
 package io.gitee.pkmer.music.application.user;
 
 import io.gitee.pkmer.ddd.shared.command.CommandHandler;
+import io.gitee.pkmer.minio.props.PkmerMinioProps;
 import io.gitee.pkmer.music.domain.user.UserAggregate;
 import io.gitee.pkmer.music.domain.user.UserId;
 import io.gitee.pkmer.music.domain.user.UserRepository;
+import io.minio.MinioProperties;
 import org.springframework.stereotype.Component;
 
 @Component
 public class GetUserDetailHandler implements CommandHandler<GetUserDetailCmd,UserDetailView> {
 
     private final UserRepository repository;
-    public GetUserDetailHandler(UserRepository userRepository){
+    private final String minioServer;
+    public GetUserDetailHandler(UserRepository userRepository,
+                                PkmerMinioProps props){
         this.repository = userRepository;
+        this.minioServer = props.getUrl();
     }
     @Override
     public UserDetailView execute(GetUserDetailCmd cmd) {
@@ -30,8 +35,7 @@ public class GetUserDetailHandler implements CommandHandler<GetUserDetailCmd,Use
                 .birth(user.getBirth())
                 .introduction(user.getIntroduction())
                 .location(user.getLocation())
-                .avator(user.getAvator())
+                .avator(minioServer + user.getAvator())
                 .build();
-
     }
 }
