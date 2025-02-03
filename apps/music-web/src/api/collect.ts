@@ -1,7 +1,7 @@
 /**
  * 收藏相关API
  */
-import type { AppResponse } from '@pkmer-music/web/types/http-base'
+import type { AppResponse, UserCollectRes } from '@pkmer-music/web/types'
 import http from './http'
 
 /**
@@ -31,6 +31,6 @@ export const cancelCollectSong = (songId: string): AppResponse<unknown> => {
   return http.delete(`/collect/song/${songId}`)
 }
 
-export const getUserCollectSong = (): AppResponse<unknown> => {
+export const getUserCollectSong = (): AppResponse<UserCollectRes> => {
   return http.get('/collect')
 }
