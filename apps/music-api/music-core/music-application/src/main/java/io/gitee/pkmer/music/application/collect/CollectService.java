@@ -72,6 +72,7 @@ public class CollectService {
                 .singerName(dto.getSingerName())
                 .link(dto.getUrl())
                 .picture(dto.getPic())
+                .introduction(dto.getIntroduction())
                 .build();
     }
 

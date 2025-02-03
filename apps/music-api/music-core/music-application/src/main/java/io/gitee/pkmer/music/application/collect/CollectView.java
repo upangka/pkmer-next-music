@@ -53,8 +53,12 @@ public class CollectView {
 
         @Schema(description = "歌曲链接")
         private String link;
+
         @Schema(description = "歌曲图片")
         private String picture;
+
+        @Schema(description = "歌曲专辑")
+        private String introduction;
 
     }
 }

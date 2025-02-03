@@ -43,7 +43,7 @@ onMounted(async () => {
       <PkmerTable :data="songs || []">
         <PkmerColumn label="歌曲名" prop="name" align="center" />
         <PkmerColumn label="歌手" prop="singerName" align="center" />
-        <PkmerColumn label="专辑" prop="introduce" align="center" />
+        <PkmerColumn label="专辑" prop="introduction" align="center" />
       </PkmerTable>
     </div>
 
