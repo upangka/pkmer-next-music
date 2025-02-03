@@ -5,7 +5,7 @@ import { useRouter } from 'vue-router'
 import { PkmerIcon } from '@pkmer-music-ui/vue/icon'
 import { formatTime } from '@pkmer-music/web/utils'
 import { useMusicPannelStore } from '@pkmer-music/web/stores'
-
+import { collectSong, cancelCollectSong } from '@pkmer-music/web/api'
 const router = useRouter()
 const musicPannelStore = useMusicPannelStore()
 const { audioRef, currentPlayingSongId, playBayStatus } = storeToRefs(musicPannelStore)
@@ -13,8 +13,6 @@ const { songs } = musicPannelStore
 
 const status = reactive({
   showPlayBar: true,
-  // showMusicInfo: false,
-  // isPlaying: false,
   currentIndex: musicPannelStore.currentPlayingIndex
 })
 
@@ -151,6 +149,18 @@ function toggleMusicAsside() {
 function routeToSongDetail() {
   router.push(`/lyrics/${currentPlayingSongId.value}`)
 }
+
+function handleCancelCollect() {
+  musicPannelStore.cancelCollectCurrentSong(id => {
+    cancelCollectSong(id)
+  })
+}
+
+function handleCollectSong() {
+  musicPannelStore.collectCurrentSong(id => {
+    collectSong(id)
+  })
+}
 </script>
 <template>
   <section class="play-bar__container">
@@ -247,7 +257,10 @@ function routeToSongDetail() {
               </button>
             </li>
             <li>
-              <button>
+              <button v-if="musicPannelStore.getIsCollectCurrentSong" @click="handleCancelCollect">
+                <PkmerIcon :style="{ color: 'red' }" icon="weui:like-filled" />
+              </button>
+              <button v-else @click="handleCollectSong">
                 <PkmerIcon icon="weui:like-outlined" />
               </button>
             </li>

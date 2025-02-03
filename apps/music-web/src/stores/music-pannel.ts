@@ -13,6 +13,8 @@ export const useMusicPannelStore = defineStore('music-pannel', () => {
 
   const isCollectCurrentSong = ref(false)
 
+  const getIsCollectCurrentSong = computed(() => isCollectCurrentSong.value)
+
   // 当切换歌曲的时候，进行查询用户是否收藏了当前歌曲
   watch(
     () => currentPlayingSongId.value,
@@ -64,6 +66,24 @@ export const useMusicPannelStore = defineStore('music-pannel', () => {
     playBayStatus.showMusicInfo = true
   }
 
+  function cancelCollect(fn: (id: string) => void) {
+    const songId = currentPlayingSongId.value
+    if (songId !== null) {
+      console.log(`取消当前${songId}`)
+      fn(songId.toString())
+      isCollectCurrentSong.value = false
+    }
+  }
+
+  function collect(fn: (id: string) => void) {
+    const songId = currentPlayingSongId.value
+    if (songId !== null) {
+      console.log(`收藏当前${songId}`)
+      fn(songId.toString())
+      isCollectCurrentSong.value = true
+    }
+  }
+
   /**
    * 这里返回的songs并不是state，而是getter
    */
@@ -76,6 +96,8 @@ export const useMusicPannelStore = defineStore('music-pannel', () => {
     audioRef,
     addSongAndPlay,
     playBayStatus,
-    isCollectCurrentSong
+    getIsCollectCurrentSong,
+    cancelCollectCurrentSong: cancelCollect,
+    collectCurrentSong: collect
   }
 })
