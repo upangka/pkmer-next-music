@@ -4,6 +4,7 @@ import { resolve } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import esbuild from 'rollup-plugin-esbuild'
 import alias from '@rollup/plugin-alias'
+import tsconfigJson from './tsconfig.json' with { type: 'json' }
 
 const dir = process.cwd()
 const tsconfigPath = resolve(dir, 'tsconfig.json')
@@ -14,12 +15,12 @@ const tsconfigPath = resolve(dir, 'tsconfig.json')
  * @returns
  */
 async function getAliasEntries() {
-  const tsconfigJson = await import(pathToFileURL(tsconfigPath).href, {
-    assert: { type: 'json' }
-  })
+  // const tsconfigJson = await import(pathToFileURL(tsconfigPath).href, {
+  //   assert: { type: 'json' }
+  // })
   const aliasEntries = []
 
-  const entries = Object.entries(tsconfigJson.default.compilerOptions.paths || {})
+  const entries = Object.entries(tsconfigJson.compilerOptions.paths || {})
 
   for (const [key, value] of entries) {
     aliasEntries.push({
