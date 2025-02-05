@@ -1,9 +1,19 @@
+'use client'
 import { PkmerIcon } from '@pkmer-music/management/components'
-export default function Asider() {
+import clsx from 'clsx'
+interface Props {
+  isShow?: boolean
+}
+
+const Asider: React.FC<Props> = ({ isShow = true }) => {
   const itemClass = 'flex items-center justify-center gap-3 py-1'
 
+  const uiStyle = {
+    display: isShow ? 'block' : 'none'
+  }
+
   return (
-    <ul className='flex flex-col gap-5 border-r border-black px-10 py-5'>
+    <ul style={uiStyle} className={clsx('flex flex-col gap-5 border-r border-black px-10 py-5')}>
       <li className={itemClass}>
         <PkmerIcon size={20} icon='material-symbols-light:pie-chart-outline' />{' '}
         <span className='text-sm'>系统首页</span>
@@ -20,3 +30,5 @@ export default function Asider() {
     </ul>
   )
 }
+
+export default Asider

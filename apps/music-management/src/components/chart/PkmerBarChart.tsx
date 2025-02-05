@@ -1,10 +1,13 @@
-'use client'
+import { useIsServerSide } from './useIsServerSide'
 import type { ChartData } from './types'
 import { BarChart, CartesianGrid, XAxis, YAxis, Tooltip, Bar } from 'recharts'
 interface Props {
   dataBar: ChartData[]
 }
 export const PkmerBarChart: React.FC<Props> = props => {
+  const isServerSide = useIsServerSide()
+
+  if (isServerSide) return null
   return (
     <>
       <BarChart

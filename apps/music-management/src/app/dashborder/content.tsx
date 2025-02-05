@@ -1,8 +1,5 @@
-'use client'
 import { PkmerIcon, PkmerBarChart, PkmerPieChart } from '@pkmer-music/management/components'
 import contentStyle from './content.module.scss'
-
-import { Bar, Tooltip, YAxis, XAxis, BarChart, CartesianGrid, PieChart, Pie } from 'recharts'
 
 export default function Content() {
   const dataPie = [

@@ -1,4 +1,6 @@
 'use client'
+
+import { useState, useEffect } from 'react'
 import { Card, CardContent } from '@pkmer-music/management/components/ui/card'
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts'
 import { User, Headphones, Mic, FileText } from 'lucide-react'
@@ -21,6 +23,13 @@ const dataBar = [
 ]
 
 const Dashboard = () => {
+  const [graph, setGraph] = useState(false)
+  useEffect(() => {
+    setGraph(true)
+  }, [])
+
+  // if (!graph) return <div>加载中...</div>
+
   return (
     <div className='min-h-screen bg-gray-50 p-8'>
       {/* Header */}
