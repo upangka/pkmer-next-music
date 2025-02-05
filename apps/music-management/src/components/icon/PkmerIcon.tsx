@@ -1,4 +1,3 @@
-'use client'
 import { Icon } from '@iconify/react'
 interface Props {
   icon: string
@@ -9,26 +8,9 @@ interface Props {
 
 const noop = () => {}
 
-const PkmerIcon: React.FC<Props> = props => {
-  function handleClick() {
-    // noop
-    console.log('See Me')
-
-    if (props.onClick) {
-      props.onClick()
-    }
-  }
-
+const PkmerIcon: React.FC<Props> = ({ icon, size = 30, className = '', onClick = noop }) => {
   // web components
-  return (
-    <Icon
-      onClick={handleClick}
-      className={props.className}
-      icon={props.icon}
-      width={props.size}
-      height={props.size}
-    />
-  )
+  return <Icon onClick={onClick} className={className} icon={icon} width={size} height={size} />
 }
 
 export default PkmerIcon
