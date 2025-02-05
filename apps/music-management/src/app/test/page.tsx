@@ -28,7 +28,7 @@ const Dashboard = () => {
     setGraph(true)
   }, [])
 
-  // if (!graph) return <div>加载中...</div>
+  if (!graph) return null
 
   return (
     <div className='min-h-screen bg-gray-50 p-8'>
