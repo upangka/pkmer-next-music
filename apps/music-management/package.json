@@ -19,6 +19,7 @@
     "next": "catalog:react19",
     "react": "catalog:react19",
     "react-dom": "catalog:react19",
+    "recharts": "^2.15.1",
     "tailwind-merge": "^3.0.1",
     "tailwindcss-animate": "^1.0.7"
   },
