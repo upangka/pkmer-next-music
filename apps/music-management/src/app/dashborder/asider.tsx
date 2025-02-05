@@ -3,7 +3,7 @@ export default function Asider() {
   const itemClass = 'flex items-center justify-center gap-3 py-1'
 
   return (
-    <ul className='flex h-screen flex-col gap-5 border border-black px-10 py-5'>
+    <ul className='flex flex-col gap-5 border-r border-black px-10 py-5'>
       <li className={itemClass}>
         <PkmerIcon size={20} icon='material-symbols-light:pie-chart-outline' />{' '}
         <span className='text-sm'>系统首页</span>

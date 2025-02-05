@@ -1,9 +1,27 @@
-import { PkmerIcon } from '@pkmer-music/management/components'
+'use client'
+import { PkmerIcon, PkmerBarChart, PkmerPieChart } from '@pkmer-music/management/components'
 import contentStyle from './content.module.scss'
+
+import { Bar, Tooltip, YAxis, XAxis, BarChart, CartesianGrid, PieChart, Pie } from 'recharts'
+
 export default function Content() {
-  // className={contentStyle.item}
+  const dataPie = [
+    { name: 'Male', value: 50 },
+    { name: 'Female', value: 50 }
+  ]
+
+  const dataBar = [
+    { name: '华语', value: 18 },
+    { name: '粤语', value: 10 },
+    { name: '欧美', value: 14 },
+    { name: '日韩', value: 8 },
+    { name: 'BGM', value: 12 },
+    { name: '轻音乐', value: 9 },
+    { name: '乐器', value: 15 }
+  ]
+
   return (
-    <section className='flex-1 border border-black py-5'>
+    <section className='flex-1 py-5'>
       <ul className='flex items-center justify-evenly'>
         <li className={contentStyle.item}>
           <PkmerIcon className='text-blue-600' size={50} icon='uil:user' />{' '}
@@ -36,7 +54,21 @@ export default function Content() {
       </ul>
 
       {/* Charts start */}
+      <section className='grid grid-cols-2 place-items-center'>
+        <div>
+          <PkmerPieChart dataPie={dataPie} />
+        </div>
+        <div>
+          <PkmerBarChart dataBar={dataBar} />
+        </div>
 
+        <div>
+          <PkmerBarChart dataBar={dataBar} />
+        </div>
+        <div>
+          <PkmerPieChart dataPie={dataPie} />
+        </div>
+      </section>
       {/* Charts end */}
     </section>
   )

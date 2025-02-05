@@ -23,7 +23,7 @@ export default function DashBorder() {
       </section>
       {/* header end */}
 
-      <main className='flex gap-3'>
+      <main className='my-5 flex gap-5'>
         <Asider />
         <Content />
       </main>
