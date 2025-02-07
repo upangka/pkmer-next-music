@@ -1,3 +1,4 @@
+'use client'
 import { useIsServerSide } from './useIsServerSide'
 import type { ChartData } from './types'
 import { BarChart, CartesianGrid, XAxis, YAxis, Tooltip, Bar } from 'recharts'

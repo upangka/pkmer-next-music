@@ -1,3 +1,4 @@
+'use client'
 import { PieChart, Pie, Cell } from 'recharts'
 import type { ChartData } from './types'
 import { useIsServerSide } from './useIsServerSide'
