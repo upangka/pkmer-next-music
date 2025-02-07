@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 @Builder
 @Data
@@ -16,7 +17,7 @@ public class UserDetailView {
     private String username;
 
     @Schema(description = "性别", example = "男")
-    private Byte sex;
+    private String sex;
 
     @Schema(description = "手机号码", example = "13800138000")
     private String phoneNum;
@@ -25,7 +26,7 @@ public class UserDetailView {
     private String email;
 
     @Schema(description = "出生日期", example = "2000-01-01T00:00:00")
-    private LocalDateTime birth;
+    private LocalDate birth;
 
     @Schema(description = "个人简介", example = "热爱音乐的开发者")
     private String introduction;

@@ -20,12 +20,15 @@ export function createHttpInstance(baseURL: string) {
     axiosInstance.interceptors.request.use(
       config => {
         // 从本地存储中获取 token
-        const token = localStorage.getItem('token')
-        console.log({ token })
-        if (token) {
-          // 如果存在 token，则将其添加到请求头中
-          config.headers.Authorization = `Bear ${token}`
+        if (typeof window !== 'undefined') {
+          const token = localStorage.getItem('token')
+          console.log({ token })
+          if (token) {
+            // 如果存在 token，则将其添加到请求头中
+            config.headers.Authorization = `Bear ${token}`
+          }
         }
+
         return config
       },
       error => Promise.reject(error) // 请求错误时，直接返回错误信息

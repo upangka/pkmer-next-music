@@ -2,6 +2,7 @@ package io.gitee.pkmer.music.application.user;
 
 import io.gitee.pkmer.ddd.shared.command.CommandHandler;
 import io.gitee.pkmer.minio.props.PkmerMinioProps;
+import io.gitee.pkmer.music.domain.singer.Sex;
 import io.gitee.pkmer.music.domain.user.UserAggregate;
 import io.gitee.pkmer.music.domain.user.UserId;
 import io.gitee.pkmer.music.domain.user.UserRepository;
@@ -25,14 +26,16 @@ public class GetUserDetailHandler implements CommandHandler<GetUserDetailCmd,Use
     }
 
     private UserDetailView toView(UserAggregate user){
+
+        Sex sex = Sex.valueOf(user.getSex().getValue());
         // 将用户聚合根转换为视图UserAggregate转化为UserDetailView，其中UserDetailView为huilder模式
         return UserDetailView.builder()
                 .id(user.getId().value().toString())
                 .username(user.getUsername())
-                .sex(user.getSex().getValue())
+                .sex(sex.name())
                 .phoneNum(user.getPhoneNum())
                 .email(user.getEmail())
-                .birth(user.getBirth())
+                .birth(user.getBirth().toLocalDate())
                 .introduction(user.getIntroduction())
                 .location(user.getLocation())
                 .avator(minioServer + user.getAvator())
