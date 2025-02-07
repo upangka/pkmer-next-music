@@ -10,7 +10,7 @@ interface Props {
   onChange?: (checked: boolean) => void // 暴露状态变化
 }
 
-const RectCheckbox: React.FC<Props> = ({ width = 60, onChange = noop }) => {
+export const RectCheckbox: React.FC<Props> = ({ width = 60, onChange = noop }) => {
   const [checked, setChecked] = useState(true)
 
   const ballStyle = checked
@@ -49,5 +49,3 @@ const RectCheckbox: React.FC<Props> = ({ width = 60, onChange = noop }) => {
     </section>
   )
 }
-
-export default RectCheckbox

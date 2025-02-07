@@ -1,0 +1,63 @@
+@use '@pkmer-music/management/styles/variables' as app;
+
+$title-color: black;
+
+:export {
+  duration: app.$duration;
+  mainColor: app.$main-color;
+  titleColor: $title-color;
+}
+
+.pageContainer {
+  position: relative;
+  display: flex;
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
+  background: url('/background.png');
+  background-attachment: fixed;
+  background-position: center;
+  background-size: cover;
+
+  .title {
+    position: absolute;
+    top: 50%;
+    left: 2%;
+    padding: 10px 20px;
+    transform: translateY(-50%);
+    color: white;
+    font-size: 22px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 20px;
+    border-top: 10px double app.$main-color;
+    border-bottom: 10px double app.$main-color;
+  }
+}
+
+.cardContainer {
+  width: 430px;
+  height: 500px;
+  perspective: 600px;
+  transform-style: preserve-3d;
+}
+
+.cardWrapper {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  // 旋转这里，保持子元素的3d效果
+  transform-style: preserve-3d;
+  transition: all app.$duration ease-in-out;
+
+  > div {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+
+    &:nth-of-type(2) {
+      transform: rotateY(180deg);
+    }
+  }
+}

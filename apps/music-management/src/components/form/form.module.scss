@@ -1,0 +1,21 @@
+@use '@pkmer-music/management/styles/variables' as app;
+:export {
+  mainColor: app.$main-color;
+}
+
+.Input {
+  width: 100%;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  padding: 4px 8px 4px 40px;
+  outline: none;
+
+  &::placeholder {
+    opacity: 1;
+    transition: opacity 0.3s ease;
+  }
+
+  &:focus::placeholder {
+    opacity: 0;
+  }
+}
