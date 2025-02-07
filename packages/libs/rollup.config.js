@@ -3,8 +3,9 @@ import { nodeResolve } from '@rollup/plugin-node-resolve'
 import { resolve } from 'node:path'
 import esbuild from 'rollup-plugin-esbuild'
 import alias from '@rollup/plugin-alias'
-
-import tsconfigJson from './tsconfig.json' with { type: "json" }
+import commonjs from '@rollup/plugin-commonjs' // CommonJS 支持
+import json from '@rollup/plugin-json' // 处理 JSON 文件
+import tsconfigJson from './tsconfig.json' with { type: 'json' }
 
 const dir = process.cwd()
 const tsconfigPath = resolve(dir, 'tsconfig.json')
@@ -15,7 +16,6 @@ const tsconfigPath = resolve(dir, 'tsconfig.json')
  * @returns
  */
 async function getAliasEntries() {
-
   const aliasEntries = []
 
   const entries = Object.entries(tsconfigJson.compilerOptions.paths || {})
@@ -45,6 +45,8 @@ const config = defineConfig(async () => {
       alias({
         entries
       }),
+      commonjs(), // CommonJS 模块支持
+      json(), // 解析 JSON 文件
       esbuild({
         sourceMap: true, // 打包后是否生成sourcemap
         tsconfig: tsconfigPath, // tsconfig.json路径
@@ -52,7 +54,7 @@ const config = defineConfig(async () => {
         minify: false
       })
     ],
-    external: []
+    external: ['axios']
   }
 })
 export default config

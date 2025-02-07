@@ -14,12 +14,14 @@
   },
   "devDependencies": {
     "@rollup/plugin-alias": "^5.1.1",
+    "@rollup/plugin-commonjs": "^28.0.2",
+    "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^16.0.0",
+    "@types/node": "catalog:node",
     "esbuild": "^0.24.2",
     "rollup": "^4.29.0",
     "rollup-plugin-esbuild": "^6.1.1",
-    "typescript": "^5.7.2",
-    "@types/node": "catalog:node"
+    "typescript": "^5.7.2"
   },
   "keywords": [],
   "author": "pkmer",
@@ -37,11 +39,20 @@
         "default": "./dist/index.js"
       }
     },
+    "./http": {
+      "import": {
+        "types": "./dist/types/http/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    },
     "./constants": {
       "import": {
         "types": "./dist/types/constants/index.d.ts",
         "default": "./dist/index.js"
       }
     }
+  },
+  "dependencies": {
+    "axios": "^1.7.9"
   }
 }
