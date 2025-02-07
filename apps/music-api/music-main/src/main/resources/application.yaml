@@ -41,8 +41,8 @@ app:
     expiration-time: 604800000 # 7天
   auth:
     ignore-urls:
-      - "/user/login"
-      - "/user/signup"
+      - "/user/**"
+#      - "/user/signup"
       - "/doc.html"
       - "/webjars/**"
       - "/v3/**"

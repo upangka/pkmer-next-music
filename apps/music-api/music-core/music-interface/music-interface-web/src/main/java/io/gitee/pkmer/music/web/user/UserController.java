@@ -1,12 +1,12 @@
 package io.gitee.pkmer.music.web.user;
+import io.gitee.pkmer.convention.page.PageResponse;
 import io.gitee.pkmer.music.application.user.*;
 import io.gitee.pkmer.security.context.AppContextHolder;
 import io.gitee.pkmer.convention.controller.BaseController;
 import io.gitee.pkmer.convention.result.Result;
 import io.gitee.pkmer.ddd.shared.dispatch.CmdDispatcher;
 import io.gitee.pkmer.security.jwt.bo.JWTUserBo;
-import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -19,11 +19,14 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2025/1/11
  * </p>
  */
+@RequiredArgsConstructor
 @RestController
 public class UserController extends BaseController implements UserApi {
 
-    @Setter(onMethod_ = @Autowired)
-    private CmdDispatcher cmdDispatcher;
+
+    private final CmdDispatcher cmdDispatcher;
+    private final UserService userService;
+
 
     @Override
     public Result<Void> signUp(SignUserCmd cmd) {
@@ -51,5 +54,10 @@ public class UserController extends BaseController implements UserApi {
         cmd.setUserId(userId);
         cmdDispatcher.dispatch(cmd);
         return success();
+    }
+
+    @Override
+    public Result<PageResponse<UserDetailView>> pageQueryUser(UserQuery query) {
+        return success(userService.pageQueryUser(query));
     }
 }

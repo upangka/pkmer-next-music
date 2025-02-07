@@ -1,5 +1,6 @@
 package io.gitee.pkmer.music.web.user;
 
+import io.gitee.pkmer.convention.page.PageResponse;
 import io.gitee.pkmer.convention.result.Result;
 import io.gitee.pkmer.music.application.user.*;
 import io.swagger.v3.oas.annotations.Operation;
@@ -45,4 +46,9 @@ public interface UserApi {
     @PostMapping("/detail")
     Result<Void> updateUserDetail(@Valid @RequestBody
                                             UpdateUserCmd cmd);
+
+    @Operation(summary = "分页查询用户")
+    @PostMapping("/page")
+    Result<PageResponse<UserDetailView>> pageQueryUser(@RequestBody
+                                                        UserQuery query);
 }

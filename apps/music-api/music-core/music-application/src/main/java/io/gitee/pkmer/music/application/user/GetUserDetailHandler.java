@@ -27,7 +27,7 @@ public class GetUserDetailHandler implements CommandHandler<GetUserDetailCmd,Use
     private UserDetailView toView(UserAggregate user){
         // 将用户聚合根转换为视图UserAggregate转化为UserDetailView，其中UserDetailView为huilder模式
         return UserDetailView.builder()
-                .id(user.getId().value())
+                .id(user.getId().value().toString())
                 .username(user.getUsername())
                 .sex(user.getSex().getValue())
                 .phoneNum(user.getPhoneNum())
