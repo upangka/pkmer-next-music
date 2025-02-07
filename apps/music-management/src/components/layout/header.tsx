@@ -1,12 +1,14 @@
 'use client'
 import { Avatar, AvatarFallback, AvatarImage } from '@pkmer-music/management/components/ui/avatar'
 import PkmerIcon from '@pkmer-music/management/components/icon/PkmerIcon'
-
+import { useThemeContext } from '@pkmer-music/management/context/themeContext'
 interface Props {
   onClick?: () => void
 }
 function noop() {}
 export const Header: React.FC<Props> = ({ onClick = noop }) => {
+  const context = useThemeContext()
+
   return (
     <>
       {/* header start */}
@@ -23,6 +25,9 @@ export const Header: React.FC<Props> = ({ onClick = noop }) => {
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
           <p>admin</p>
+          <p className='cursor-pointer' onClick={() => context.toggleTheme()}>
+            {context.theme === 'dark' ? '🌙' : '☀️'}
+          </p>
         </div>
       </section>
       {/* header end */}
