@@ -26,10 +26,10 @@ export const PkmerPieChart: React.FC<Props> = ({ dataPie }) => {
   if (dataPie.length === 0) return <p>Loading chart...</p>
   const targetColors = COLORS.slice(0, size)
 
-  // const cellJsxElements = dataPie.map((_, index) => {
-  //   const color = targetColors[index % size]
-  //   return <Cell key={index} fill={color} />
-  // })
+  const cellJsxElements = dataPie.map((_, index) => {
+    const color = targetColors[index % size]
+    return <Cell key={index} fill={color} />
+  })
 
   return (
     <>
@@ -44,7 +44,7 @@ export const PkmerPieChart: React.FC<Props> = ({ dataPie }) => {
           fill='#8884d8'
           dataKey='value'
         >
-          {/* {cellJsxElements} */}
+          {cellJsxElements}
         </Pie>
       </PieChart>
     </>
