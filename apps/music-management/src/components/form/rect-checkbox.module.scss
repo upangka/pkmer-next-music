@@ -1,0 +1,31 @@
+@import '@/styles/_variables.scss';
+
+$stroke-width: 5;
+:export {
+  strokeWidth: $stroke-width;
+  mainColor: $main-color;
+  duration: $duration;
+}
+
+.checkbox {
+  display: none;
+}
+
+.label {
+  position: relative;
+  display: block;
+  height: 24px;
+  border-radius: 6px;
+  background-color: $main-color;
+
+  div {
+    padding: 0.5rem;
+    width: fit-content;
+    position: absolute;
+    top: 50%;
+    transform-origin: center;
+    background-color: #4b5563;
+    border-radius: 100%;
+    transition: all $duration ease-in-out;
+  }
+}

@@ -17,6 +17,12 @@ Vue3 + Vite开发
 React + NextJS开发
 [music-management](./apps/music-management/)
 
+## icon
+
+- iconify
+- heroicons
+- lucide-react
+
 # API 接口
 
 [music api](./apps/music-api/)
