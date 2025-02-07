@@ -1,15 +1,12 @@
 'use client'
 import { Avatar, AvatarFallback, AvatarImage } from '@pkmer-music/management/components/ui/avatar'
 import PkmerIcon from '@pkmer-music/management/components/icon/PkmerIcon'
-import { usePathname } from 'next/navigation'
 
 interface Props {
   onClick?: () => void
 }
 function noop() {}
 export const Header: React.FC<Props> = ({ onClick = noop }) => {
-  const pathname = usePathname()
-
   return (
     <>
       {/* header start */}
