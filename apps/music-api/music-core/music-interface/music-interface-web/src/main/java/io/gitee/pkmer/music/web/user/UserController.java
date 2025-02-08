@@ -60,4 +60,9 @@ public class UserController extends BaseController implements UserApi {
     public Result<PageResponse<UserDetailView>> pageQueryUser(UserQuery query) {
         return success(userService.pageQueryUser(query));
     }
+
+    @Override
+    public Result<TotalView> getTotal(UserQuery query) {
+        return success(userService.getTotal(query));
+    }
 }

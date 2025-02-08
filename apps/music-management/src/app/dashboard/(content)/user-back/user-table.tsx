@@ -1,3 +1,4 @@
+'use client'
 import {
   Table,
   TableHeader,
@@ -8,13 +9,11 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@pkmer-music/management/components/ui/avatar'
 import { Button } from '@pkmer-music/management/components/ui/button'
 import tableStyle from './user-table.module.scss'
-import { pageUsers } from '@pkmer-music/management/actions'
+import type { UserDetail } from '@pkmer-music/management/types'
 import { deleteUser } from '@pkmer-music/management/actions'
-import DeleteUserButton from './_components/delete-user-button'
+
 interface UserTableProps {
-  pageNo: number
-  pageSize: number
-  query: string
+  data: UserDetail[]
 }
 
 const headers = [
@@ -30,13 +29,7 @@ const headers = [
   '操作'
 ]
 
-export const UserTable: React.FC<UserTableProps> = async ({ pageNo, pageSize, query }) => {
-  const data = await pageUsers({
-    pageNo: pageNo,
-    pageSize: pageSize,
-    username: query
-  })
-
+export const UserTable: React.FC<UserTableProps> = ({ data }) => {
   function handleSex(sex?: string) {
     if (sex === 'FEMALE') {
       return '女'
@@ -59,7 +52,7 @@ export const UserTable: React.FC<UserTableProps> = async ({ pageNo, pageSize, qu
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data.list.map(user => (
+          {data.map(user => (
             <TableRow key={user.id} className='hover:bg-gray-50'>
               <TableCell className={tableStyle.tableItem}>{user.id}</TableCell>
               <TableCell className={tableStyle.tableItem}>
@@ -80,15 +73,12 @@ export const UserTable: React.FC<UserTableProps> = async ({ pageNo, pageSize, qu
                 <Button className='rounded-md bg-blue-500 px-4 py-1 text-white hover:bg-blue-600'>
                   收藏
                 </Button>
-                {/* 从Table的服务端组件抽离成客户端组件 */}
-
-                <DeleteUserButton userId={user.id} />
-                {/* <Button
+                <Button
                   onClick={() => deleteUser(user.id)}
                   className='rounded-md bg-red-500 px-4 py-1 text-white hover:bg-red-600'
                 >
                   删除
-                </Button> */}
+                </Button>
               </TableCell>
             </TableRow>
           ))}

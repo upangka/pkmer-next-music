@@ -12,6 +12,7 @@
     "@heroicons/react": "^2.2.0",
     "@pkmer-music-ui/react": "workspace:*",
     "@pkmer/libs": "workspace:*",
+    "@radix-ui/react-alert-dialog": "^1.1.6",
     "@radix-ui/react-avatar": "^1.1.2",
     "@radix-ui/react-slot": "^1.1.1",
     "axios": "^1.7.9",

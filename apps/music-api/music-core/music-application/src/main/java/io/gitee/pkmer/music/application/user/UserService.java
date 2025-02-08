@@ -3,23 +3,17 @@ package io.gitee.pkmer.music.application.user;
 import io.gitee.pkmer.convention.page.PageResponse;
 import io.gitee.pkmer.core.infrastructure.persistence.consumer.mybatis.Consumer;
 import io.gitee.pkmer.core.infrastructure.persistence.consumer.mybatis.ConsumerDynamicMapper;
-import io.gitee.pkmer.core.infrastructure.persistence.consumer.mybatis.ConsumerDynamicSqlSupport;
 import io.gitee.pkmer.minio.props.PkmerMinioProps;
 import io.gitee.pkmer.music.domain.singer.Sex;
-import io.gitee.pkmer.music.domain.user.UserRepository;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Named;
-import org.mapstruct.factory.Mappers;
 import org.mybatis.dynamic.sql.where.WhereApplier;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static io.gitee.pkmer.core.infrastructure.persistence.consumer.mybatis.ConsumerDynamicSqlSupport.username;
 import static org.mybatis.dynamic.sql.SqlBuilder.isLikeWhenPresent;
 import static org.mybatis.dynamic.sql.SqlBuilder.where;
-import static io.gitee.pkmer.core.infrastructure.persistence.consumer.mybatis.ConsumerDynamicSqlSupport.*;
 
 @Service
 public class UserService {
@@ -33,8 +27,13 @@ public class UserService {
         this.consumerDynamicMapper = consumerDynamicMapper;
     }
 
+    /**
+     * 分页查询用户信息
+     * @param query
+     * @return
+     */
     public PageResponse<UserDetailView> pageQueryUser(UserQuery query){
-        WhereApplier whereApplier = where(username, isLikeWhenPresent(query.getUsername()).map(s -> "%" + s + "%")).toWhereApplier();
+        WhereApplier whereApplier = buildWhereApplier(query);
 
         List<Consumer> users = consumerDynamicMapper.select(c ->
                 c.applyWhere(whereApplier)
@@ -52,8 +51,6 @@ public class UserService {
         PageResponse<UserDetailView> pageResponse = new PageResponse<>();
         List<UserDetailView> list = toView(users);
 
-
-
         pageResponse
                 .setList(list)
                 .setTotal(total)
@@ -61,6 +58,31 @@ public class UserService {
                 .setCurrentPageNo(query.getPageNo());
         return pageResponse;
     }
+
+
+    /**
+     * 获取总数，用于服务端渲染分页组件
+     * @param query
+     * @return
+     */
+    public TotalView getTotal(UserQuery query){
+        WhereApplier whereApplier = buildWhereApplier(query);
+        int total = (int)consumerDynamicMapper.count(c -> c
+                .applyWhere(whereApplier)
+                .configureStatement(s -> s.setNonRenderingWhereClauseAllowed(true))
+        );
+
+        return TotalView.builder()
+                .total(total)
+                .totalPages(total / query.getPageSize() + 1)
+                .build();
+    }
+
+    private WhereApplier buildWhereApplier(UserQuery query){
+        return  where(username, isLikeWhenPresent(query.getUsername()).map(s -> "%" + s + "%")).toWhereApplier();
+    }
+
+
 
     private String addMinioServer(String path){
         return minioServer + path;

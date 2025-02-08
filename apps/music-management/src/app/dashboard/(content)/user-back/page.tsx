@@ -2,17 +2,15 @@ import { UserTable } from './user-table'
 import { Search, PKMPagination } from '@pkmer-music/management/components'
 import { Suspense } from 'react'
 import UserLoading from './user-loading'
-import { getPageUserTotal } from '@pkmer-music/management/actions'
+import { pageUsers } from '@pkmer-music/management/actions'
+
 interface Props {
   searchParams: Promise<{
     [key: string]: string | undefined
   }>
 }
-
 /**
- * Page服务端组件，Table服务端组件，Suspense生效
- * 分页客户端组件能够接收服务端组件Page传递的属性。
- * btn组件能够接收Table服务端组件传递的属性，进行交互效果。
+ * Page服务端组件，table客户端组件 Suspense失效
  * @param props
  * @returns
  */
@@ -22,7 +20,11 @@ export default async function Page(props: Props) {
   const pageNo = +(searchParams?.pageNo || 1)
   const pageSize = +(searchParams?.pageSize || 3)
 
-  const totalData = await getPageUserTotal({ username: query, pageNo, pageSize })
+  const data = await pageUsers({
+    pageNo: pageNo,
+    pageSize: pageSize,
+    username: query
+  })
 
   return (
     <div className='flex-1 rounded-lg bg-white p-6 shadow-md'>
@@ -32,11 +34,11 @@ export default async function Page(props: Props) {
       </section>
 
       {/* TODO suspense的生效问题 */}
-      <Suspense key={query + pageNo} fallback={<UserLoading lines={pageSize} />}>
-        <UserTable pageNo={pageNo} pageSize={pageSize} query={query} />
+      <Suspense key={query + pageNo} fallback={<UserLoading />}>
+        <UserTable data={data.list} />
       </Suspense>
 
-      <PKMPagination total={totalData.totalPages} />
+      <PKMPagination total={data.totalPages} />
     </div>
   )
 }

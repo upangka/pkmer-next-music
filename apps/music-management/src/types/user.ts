@@ -19,3 +19,8 @@ export interface UserDetail {
 }
 
 export type UserPageRes = PageQueryRes<UserDetail>
+
+export type PageTotal = {
+  total: number
+  totalPages: number
+}

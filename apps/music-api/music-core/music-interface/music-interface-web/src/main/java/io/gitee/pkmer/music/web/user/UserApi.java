@@ -51,4 +51,9 @@ public interface UserApi {
     @PostMapping("/page")
     Result<PageResponse<UserDetailView>> pageQueryUser(@RequestBody
                                                         UserQuery query);
+
+    @Operation(summary = "获取用户分页总数")
+    @PostMapping("/page/total")
+    Result<TotalView> getTotal(@RequestBody
+                                        UserQuery query);
 }
