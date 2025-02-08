@@ -6,13 +6,11 @@ import {
   TableCell
 } from '@pkmer-music/management/components/ui/table'
 import { Button } from '@pkmer-music/management/components/ui/button'
+import type { UserDetail } from '@pkmer-music/management/types'
 import { Avatar, AvatarFallback, AvatarImage } from '@pkmer-music/management/components/ui/avatar'
-import { pageUsers } from '@pkmer-music/management/actions'
 import tableStyle from './user-table.module.scss'
 interface UserTableProps {
-  pageNo: number
-  pageSize: number
-  query: string
+  data: UserDetail[]
 }
 
 const headers = [
@@ -28,14 +26,7 @@ const headers = [
   '操作'
 ]
 
-export const UserTable: React.FC<UserTableProps> = async props => {
-  console.log(props)
-  const data = await pageUsers({
-    pageNo: props.pageNo,
-    pageSize: props.pageSize,
-    username: props.query
-  })
-
+export const UserTable: React.FC<UserTableProps> = async ({ data }) => {
   function handleSex(sex?: string) {
     if (sex === 'FEMALE') {
       return '女'
@@ -58,7 +49,7 @@ export const UserTable: React.FC<UserTableProps> = async props => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data.list.map(user => (
+          {data.map(user => (
             <TableRow key={user.id} className='hover:bg-gray-50'>
               <TableCell className={tableStyle.tableItem}>{user.id}</TableCell>
               <TableCell className={tableStyle.tableItem}>
