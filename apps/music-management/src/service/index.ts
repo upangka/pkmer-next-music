@@ -1,3 +1,1 @@
-'server only'
-import { httpService } from './http.service'
-export default httpService
+export { httpServerService as default } from './http.service'
