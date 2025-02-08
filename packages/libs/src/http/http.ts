@@ -1,9 +1,23 @@
 import axios from 'axios'
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
-import type { AppHTTP, Data, AppBaseResponse, AppResponse } from './http-base'
+import type { HttpConfig, AppHTTP, Data, AppBaseResponse, AppResponse } from './http-base'
 
-export function createHttpInstance(baseURL: string) {
+export function createHttpInstance(httpConfig: HttpConfig) {
   let http: AppHTTP | null = null
+
+  /**
+   * 统一处理客户端与服务端的token
+   * @returns
+   */
+  async function getToken() {
+    if (httpConfig.isServerSide) {
+      // 服务端获取token
+      return httpConfig.getTokenAsync()
+    } else {
+      // 客户端获取token
+      return httpConfig.getToken()
+    }
+  }
 
   // 为了防止rollup打包时tree-shaking，将函数放在闭包中
   return function getHttpInstance() {
@@ -12,7 +26,7 @@ export function createHttpInstance(baseURL: string) {
     }
     // 创建 Axios 实例
     const axiosInstance: AxiosInstance = axios.create({
-      baseURL,
+      baseURL: httpConfig.baseURL,
       timeout: 10000
     })
 
@@ -20,15 +34,11 @@ export function createHttpInstance(baseURL: string) {
     axiosInstance.interceptors.request.use(
       config => {
         // 从本地存储中获取 token
-        if (typeof window !== 'undefined') {
-          const token = localStorage.getItem('token')
-          console.log({ token })
-          if (token) {
-            // 如果存在 token，则将其添加到请求头中
-            config.headers.Authorization = `Bear ${token}`
-          }
+        const token = getToken()
+        if (token) {
+          // 如果存在 token，则将其添加到请求头中
+          config.headers.Authorization = `Bear ${token}`
         }
-
         return config
       },
       error => Promise.reject(error) // 请求错误时，直接返回错误信息

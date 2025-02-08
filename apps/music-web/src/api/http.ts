@@ -3,7 +3,13 @@ import { createHttpInstance } from '@pkmer/libs/http'
 const isDev = import.meta.env.MODE === 'development'
 const baseURL = isDev ? '/api' : import.meta.env.VITE_API_BASE_URL || ''
 
-const getHttpInstance = createHttpInstance(baseURL)
+const getHttpInstance = createHttpInstance({
+  baseURL,
+  isServerSide: false,
+  getToken: function () {
+    return localStorage.getItem('token')
+  }
+})
 
 const http = getHttpInstance()
 
