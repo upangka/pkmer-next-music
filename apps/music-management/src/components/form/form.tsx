@@ -1,3 +1,4 @@
+'use client'
 import { LockClosedIcon, AtSymbolIcon, UserIcon } from '@heroicons/react/24/solid'
 import style from './form.module.scss'
 import { registerUser, login } from '@pkmer-music/management/actions'

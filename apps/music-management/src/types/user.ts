@@ -7,7 +7,7 @@ export type UserQuery = PageBase & {
 export interface UserDetail {
   id: string
   username: string
-  sex: number
+  sex: string
   phoneNum: string
   email: string
   birth: string // 或者可以使用 Date 类型，如果你打算将其转换为 Date 对象

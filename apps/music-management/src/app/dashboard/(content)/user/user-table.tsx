@@ -8,68 +8,73 @@ import {
 import { Button } from '@pkmer-music/management/components/ui/button'
 import { Avatar, AvatarFallback, AvatarImage } from '@pkmer-music/management/components/ui/avatar'
 import { pageUsers } from '@pkmer-music/management/actions'
+import tableStyle from './user-table.module.scss'
 interface UserTableProps {
   pageNo: number
   pageSize: number
   query: string
 }
 
+const headers = [
+  'ID',
+  '用户头像',
+  '用户名',
+  '性别',
+  '手机号码',
+  '邮箱',
+  '生日',
+  '签名',
+  '地区',
+  '操作'
+]
+
 export const UserTable: React.FC<UserTableProps> = async props => {
-  const data = await pageUsers(props)
+  console.log(props)
+  const data = await pageUsers({
+    pageNo: props.pageNo,
+    pageSize: props.pageSize,
+    username: props.query
+  })
+
+  function handleSex(sex?: string) {
+    if (sex === 'FEMALE') {
+      return '女'
+    } else if (sex === 'MALE') {
+      return '男'
+    }
+    return '未知'
+  }
 
   return (
     <>
       <Table className='w-full border-collapse border border-gray-300'>
         <TableHeader>
           <TableRow className='bg-gray-100'>
-            <TableCell className='border border-gray-300 p-4 text-left font-semibold'>ID</TableCell>
-            <TableCell className='border border-gray-300 p-4 text-left font-semibold'>
-              用户头像
-            </TableCell>
-            <TableCell className='border border-gray-300 p-4 text-left font-semibold'>
-              用户名
-            </TableCell>
-            <TableCell className='border border-gray-300 p-4 text-left font-semibold'>
-              性别
-            </TableCell>
-            <TableCell className='border border-gray-300 p-4 text-left font-semibold'>
-              手机号码
-            </TableCell>
-            <TableCell className='border border-gray-300 p-4 text-left font-semibold'>
-              邮箱
-            </TableCell>
-            <TableCell className='border border-gray-300 p-4 text-left font-semibold'>
-              生日
-            </TableCell>
-            <TableCell className='border border-gray-300 p-4 text-left font-semibold'>
-              签名
-            </TableCell>
-            <TableCell className='border border-gray-300 p-4 text-left font-semibold'>
-              地区
-            </TableCell>
-            <TableCell className='border border-gray-300 p-4 text-left font-semibold'>
-              操作
-            </TableCell>
+            {headers.map((header, index) => (
+              <TableCell key={index} className='border border-gray-300 p-4 text-left font-semibold'>
+                {header}
+              </TableCell>
+            ))}
           </TableRow>
         </TableHeader>
         <TableBody>
           {data.list.map(user => (
             <TableRow key={user.id} className='hover:bg-gray-50'>
-              <TableCell className='border border-gray-300 p-4'>{user.id}</TableCell>
-              <TableCell className='border border-gray-300 p-4'>
+              <TableCell className={tableStyle.tableItem}>{user.id}</TableCell>
+              <TableCell className={tableStyle.tableItem}>
                 {/* Avatar,AvatarFallback,AvatarImage */}
                 <Avatar>
                   <AvatarImage src={user.avator} alt={user.username} />
                   <AvatarFallback>{user.username}</AvatarFallback>
                 </Avatar>
               </TableCell>
-              <TableCell className='border border-gray-300 p-4'>{user.username}</TableCell>
-              <TableCell className='border border-gray-300 p-4'>{user.sex}</TableCell>
-              <TableCell className='border border-gray-300 p-4'>{user.phoneNum}</TableCell>
-              <TableCell className='border border-gray-300 p-4'>{user.email}</TableCell>
-              <TableCell className='border border-gray-300 p-4'>{user.birth}</TableCell>
-              <TableCell className='border border-gray-300 p-4'>{user.introduction}</TableCell>
-              <TableCell className='border border-gray-300 p-4'>{user.location}</TableCell>
+              <TableCell className={tableStyle.tableItem}>{user.username}</TableCell>
+              <TableCell className={tableStyle.tableItem}>{handleSex(user.sex)}</TableCell>
+              <TableCell className={tableStyle.tableItem}>{user.phoneNum}</TableCell>
+              <TableCell className={tableStyle.tableItem}>{user.email}</TableCell>
+              <TableCell className={tableStyle.tableItem}>{user.birth}</TableCell>
+              <TableCell className={tableStyle.tableItem}>{user.introduction}</TableCell>
+              <TableCell className={tableStyle.tableItem}>{user.location}</TableCell>
               <TableCell className='space-x-2 border border-gray-300 p-4'>
                 <Button className='rounded-md bg-blue-500 px-4 py-1 text-white hover:bg-blue-600'>
                   收藏
