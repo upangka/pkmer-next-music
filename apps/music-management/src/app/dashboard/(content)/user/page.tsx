@@ -1,8 +1,7 @@
 import { UserTable } from './user-table'
-import { Search } from '@pkmer-music/management/components'
+import { Search, PKMPagination } from '@pkmer-music/management/components'
 import { Suspense } from 'react'
 import UserLoading from './user-loading'
-import PKMPagination from './pkmer-pagination'
 import { pageUsers } from '@pkmer-music/management/actions'
 
 interface Props {
@@ -14,7 +13,7 @@ export default async function Page(props: Props) {
   const searchParams = await props.searchParams
   const query = searchParams?.query || ''
   const pageNo = +(searchParams?.pageNo || 1)
-  const pageSize = +(searchParams?.pageSize || 3)
+  const pageSize = +(searchParams?.pageSize || 10)
 
   const data = await pageUsers({
     pageNo: pageNo,

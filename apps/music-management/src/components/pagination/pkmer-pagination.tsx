@@ -1,5 +1,5 @@
 'use client'
-import { useSearchParams } from 'next/navigation'
+import { useSearchParams, usePathname } from 'next/navigation'
 import {
   Pagination,
   PaginationContent,
@@ -16,9 +16,16 @@ interface PaginationProps {
   total: number
 }
 
-const PKMPagination: React.FC<PaginationProps> = props => {
+export const PKMPagination: React.FC<PaginationProps> = props => {
   const searchParams = useSearchParams()
-  const currentPage = +(searchParams.get('page') ?? 1)
+  const pathname = usePathname()
+  const currentPage = +(searchParams.get('pageNo') ?? 1)
+
+  function createhref(page: number) {
+    const params = new URLSearchParams(searchParams)
+    params.set('pageNo', page.toString())
+    return `${pathname}?${params.toString()}`
+  }
 
   const getPageNumbers = () => {
     const pageNumbers: JSX.Element[] = []
@@ -30,7 +37,10 @@ const PKMPagination: React.FC<PaginationProps> = props => {
       for (let i = 1; i <= props.total; i++) {
         pageNumbers.push(
           <PaginationItem key={i}>
-            <PaginationLink href='#' className={clsx(currentPage === i && paginationStyle.active)}>
+            <PaginationLink
+              href={createhref(i)}
+              className={clsx(currentPage === i && paginationStyle.active)}
+            >
               {i}
             </PaginationLink>
           </PaginationItem>
@@ -45,7 +55,10 @@ const PKMPagination: React.FC<PaginationProps> = props => {
       if (left > 1) {
         pageNumbers.push(
           <PaginationItem key='first'>
-            <PaginationLink href='#' className={clsx(currentPage === 1 && paginationStyle.active)}>
+            <PaginationLink
+              href={createhref(1)}
+              className={clsx(currentPage === 1 && paginationStyle.active)}
+            >
               1
             </PaginationLink>
           </PaginationItem>
@@ -61,7 +74,10 @@ const PKMPagination: React.FC<PaginationProps> = props => {
       for (let i = left; i <= right; i++) {
         pageNumbers.push(
           <PaginationItem key={i}>
-            <PaginationLink href='#' className={clsx(currentPage === i && paginationStyle.active)}>
+            <PaginationLink
+              href={createhref(i)}
+              className={clsx(currentPage === i && paginationStyle.active)}
+            >
               {i}
             </PaginationLink>
           </PaginationItem>
@@ -78,7 +94,7 @@ const PKMPagination: React.FC<PaginationProps> = props => {
         pageNumbers.push(
           <PaginationItem key='last'>
             <PaginationLink
-              href='#'
+              href={createhref(props.total)}
               className={clsx(currentPage === props.total && paginationStyle.active)}
             >
               {props.total}
@@ -94,18 +110,28 @@ const PKMPagination: React.FC<PaginationProps> = props => {
   return (
     <section className='py-3'>
       <Pagination>
-        <PaginationContent>
+        <PaginationContent className='flex gap-5'>
           <PaginationItem>
-            <PaginationPrevious href='#' />
+            <PaginationPrevious
+              href={currentPage > 1 ? createhref(currentPage - 1) : undefined}
+              className={clsx(
+                'select-none rounded px-3 py-2',
+                currentPage === 1 && 'cursor-not-allowed bg-gray-300 text-gray-500'
+              )}
+            />
           </PaginationItem>
           {getPageNumbers()}
           <PaginationItem>
-            <PaginationNext href='#' />
+            <PaginationNext
+              href={currentPage < props.total ? createhref(currentPage + 1) : undefined}
+              className={clsx(
+                'select-none rounded px-3 py-2',
+                currentPage >= props.total && 'cursor-not-allowed bg-gray-300 text-gray-500'
+              )}
+            />
           </PaginationItem>
         </PaginationContent>
       </Pagination>
     </section>
   )
 }
-
-export default PKMPagination

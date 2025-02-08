@@ -16,7 +16,7 @@ export const Search: React.FC<Props> = ({ placeholder, className }) => {
     const value = e.target.value.trim()
     if (value) {
       params.set('query', value)
-      params.set('page', '1')
+      params.set('pageNo', '1')
     } else {
       params.delete('query')
     }
