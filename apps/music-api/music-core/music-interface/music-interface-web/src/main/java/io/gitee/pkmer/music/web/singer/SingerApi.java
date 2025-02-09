@@ -1,5 +1,6 @@
 package io.gitee.pkmer.music.web.singer;
 
+import io.gitee.common.view.TotalView;
 import io.gitee.pkmer.convention.page.PageResponse;
 import io.gitee.pkmer.convention.result.Result;
 import io.gitee.pkmer.music.application.singer.add.AddSingerCmd;
@@ -57,7 +58,7 @@ public interface SingerApi {
             @Parameter(name = "pageNo", description = "页码", example = "1", required = true, in = ParameterIn.HEADER),
             @Parameter(name = "pageSize", description = "每页大小", example = "10", required = true, in = ParameterIn.HEADER),
     })
-    @GetMapping("/query")
+    @GetMapping("/page")
     Result<PageResponse<SingerView>> getSinger(
             @RequestParam(value = "name", required = false)
             String name,
@@ -67,5 +68,21 @@ public interface SingerApi {
             int PageNo,
             @RequestParam(value = "pageSize", required = false, defaultValue = "10")
             int pageSize
-            );
+    );
+
+    @Operation(summary = "获取歌手分页总数")
+    @Parameters({
+            @Parameter(name = "name", description = "歌手名称", in = ParameterIn.PATH),
+            @Parameter(name = "sex", description = "歌手性别", example = "MALE", required = true, in = ParameterIn.HEADER),
+    })
+    @GetMapping("/page/total")
+    Result<TotalView> getTotal(
+            @RequestParam(value = "name", required = false)
+            String name,
+            @RequestParam(value = "sex", required = false)
+            String sex,
+            @Parameter(name = "pageSize", description = "每页大小", example = "10", required = true, in = ParameterIn.HEADER)
+            @RequestParam(value = "pageSize", required = false, defaultValue = "10")
+            int pageSize
+    );
 }

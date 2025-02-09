@@ -1,5 +1,6 @@
 package io.gitee.pkmer.music.web.singer;
 
+import io.gitee.common.view.TotalView;
 import io.gitee.pkmer.convention.controller.BaseController;
 import io.gitee.pkmer.convention.page.PageResponse;
 import io.gitee.pkmer.convention.result.Result;
@@ -69,6 +70,13 @@ public class SingerController extends BaseController implements SingerApi {
         singerQuery.setPageSize(pageSize);
         PageResponse<SingerView> results = singerService.query(singerQuery);
         return success(results);
+    }
+
+    @Override
+    public Result<TotalView> getTotal(String name, String sex, int pageSize) {
+        SingerQuery singerQuery = SingerQuery.commandOf(name, sex);
+        singerQuery.setPageSize(pageSize);
+        return success(singerService.getPageTotal(singerQuery));
     }
 
 }
