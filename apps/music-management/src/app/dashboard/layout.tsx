@@ -18,7 +18,7 @@ export default function DashBoardLayout({
       <Toaster />
       <main className='my-5 flex gap-5'>
         <Asider isShow={menuContext.collapsed} />
-        {children}
+        <section className='flex-1'>{children}</section>
       </main>
       {/* </AppProviders> */}
     </>

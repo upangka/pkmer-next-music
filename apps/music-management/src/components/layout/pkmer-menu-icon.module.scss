@@ -1,0 +1,60 @@
+$size: 40px;
+$item-height: 5px;
+$gap: ($size - $item-height * 3) / 3 + $item-height/2;
+.menuWrapper {
+  position: relative;
+  // border: 1px solid #555454;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: $size;
+  height: $size;
+  cursor: pointer;
+
+  &:hover {
+    .menu,
+    .menu::after,
+    .menu::before {
+      background-color: #19ec40;
+    }
+  }
+
+  &.open {
+    .menu {
+      transform: rotate(45deg);
+      &::before {
+        top: 0;
+        transform: rotate(90deg);
+      }
+
+      &::after {
+        top: 0;
+        transform: rotate(90deg);
+      }
+    }
+  }
+  .menu {
+    &::after,
+    &::before,
+    & {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: $item-height;
+      background-color: #555454;
+      transition: all 0.3s ease-in-out;
+    }
+
+    & {
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    &::before {
+      top: -$gap;
+    }
+
+    &::after {
+      top: $gap;
+    }
+  }
+}
