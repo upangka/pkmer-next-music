@@ -1,5 +1,6 @@
 package io.gitee.pkmer.music.application.songlist.query;
 
+import io.gitee.common.util.TotalPagesHelper;
 import io.gitee.common.view.TotalView;
 import io.gitee.pkmer.convention.converter.TargetAndSourceConverter;
 import io.gitee.pkmer.convention.page.PageResponse;
@@ -82,9 +83,11 @@ public class SongListService {
         WhereApplier whereApplier = buildWhereApplier(query);
         int total = (int) songListMapper.count(c -> c.applyWhere(whereApplier));
 
+
+        int totalPages = TotalPagesHelper.calcTotalPages(total, query.getPageSize());
         return TotalView.builder()
                 .total(total)
-                .totalPages(total / query.getPageSize() + 1)
+                .totalPages(totalPages)
                 .build();
     }
 

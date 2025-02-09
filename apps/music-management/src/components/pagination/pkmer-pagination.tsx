@@ -1,7 +1,5 @@
 'use client'
 import { useSearchParams, usePathname } from 'next/navigation'
-import { useRouter } from 'next/navigation'
-import Link from 'next/link'
 import {
   Pagination,
   PaginationContent,
@@ -23,7 +21,6 @@ export const PKMPagination: React.FC<PaginationProps> = props => {
   const pathname = usePathname()
   const currentPage = +(searchParams.get('pageNo') ?? 1)
   // 使用router.push来代替link组件的href属性，因为它会reload windows
-  const router = useRouter()
   function createhref(page: number) {
     const params = new URLSearchParams(searchParams)
     params.set('pageNo', page.toString())
@@ -96,15 +93,12 @@ export const PKMPagination: React.FC<PaginationProps> = props => {
         )
         pageNumbers.push(
           <PaginationItem key='last'>
-            <span
-              onClick={() => {
-                console.log('see me?')
-                router.push(createhref(props.total))
-              }}
+            <PaginationLink
+              href={createhref(props.total)}
               className={clsx(currentPage === props.total && paginationStyle.active)}
             >
-              1{props.total}
-            </span>
+              {props.total}
+            </PaginationLink>
           </PaginationItem>
         )
       }

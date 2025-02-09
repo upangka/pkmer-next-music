@@ -1,5 +1,6 @@
 package io.gitee.pkmer.music.application.user;
 
+import io.gitee.common.util.TotalPagesHelper;
 import io.gitee.common.view.TotalView;
 import io.gitee.pkmer.convention.page.PageResponse;
 import io.gitee.pkmer.core.infrastructure.persistence.consumer.mybatis.Consumer;
@@ -73,9 +74,10 @@ public class UserService {
                 .configureStatement(s -> s.setNonRenderingWhereClauseAllowed(true))
         );
 
+        int totalPages = TotalPagesHelper.calcTotalPages(total, query.getPageSize());
         return TotalView.builder()
                 .total(total)
-                .totalPages(total / query.getPageSize() + 1)
+                .totalPages(totalPages)
                 .build();
     }
 

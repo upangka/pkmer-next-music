@@ -22,7 +22,8 @@ public enum Style implements ValueObject {
     JapanAndKorea("日韩",4),
     LightMusic("轻音乐",5),
     BGM("BGM",6),
-    Instrumental("乐器",7);
+    Instrumental("乐器",7),
+    UNKNOWN("未知",8); // TODO 暂时解决，防止bug
 
     @Getter
     final String desc;
@@ -40,7 +41,8 @@ public enum Style implements ValueObject {
             }
         }
         log.error("不存在的风格：{}",desc);
-        throw new UnsupportedOperationException("不存在的风格："+desc);
+        return UNKNOWN;
+//        throw new UnsupportedOperationException("不存在的风格："+desc);
     }
 
     /**

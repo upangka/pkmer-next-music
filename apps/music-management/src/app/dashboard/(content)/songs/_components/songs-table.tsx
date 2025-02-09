@@ -25,7 +25,7 @@ export const SongTable: React.FC<SongListTableProps> = async ({ pageNo, pageSize
   })
 
   return (
-    <Table className='w-full border border-red-500'>
+    <Table className='w-full'>
       <TableHeader>
         <TableRow>
           {headers.map(header => (
