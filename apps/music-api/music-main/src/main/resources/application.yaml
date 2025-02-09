@@ -50,4 +50,4 @@ app:
       - "/banner"
       - "/song/**"
       - "/singer/**"
-#      - "/songList/**"
+      - "/songList/**"  #TODO 用户端需要登录，后端现在开发中放行

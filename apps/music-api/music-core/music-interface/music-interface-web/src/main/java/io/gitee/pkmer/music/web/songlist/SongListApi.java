@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.*;
  * At 2025/1/5
  */
 @Tag(name = "歌单")
-@RequestMapping("songList")
+@RequestMapping("/songList")
 public interface SongListApi {
 
 

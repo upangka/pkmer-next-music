@@ -1,104 +1,38 @@
-import {
-  Table,
-  TableHeader,
-  TableRow,
-  TableHead,
-  TableBody,
-  TableCell
-} from '@pkmer-music/management/components/ui/table'
-import { Button } from '@pkmer-music/management/components/ui/button'
-interface Singer {
-  id: number
-  name: string
-  gender: string
-  birthDate: string
-  region: string
-  description: string
-  imageUrl: string
+import { SongTable } from './_components/songs-table'
+import { SearchHeader, PKMPagination, TableLoading } from '@pkmer-music/management/components'
+import { Suspense } from 'react'
+import { getSongListPageTotal } from '@pkmer-music/management/actions'
+interface Props {
+  searchParams: Promise<{
+    [key: string]: string | undefined
+  }>
 }
 
-const sampleData: Singer[] = [
-  {
-    id: 1,
-    name: '张杰',
-    gender: '男',
-    birthDate: '1982-12-20',
-    region: '中国四川',
-    description: '华语流行音乐代表歌手...',
-    imageUrl: '/images/zhangjie.jpg'
-  },
-  {
-    id: 2,
-    name: '周杰伦',
-    gender: '男',
-    birthDate: '1979-01-08',
-    region: '中国台湾',
-    description: '著名歌手、作曲家...',
-    imageUrl: '/images/zhoujielun.jpg'
-  },
-  {
-    id: 3,
-    name: '林允儿',
-    gender: '女',
-    birthDate: '1990-05-30',
-    region: '韩国',
-    description: '韩国著名艺人...',
-    imageUrl: '/images/linyuner.jpg'
-  },
-  {
-    id: 4,
-    name: '陈奕迅',
-    gender: '男',
-    birthDate: '1974-07-27',
-    region: '中国香港',
-    description: '华语流行音乐重要人物...',
-    imageUrl: '/images/chenyixun.jpg'
-  }
-]
+/**
+ * Page服务端组件，Table服务端组件，Suspense生效
+ * 分页客户端组件能够接收服务端组件Page传递的属性。
+ * btn组件能够接收Table服务端组件传递的属性，进行交互效果。
+ * @param props
+ * @returns
+ */
+export default async function Page(props: Props) {
+  const searchParams = await props.searchParams
+  const query = searchParams?.query || ''
+  const pageNo = +(searchParams?.pageNo || 1)
+  const pageSize = +(searchParams?.pageSize || 5)
 
-export default function Page() {
+  const totalData = await getSongListPageTotal({ title: query, pageSize })
+  console.log(totalData)
   return (
-    <div className='flex-1 border border-black p-8'>
-      <h1 className='mb-4 text-2xl font-bold'>歌手管理</h1>
-      <Table className='w-full border border-red-500'>
-        <TableHeader>
-          <TableRow>
-            <TableHead>ID</TableHead>
-            <TableHead>歌单图片</TableHead>
-            <TableHead>标题</TableHead>
-            <TableHead>简介</TableHead>
-            <TableHead>风格</TableHead>
-            <TableHead>内容</TableHead>
-            <TableHead>评论</TableHead>
-            <TableHead>操作</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {sampleData.map(singer => (
-            <TableRow key={singer.id}>
-              <TableCell>{singer.id}</TableCell>
-              <TableCell>
-                <img
-                  src={singer.imageUrl}
-                  alt={singer.name}
-                  className='h-16 w-16 rounded-full object-cover'
-                />
-              </TableCell>
-              <TableCell>{singer.name}</TableCell>
-              <TableCell>{singer.gender}</TableCell>
-              <TableCell>{singer.birthDate}</TableCell>
-              <TableCell>{singer.region}</TableCell>
-              <TableCell>{singer.description}</TableCell>
-              <TableCell>
-                <div className='flex space-x-2'>
-                  <Button variant='outline'>编辑</Button>
-                  <Button variant='destructive'>删除</Button>
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+    <div suppressHydrationWarning={true} className='w-auto rounded-lg bg-white p-6 shadow-md'>
+      <SearchHeader>歌单列表</SearchHeader>
+
+      {/* TODO suspense的生效问题 */}
+      <Suspense key={query + pageNo + Date.now()} fallback={<TableLoading lines={pageSize} />}>
+        <SongTable pageNo={pageNo} pageSize={pageSize} query={query} />
+      </Suspense>
+
+      <PKMPagination total={totalData.totalPages} />
     </div>
   )
 }

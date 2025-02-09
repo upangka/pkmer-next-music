@@ -22,7 +22,7 @@ public enum Style implements ValueObject {
     JapanAndKorea("日韩",4),
     LightMusic("轻音乐",5),
     BGM("BGM",6),
-    Instrumental("器乐",7);
+    Instrumental("乐器",7);
 
     @Getter
     final String desc;

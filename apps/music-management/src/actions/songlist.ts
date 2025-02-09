@@ -9,7 +9,7 @@ import type { SongListQuery, PageTotal, SongListQueryRes } from '@pkmer-music/ma
  * @returns
  */
 export async function pageSongList(query: SongListQuery): AppResponse<SongListQueryRes> {
-  return httpService.get('/songList/page', query)
+  return httpService.post('/songList/page', query)
 }
 
 /**
@@ -18,5 +18,14 @@ export async function pageSongList(query: SongListQuery): AppResponse<SongListQu
  * @returns
  */
 export async function getSongListPageTotal(query: SongListQuery): AppResponse<PageTotal> {
-  return httpService.get('/songList/page/total', query)
+  return httpService.post('/songList/page/total', query)
+}
+
+/**
+ * 删除歌单
+ * @param id
+ * @returns
+ */
+export async function deleteSongList(id: string): AppResponse<void> {
+  return httpService.delete(`/songList/${id}`)
 }
