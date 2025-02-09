@@ -4,12 +4,11 @@ import io.gitee.pkmer.convention.page.PageResponse;
 import io.gitee.pkmer.convention.result.Result;
 import io.gitee.pkmer.music.application.user.*;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * <p>
@@ -56,4 +55,11 @@ public interface UserApi {
     @PostMapping("/page/total")
     Result<TotalView> getTotal(@RequestBody
                                         UserQuery query);
+
+    @Operation(summary = "删除用户")
+    @Parameters({
+            @Parameter(name = "id", description = "用户id", required = true)
+    })
+    @DeleteMapping("/{id}")
+    Result<Void> deleteUser(@PathVariable("id") Long id);
 }

@@ -28,10 +28,10 @@ export async function pageUsers(query: UserQuery): AppResponse<UserPageRes> {
   return httpService.post('/user/page', query)
 }
 
-export async function deleteUser(id: string): AppResponse<void> {
-  console.log('server action', id)
-}
-
 export async function getPageUserTotal(query: UserQuery): AppResponse<PageTotal> {
   return httpService.post('/user/page/total', query)
+}
+
+export async function deleteUser(id: string): AppResponse<void> {
+  return httpService.delete(`/user/${id}`)
 }

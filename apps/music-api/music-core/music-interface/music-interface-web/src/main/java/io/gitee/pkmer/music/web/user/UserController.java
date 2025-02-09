@@ -65,4 +65,10 @@ public class UserController extends BaseController implements UserApi {
     public Result<TotalView> getTotal(UserQuery query) {
         return success(userService.getTotal(query));
     }
+
+    @Override
+    public Result<Void> deleteUser(Long id) {
+        cmdDispatcher.dispatch(DeleteUserCmd.commandOf(id));
+        return success();
+    }
 }
