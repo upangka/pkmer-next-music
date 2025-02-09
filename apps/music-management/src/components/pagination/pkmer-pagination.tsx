@@ -132,7 +132,8 @@ export const PKMPagination: React.FC<PaginationProps> = props => {
               href={currentPage < props.total ? createhref(currentPage + 1) : ''}
               className={clsx(
                 'select-none rounded px-3 py-2',
-                currentPage >= props.total && 'cursor-not-allowed bg-gray-300 text-gray-500'
+                currentPage >= props.total &&
+                  'pointer-events-none cursor-not-allowed bg-gray-300 text-gray-500'
               )}
             />
           </PaginationItem>
