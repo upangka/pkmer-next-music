@@ -1,7 +1,6 @@
-import { UserTable } from './user-table'
-import { Search, PKMPagination } from '@pkmer-music/management/components'
+import { UserTable } from './_components/user-table'
+import { SearchHeader, PKMPagination, TableLoading } from '@pkmer-music/management/components'
 import { Suspense } from 'react'
-import UserLoading from './user-loading'
 import { getPageUserTotal } from '@pkmer-music/management/actions'
 interface Props {
   searchParams: Promise<{
@@ -20,19 +19,16 @@ export default async function Page(props: Props) {
   const searchParams = await props.searchParams
   const query = searchParams?.query || ''
   const pageNo = +(searchParams?.pageNo || 1)
-  const pageSize = +(searchParams?.pageSize || 3)
+  const pageSize = +(searchParams?.pageSize || 5)
 
   const totalData = await getPageUserTotal({ username: query, pageNo, pageSize })
 
   return (
     <div suppressHydrationWarning={true} className='w-auto rounded-lg bg-white p-6 shadow-md'>
-      <section className='mb-6 flex w-[40%] items-center justify-between gap-5'>
-        <h1 className='rounded-md bg-gray-400 p-2 text-lg text-white'>用户列表</h1>
-        <Search className='flex-1' placeholder='Search for users' />
-      </section>
+      <SearchHeader>用户列表</SearchHeader>
 
       {/* TODO suspense的生效问题 */}
-      <Suspense key={query + pageNo + Date.now()} fallback={<UserLoading lines={pageSize} />}>
+      <Suspense key={query + pageNo + Date.now()} fallback={<TableLoading lines={pageSize} />}>
         <UserTable pageNo={pageNo} pageSize={pageSize} query={query} />
       </Suspense>
 

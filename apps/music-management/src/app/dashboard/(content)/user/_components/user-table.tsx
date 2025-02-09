@@ -7,10 +7,10 @@ import {
 } from '@pkmer-music/management/components/ui/table'
 import { Avatar, AvatarFallback, AvatarImage } from '@pkmer-music/management/components/ui/avatar'
 import { Button } from '@pkmer-music/management/components/ui/button'
-import tableStyle from './user-table.module.scss'
+import tableStyle from '@pkmer-music/management/styles/table.module.scss'
 import { pageUsers } from '@pkmer-music/management/actions'
 import { deleteUser } from '@pkmer-music/management/actions'
-import DeleteUserButton from './_components/delete-user-button'
+import { DeleteBtn } from '@pkmer-music/management/components'
 interface UserTableProps {
   pageNo: number
   pageSize: number
@@ -81,14 +81,7 @@ export const UserTable: React.FC<UserTableProps> = async ({ pageNo, pageSize, qu
                   收藏
                 </Button>
                 {/* 从Table的服务端组件抽离成客户端组件 */}
-
-                <DeleteUserButton userId={user.id} />
-                {/* <Button
-                  onClick={() => deleteUser(user.id)}
-                  className='rounded-md bg-red-500 px-4 py-1 text-white hover:bg-red-600'
-                >
-                  删除
-                </Button> */}
+                <DeleteBtn id={user.id} triggerDelete={deleteUser} />
               </TableCell>
             </TableRow>
           ))}

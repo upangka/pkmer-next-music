@@ -1,6 +1,5 @@
 'use client'
 import { Button } from '@pkmer-music/management/components/ui/button'
-import { deleteUser } from '@pkmer-music/management/actions'
 import { useToast } from '@pkmer-music/management/hooks/use-toast'
 import { ToastAction } from '@pkmer-music/management/components/ui/toast'
 import { useRouter, useSearchParams, usePathname } from 'next/navigation'
@@ -16,10 +15,11 @@ import {
 } from '@pkmer-music/management/components/ui/dialog'
 
 interface DeleteUserButtonProps {
-  userId: string
+  id: string
+  triggerDelete: (id: string) => Promise<void>
 }
 
-const DeleteUserButton: React.FC<DeleteUserButtonProps> = ({ userId }) => {
+export const DeleteBtn: React.FC<DeleteUserButtonProps> = ({ id, triggerDelete }) => {
   const { toast } = useToast()
   const router = useRouter()
   const path = usePathname()
@@ -29,17 +29,17 @@ const DeleteUserButton: React.FC<DeleteUserButtonProps> = ({ userId }) => {
 
   async function handleDelete() {
     try {
-      await deleteUser(userId)
+      await triggerDelete(id)
       toast({
         title: '删除成功',
-        description: '删除用户成功',
+        description: '删除成功',
         action: <ToastAction altText='删除成功'>删除成功</ToastAction>
       })
       router.push(`${path}?${params.toString()}`)
     } catch (_) {
       toast({
         title: '删除失败',
-        description: '删除用户失败，请稍后再试',
+        description: '删除失败，请稍后再试',
         action: <ToastAction altText='删除失败'>删除失败</ToastAction>
       })
     }
@@ -76,4 +76,3 @@ const DeleteUserButton: React.FC<DeleteUserButtonProps> = ({ userId }) => {
     </>
   )
 }
-export default DeleteUserButton

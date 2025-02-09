@@ -2,7 +2,7 @@ interface Props {
   lines?: number
 }
 
-export default function UserLoading({ lines = 5 }: Props) {
+export function TableLoading({ lines = 5 }: Props) {
   return (
     <>
       <div className='w-full space-y-4 p-4'>
