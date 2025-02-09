@@ -1,5 +1,6 @@
 'use client'
 import { Avatar, AvatarFallback, AvatarImage } from '@pkmer-music/management/components/ui/avatar'
+import { PkmerMenuIcon } from './pkmer-menu-icon'
 import PkmerIcon from '@pkmer-music/management/components/icon/PkmerIcon'
 import { useThemeContext } from '@pkmer-music/management/context/themeContext'
 import headerStyle from './header.module.scss'
@@ -15,7 +16,8 @@ export const Header: React.FC<Props> = ({ onClick = noop }) => {
       {/* header start */}
       <section className='flex items-center justify-between px-10 py-2 shadow-lg'>
         <div className='flex items-center gap-5'>
-          <PkmerIcon icon='mynaui:menu-solid' onClick={onClick} />
+          {/* <PkmerIcon icon='mynaui:menu-solid' onClick={onClick} /> */}
+          <PkmerMenuIcon className='scale-75' changeStatus={onClick} />
           <p className='text-lg font-bold'>
             Pkmer-Next-Music <span className='text-base font-normal'>后台管理</span>
           </p>
