@@ -25,7 +25,10 @@ export default async function Page(props: Props) {
   const totalData = await getPageUserTotal({ username: query, pageNo, pageSize })
 
   return (
-    <div suppressHydrationWarning={true} className='flex-1 rounded-lg bg-white p-6 shadow-md'>
+    <div
+      suppressHydrationWarning={true}
+      className='w-auto rounded-lg border border-black bg-white p-6 shadow-md'
+    >
       <section className='mb-6 flex w-[40%] items-center justify-between gap-5'>
         <h1 className='rounded-md bg-gray-400 p-2 text-lg text-white'>用户列表</h1>
         <Search className='flex-1' placeholder='Search for users' />
