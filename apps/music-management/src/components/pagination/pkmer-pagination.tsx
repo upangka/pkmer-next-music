@@ -1,5 +1,7 @@
 'use client'
 import { useSearchParams, usePathname } from 'next/navigation'
+import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import {
   Pagination,
   PaginationContent,
@@ -20,7 +22,8 @@ export const PKMPagination: React.FC<PaginationProps> = props => {
   const searchParams = useSearchParams()
   const pathname = usePathname()
   const currentPage = +(searchParams.get('pageNo') ?? 1)
-
+  // 使用router.push来代替link组件的href属性，因为它会reload windows
+  const router = useRouter()
   function createhref(page: number) {
     const params = new URLSearchParams(searchParams)
     params.set('pageNo', page.toString())
@@ -93,12 +96,15 @@ export const PKMPagination: React.FC<PaginationProps> = props => {
         )
         pageNumbers.push(
           <PaginationItem key='last'>
-            <PaginationLink
-              href={createhref(props.total)}
+            <span
+              onClick={() => {
+                console.log('see me?')
+                router.push(createhref(props.total))
+              }}
               className={clsx(currentPage === props.total && paginationStyle.active)}
             >
-              {props.total}
-            </PaginationLink>
+              1{props.total}
+            </span>
           </PaginationItem>
         )
       }
@@ -113,7 +119,7 @@ export const PKMPagination: React.FC<PaginationProps> = props => {
         <PaginationContent className='flex gap-5'>
           <PaginationItem>
             <PaginationPrevious
-              href={currentPage > 1 ? createhref(currentPage - 1) : undefined}
+              href={currentPage > 1 ? createhref(currentPage - 1) : ''}
               className={clsx(
                 'select-none rounded px-3 py-2',
                 currentPage === 1 && 'cursor-not-allowed bg-gray-300 text-gray-500'
@@ -123,7 +129,7 @@ export const PKMPagination: React.FC<PaginationProps> = props => {
           {getPageNumbers()}
           <PaginationItem>
             <PaginationNext
-              href={currentPage < props.total ? createhref(currentPage + 1) : undefined}
+              href={currentPage < props.total ? createhref(currentPage + 1) : ''}
               className={clsx(
                 'select-none rounded px-3 py-2',
                 currentPage >= props.total && 'cursor-not-allowed bg-gray-300 text-gray-500'

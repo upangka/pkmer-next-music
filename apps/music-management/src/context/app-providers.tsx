@@ -1,4 +1,5 @@
 import { ThemeProvider } from './themeContext'
+import { MenuProvider } from './menuContext'
 
 interface AppProvidersProps {
   children: React.ReactNode
@@ -7,7 +8,9 @@ interface AppProvidersProps {
 const AppProviders: React.FC<AppProvidersProps> = ({ children }) => {
   return (
     <>
-      <ThemeProvider>{children}</ThemeProvider>
+      <ThemeProvider>
+        <MenuProvider>{children}</MenuProvider>
+      </ThemeProvider>
     </>
   )
 }
