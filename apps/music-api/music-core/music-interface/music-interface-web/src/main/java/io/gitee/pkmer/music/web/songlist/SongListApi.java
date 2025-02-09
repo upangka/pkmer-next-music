@@ -1,5 +1,6 @@
 package io.gitee.pkmer.music.web.songlist;
 
+import io.gitee.common.view.TotalView;
 import io.gitee.pkmer.convention.page.PageResponse;
 import io.gitee.pkmer.convention.result.Result;
 import io.gitee.pkmer.music.application.rank.AddRankCmd;
@@ -47,14 +48,27 @@ public interface SongListApi {
 
     @Operation(summary = "歌单分页查询")
     @PostMapping("/page")
-    Result<PageResponse<SongListView>> pageQuerySongList(@Valid @RequestBody SongListPageQuery pageQuery);
+    Result<PageResponse<SongListView>> pageQuerySongList(
+            @Valid
+            @RequestBody
+            SongListPageQuery pageQuery);
+
+
+
+    @Operation(summary = "歌单分页总数")
+    @PostMapping("/page/total")
+    Result<TotalView> getTotal(
+            @Valid
+            @RequestBody
+            SongListPageQuery pageQuery);
+
 
     @Operation(summary = "歌单详情")
     @Parameters({
             @Parameter(name = "id",description = "歌单id",in = ParameterIn.PATH),
     })
     @GetMapping("/{id}")
-    Result<SongDetailView> getSongListDetail(@PathVariable("id") Long id);
+    Result<SongListDetailView> getSongListDetail(@PathVariable("id") Long id);
 
     @Operation(summary = "歌单基本信息")
     @PostMapping("/update/base")

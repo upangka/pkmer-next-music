@@ -1,5 +1,6 @@
 package io.gitee.pkmer.music.application.songlist.query;
 
+import io.gitee.common.view.TotalView;
 import io.gitee.pkmer.convention.converter.TargetAndSourceConverter;
 import io.gitee.pkmer.convention.page.PageResponse;
 import io.gitee.pkmer.core.infrastructure.persistence.comment.mybatis.Comment;
@@ -52,12 +53,7 @@ public class SongListService {
      */
     public PageResponse<SongListView> pageQuerySongList(SongListPageQuery query){
 
-        // https://mybatis.org/mybatis-dynamic-sql/docs/conditions.html#value-transformation
-        WhereApplier whereApplier =
-                where(style, isLikeWhenPresent(query.getStyle()).map(s -> "%"+s+"%"))
-                        .and(title, isLikeWhenPresent(query.getTitle()).map(s -> "%"+s+"%"))
-                        .toWhereApplier();
-
+        WhereApplier whereApplier = buildWhereApplier(query);
         List<SongList> songLists = songListMapper.select(c ->
                 c.applyWhere(whereApplier)
                         .configureStatement(s -> s.setNonRenderingWhereClauseAllowed(true))
@@ -75,6 +71,28 @@ public class SongListService {
                 .setTotalPages(total / query.getPageSize() + 1)
                 .setCurrentPageNo(query.getPageNo());
         return pageResponse;
+    }
+
+
+    /**
+     * 获取歌单总数
+     * @param query
+     */
+    public TotalView getPageTotal(SongListPageQuery query){
+        WhereApplier whereApplier = buildWhereApplier(query);
+        int total = (int) songListMapper.count(c -> c.applyWhere(whereApplier));
+
+        return TotalView.builder()
+                .total(total)
+                .totalPages(total / query.getPageSize() + 1)
+                .build();
+    }
+
+    private WhereApplier buildWhereApplier(SongListPageQuery query){
+        // https://mybatis.org/mybatis-dynamic-sql/docs/conditions.html#value-transformation
+        return where(style, isLikeWhenPresent(query.getStyle()).map(s -> "%"+s+"%"))
+                        .and(title, isLikeWhenPresent(query.getTitle()).map(s -> "%"+s+"%"))
+                        .toWhereApplier();
     }
 
     /**

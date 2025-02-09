@@ -1,5 +1,6 @@
 package io.gitee.pkmer.music.web.songlist;
 
+import io.gitee.common.view.TotalView;
 import io.gitee.pkmer.convention.controller.BaseController;
 import io.gitee.pkmer.convention.page.PageResponse;
 import io.gitee.pkmer.convention.result.Result;
@@ -69,7 +70,12 @@ public class SongListController extends BaseController implements SongListApi {
     }
 
     @Override
-    public Result<SongDetailView> getSongListDetail(Long id) {
+    public Result<TotalView> getTotal(SongListPageQuery pageQuery) {
+        return success(songListService.getPageTotal(pageQuery));
+    }
+
+    @Override
+    public Result<SongListDetailView> getSongListDetail(Long id) {
         GetSongListDetailCmd cmd = GetSongListDetailCmd.commandOf(id);
         return success(cmdDispatcher.dispatch(cmd));
     }

@@ -25,7 +25,7 @@ import static org.mybatis.dynamic.sql.SqlBuilder.*;
 import static org.mybatis.dynamic.sql.SqlBuilder.where;
 
 @Component
-public class GetSongListDetailHandler implements CommandHandler<GetSongListDetailCmd, SongDetailView> {
+public class GetSongListDetailHandler implements CommandHandler<GetSongListDetailCmd, SongListDetailView> {
     private final SongListRepository songListrepository;
     private final SongDynamicMapper songDynamicMapper;
     private final SingerDynamicMapper singerDynamicMapper;
@@ -42,16 +42,16 @@ public class GetSongListDetailHandler implements CommandHandler<GetSongListDetai
     }
 
     @Override
-    public SongDetailView execute(GetSongListDetailCmd cmd) {
+    public SongListDetailView execute(GetSongListDetailCmd cmd) {
         SongListAggregate songList = songListrepository.load(new SongListId(cmd.getSongListId())).orElseThrow(
                 () -> new RuntimeException("歌单不存在")
         );
-        Map<Long, SongDetailView.SongView> songs = getSongs(songList);
+        Map<Long, SongListDetailView.SongView> songs = getSongs(songList);
 
         return buildSongDetailView(songList,songs);
     }
 
-    private Map<Long, SongDetailView.SongView> getSongs(SongListAggregate songList) {
+    private Map<Long, SongListDetailView.SongView> getSongs(SongListAggregate songList) {
         List<Long> songIds = songList.getBindSongs().stream().map(s -> s.getSongId().value()).toList();
 
         WhereApplier whereApplier = where().toWhereApplier();
@@ -107,8 +107,8 @@ public class GetSongListDetailHandler implements CommandHandler<GetSongListDetai
                ));
     }
 
-    private SongDetailView.SongView toSongView(Song song,final Map<Long,String> singers) {
-        return SongDetailView.SongView.builder()
+    private SongListDetailView.SongView toSongView(Song song, final Map<Long,String> singers) {
+        return SongListDetailView.SongView.builder()
                 .id(song.getId().toString())
                 .singerId(song.getSingerId().toString())
                 .singerName(singers.get(song.getSingerId()))
@@ -119,21 +119,21 @@ public class GetSongListDetailHandler implements CommandHandler<GetSongListDetai
                 .build();
     }
 
-    private SongDetailView buildSongDetailView(SongListAggregate songList,Map<Long,SongDetailView.SongView> songs){
+    private SongListDetailView buildSongDetailView(SongListAggregate songList, Map<Long, SongListDetailView.SongView> songs){
         List<String> styles = songList.getStyles().stream().map(Style::getDesc).toList();
 
-        List<SongDetailView.SongView> songViews = new ArrayList<>();
+        List<SongListDetailView.SongView> songViews = new ArrayList<>();
 
 
         songList.getSongIds().forEach(songId -> {
             Long id = songId.getSongId().value();
-            SongDetailView.SongView song = songs.get(id);
+            SongListDetailView.SongView song = songs.get(id);
             if(song != null){
                 songViews.add(song);
             }
         });
 
-        return SongDetailView.builder()
+        return SongListDetailView.builder()
                 .id(songList.getId().toString())
                 .styles(styles)
                 .title(songList.getTitle())

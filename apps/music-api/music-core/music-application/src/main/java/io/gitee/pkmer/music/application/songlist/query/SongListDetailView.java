@@ -8,7 +8,7 @@ import java.util.List;
 
 @Builder
 @Data
-public class SongDetailView {
+public class SongListDetailView {
 
     @Schema(description = "歌单id")
     private String id;
