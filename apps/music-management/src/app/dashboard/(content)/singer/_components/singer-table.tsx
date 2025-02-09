@@ -8,8 +8,9 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@pkmer-music/management/components/ui/avatar'
 import { Button } from '@pkmer-music/management/components/ui/button'
 import tableStyle from '@pkmer-music/management/styles/table.module.scss'
-import { pageUsers, deleteSinger } from '@pkmer-music/management/actions'
+import { pageSinger, deleteSinger } from '@pkmer-music/management/actions'
 import { DeleteBtn } from '@pkmer-music/management/components'
+import clsx from 'clsx'
 interface UserTableProps {
   pageNo: number
   pageSize: number
@@ -19,10 +20,10 @@ interface UserTableProps {
 const headers = ['ID', '歌手图片', '歌手', '性别', '出生', '地区', '简介', '操作']
 
 export const SingerTable: React.FC<UserTableProps> = async ({ pageNo, pageSize, query }) => {
-  const data = await pageUsers({
+  const data = await pageSinger({
     pageNo: pageNo,
     pageSize: pageSize,
-    username: query
+    name: query
   })
 
   function handleSex(sex?: string) {
@@ -47,30 +48,35 @@ export const SingerTable: React.FC<UserTableProps> = async ({ pageNo, pageSize, 
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data.list.map(user => (
-            <TableRow key={user.id} className='hover:bg-gray-50'>
-              <TableCell className={tableStyle.tableItem}>{user.id}</TableCell>
+          {data.list.map(singer => (
+            <TableRow key={singer.id} className='hover:bg-gray-50'>
+              <TableCell className={tableStyle.tableItem}>{singer.id}</TableCell>
               <TableCell className={tableStyle.tableItem}>
                 {/* Avatar,AvatarFallback,AvatarImage */}
                 <Avatar>
-                  <AvatarImage src={user.avator} alt={user.username} />
-                  <AvatarFallback>{user.username}</AvatarFallback>
+                  <AvatarImage src={singer.pic} alt={singer.name} />
+                  <AvatarFallback>{singer.name}</AvatarFallback>
                 </Avatar>
               </TableCell>
-              <TableCell className={tableStyle.tableItem}>{user.username}</TableCell>
-              <TableCell className={tableStyle.tableItem}>{handleSex(user.sex)}</TableCell>
-              <TableCell className={tableStyle.tableItem}>{user.phoneNum}</TableCell>
-              <TableCell className={tableStyle.tableItem}>{user.email}</TableCell>
-              <TableCell className={tableStyle.tableItem}>{user.birth}</TableCell>
-              <TableCell className={tableStyle.tableItem}>{user.introduction}</TableCell>
-              <TableCell className={tableStyle.tableItem}>{user.location}</TableCell>
+              <TableCell className={tableStyle.tableItem}>{singer.name}</TableCell>
+              <TableCell className={tableStyle.tableItem}>{handleSex(singer.sex)}</TableCell>
+              <TableCell className={tableStyle.tableItem}>{singer?.birth.split('T')[0]}</TableCell>
+              <TableCell className={tableStyle.tableItem}>{singer.location}</TableCell>
+              <TableCell
+                className={clsx(
+                  tableStyle.tableItem,
+                  'max-w-[200px] overflow-hidden text-ellipsis whitespace-nowrap'
+                )}
+              >
+                {singer.introduction}
+              </TableCell>
               <TableCell className='space-x-2 border border-gray-300 p-4'>
                 <Button className='rounded-md bg-blue-500 px-4 py-1 text-white hover:bg-blue-600'>
                   收藏
                 </Button>
                 {/* 从Table的服务端组件抽离成客户端组件 */}
 
-                <DeleteBtn id={user.id} triggerDelete={deleteSinger} />
+                <DeleteBtn id={singer.id} triggerDelete={deleteSinger} />
               </TableCell>
             </TableRow>
           ))}

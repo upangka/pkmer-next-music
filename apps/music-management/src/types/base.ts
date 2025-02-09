@@ -9,3 +9,10 @@ export interface PageQueryRes<T> {
   total: number
   totalPages: number
 }
+
+export type PageTotal = {
+  total: number
+  totalPages: number
+}
+
+export type Sex = 'FEMALE' | 'FEMALE' | 'UNKNOWN' | undefined

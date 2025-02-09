@@ -1,7 +1,7 @@
 import { SingerTable } from './_components/singer-table'
 import { SearchHeader, PKMPagination, TableLoading } from '@pkmer-music/management/components'
 import { Suspense } from 'react'
-import { getPageUserTotal } from '@pkmer-music/management/actions'
+import { getSingerPageTotal } from '@pkmer-music/management/actions'
 interface Props {
   searchParams: Promise<{
     [key: string]: string | undefined
@@ -21,7 +21,7 @@ export default async function Page(props: Props) {
   const pageNo = +(searchParams?.pageNo || 1)
   const pageSize = +(searchParams?.pageSize || 5)
 
-  const totalData = await getPageUserTotal({ username: query, pageNo, pageSize })
+  const totalData = await getSingerPageTotal({ name: query, pageSize })
 
   return (
     <div suppressHydrationWarning={true} className='w-auto rounded-lg bg-white p-6 shadow-md'>
