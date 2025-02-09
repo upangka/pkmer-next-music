@@ -36,10 +36,7 @@ public class SingerService {
 
 
     public PageResponse<SingerView> query(SingerQuery query){
-        Byte sexValue = handleSexValue(query.getSex());
-
-        WhereApplier whereApplier = where(name, isLikeWhenPresent(query.getName()).map(s -> "%" + s + "%"))
-                .and(sex, isEqualToWhenPresent(sexValue)).toWhereApplier();
+        WhereApplier whereApplier = buildWhereApplier(query);
 
         List<Singer> singers = singerDynamicMapper.select(c ->
                 c.applyWhere(whereApplier)
@@ -55,6 +52,21 @@ public class SingerService {
 
         List<SingerView> list = singers.stream().map(this::toView).toList();
         return handleResults((int) total, list, query);
+    }
+
+    public int getPageTotal(SingerQuery query){
+        WhereApplier whereApplier = buildWhereApplier(query);
+        return (int)singerDynamicMapper.count(c -> c
+                .applyWhere(whereApplier)
+                .configureStatement(s -> s.setNonRenderingWhereClauseAllowed(true))
+        );
+    }
+
+    private WhereApplier buildWhereApplier(SingerQuery query){
+        Byte sexValue = handleSexValue(query.getSex());
+
+       return where(name, isLikeWhenPresent(query.getName()).map(s -> "%" + s + "%"))
+                .and(sex, isEqualToWhenPresent(sexValue)).toWhereApplier();
     }
 
     private PageResponse<SingerView> handleResults(int total,

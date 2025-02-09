@@ -6,6 +6,7 @@ dependencies {
     implementation "org.springframework:spring-tx"
     implementation projects.musicCore.musicInfrastructure.musicInfrastructurePersistence
     api projects.musicCore.musicInfrastructure.musicInfrastructureGateway
+    api projects.musicCommon
     implementation projects.musicCore.musicDomain
     implementation projects.musicFramework.pkmerBootStarterMinio
 }

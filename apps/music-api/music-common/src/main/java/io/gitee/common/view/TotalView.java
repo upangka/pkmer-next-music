@@ -1,4 +1,4 @@
-package io.gitee.pkmer.music.application.user;
+package io.gitee.common.view;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;

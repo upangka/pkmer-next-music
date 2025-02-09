@@ -1,5 +1,6 @@
 package io.gitee.pkmer.music.application.user;
 
+import io.gitee.common.view.TotalView;
 import io.gitee.pkmer.convention.page.PageResponse;
 import io.gitee.pkmer.core.infrastructure.persistence.consumer.mybatis.Consumer;
 import io.gitee.pkmer.core.infrastructure.persistence.consumer.mybatis.ConsumerDynamicMapper;
