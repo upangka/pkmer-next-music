@@ -1,5 +1,6 @@
 package io.gitee.pkmer.music.application.singer.query;
 
+import io.gitee.common.view.TotalView;
 import io.gitee.pkmer.convention.page.PageResponse;
 import io.gitee.pkmer.core.infrastructure.persistence.singer.mybatis.Singer;
 import io.gitee.pkmer.core.infrastructure.persistence.singer.mybatis.SingerDynamicMapper;
@@ -54,12 +55,17 @@ public class SingerService {
         return handleResults((int) total, list, query);
     }
 
-    public int getPageTotal(SingerQuery query){
+    public TotalView getPageTotal(SingerQuery query){
         WhereApplier whereApplier = buildWhereApplier(query);
-        return (int)singerDynamicMapper.count(c -> c
+        int total = (int)singerDynamicMapper.count(c -> c
                 .applyWhere(whereApplier)
                 .configureStatement(s -> s.setNonRenderingWhereClauseAllowed(true))
         );
+
+        return TotalView.builder()
+                .total(total)
+                .totalPages(total / query.getPageSize() + 1)
+                .build();
     }
 
     private WhereApplier buildWhereApplier(SingerQuery query){

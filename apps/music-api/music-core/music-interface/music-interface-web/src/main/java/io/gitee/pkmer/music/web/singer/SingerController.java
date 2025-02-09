@@ -60,8 +60,13 @@ public class SingerController extends BaseController implements SingerApi {
     }
 
     @Override
-    public Result<PageResponse<SingerView>> getSinger(String name, String sex) {
+    public Result<PageResponse<SingerView>> getSinger(String name,
+                                                      String sex,
+                                                      int pageNo,
+                                                      int pageSize) {
         SingerQuery singerQuery = SingerQuery.commandOf(name, sex);
+        singerQuery.setPageNo(pageNo);
+        singerQuery.setPageSize(pageSize);
         PageResponse<SingerView> results = singerService.query(singerQuery);
         return success(results);
     }

@@ -29,7 +29,7 @@ public interface SingerApi {
 
     @Operation(summary = "查询歌手详情")
     @Parameters({
-            @Parameter(name = "id",description = "歌手id",required = true,in = ParameterIn.PATH),
+            @Parameter(name = "id", description = "歌手id", required = true, in = ParameterIn.PATH),
     })
     @GetMapping("/{id}")
     Result<SingerView> getSingerDetail(@PathVariable("id") Long id);
@@ -52,12 +52,20 @@ public interface SingerApi {
 
     @Operation(summary = "查询歌手")
     @Parameters({
-            @Parameter(name = "name",description = "歌手名称",in = ParameterIn.PATH),
-            @Parameter(name = "sex",description = "歌手性别",example = "MALE" ,required = true,in = ParameterIn.HEADER),
+            @Parameter(name = "name", description = "歌手名称", in = ParameterIn.PATH),
+            @Parameter(name = "sex", description = "歌手性别", example = "MALE", required = true, in = ParameterIn.HEADER),
+            @Parameter(name = "pageNo", description = "页码", example = "1", required = true, in = ParameterIn.HEADER),
+            @Parameter(name = "pageSize", description = "每页大小", example = "10", required = true, in = ParameterIn.HEADER),
     })
     @GetMapping("/query")
-    Result<PageResponse<SingerView>> getSinger(@RequestParam(value = "name",required = false)
-                           String name,
-                                               @RequestParam(value = "sex",required = false)
-                           String sex);
+    Result<PageResponse<SingerView>> getSinger(
+            @RequestParam(value = "name", required = false)
+            String name,
+            @RequestParam(value = "sex", required = false)
+            String sex,
+            @RequestParam(value = "pageNo", required = false, defaultValue = "1")
+            int PageNo,
+            @RequestParam(value = "pageSize", required = false, defaultValue = "10")
+            int pageSize
+            );
 }
