@@ -1,0 +1,30 @@
+$width: 170px;
+$time: 0.3s;
+$gap: 10px;
+.asider {
+  position: absolute;
+  width: $width;
+  //   设置高度与父容器一样
+  top: 0;
+  bottom: 0;
+  left: 0;
+  border-radius: 0.375rem; /* rounded-md */
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-lg */
+
+  transition: left $time ease-in-out;
+  &.collapsed {
+    left: -$width;
+  }
+}
+
+.content {
+  width: 100%;
+  margin-left: $width + $gap;
+  transition: margin-left $time ease-in-out;
+
+  &.collapsed {
+    margin-left: 0;
+  }
+}

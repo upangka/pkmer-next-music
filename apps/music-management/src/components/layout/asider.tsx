@@ -42,7 +42,7 @@ export const Asider: React.FC<Props> = ({ isShow = true, className = '' }) => {
   // }
 
   return (
-    <nav className={clsx('h-full border-r border-black bg-white', className)}>
+    <nav className={clsx('h-full bg-white', className)}>
       <ul className={clsx('flex flex-col gap-3 py-5')}>
         {navInfos.map(item => (
           <li
