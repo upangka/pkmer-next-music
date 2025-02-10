@@ -1,9 +1,6 @@
 package io.gitee.pkmer.core.infrastructure.persistence.collect.mybatis;
 
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Result;
-import org.apache.ibatis.annotations.Results;
-import org.apache.ibatis.annotations.SelectProvider;
+import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.type.JdbcType;
 import org.mybatis.dynamic.sql.select.render.SelectStatementProvider;
 
@@ -11,15 +8,37 @@ import java.util.List;
 
 @Mapper
 public interface CollectPageMapper {
+
     @SelectProvider(type = CollectPageProvider.class, method = "selectWithLeftJoinProvider")
-    @Results(id="CollectResult", value = {
+    @Results(id="CollectSongResult", value = {
             @Result(column="id", property="id", jdbcType= JdbcType.BIGINT, id=true),
             @Result(column="user_id", property="userId", jdbcType=JdbcType.BIGINT),
             @Result(column="type", property="type", jdbcType=JdbcType.TINYINT),
-            @Result(column="song_list_id", property="songListId", jdbcType=JdbcType.BIGINT),
             @Result(column="create_time", property="createTime", jdbcType=JdbcType.TIMESTAMP),
+            @Result(column="song_id", property="songId", jdbcType=JdbcType.BIGINT),
             @Result(column="song_id", property="song.id", jdbcType=JdbcType.BIGINT),
-            @Result(column="song_name", property="song.name", jdbcType=JdbcType.BIGINT),
+            @Result(column="song_name", property="song.name", jdbcType=JdbcType.VARCHAR),
+            @Result(column="singer_id", property="song.singerId", jdbcType=JdbcType.BIGINT),
+            @Result(column="singer_name", property="song.singerName", jdbcType=JdbcType.VARCHAR),
+            @Result(column="song_url", property="song.url", jdbcType=JdbcType.VARCHAR),
+            @Result(column="song_pic", property="song.pic", jdbcType=JdbcType.VARCHAR),
+            @Result(column="song_introduction", property="song.introduction", jdbcType=JdbcType.VARCHAR),
     })
-    List<CollectSongDto> selectWithLeftJoin(SelectStatementProvider selectStatementProvider);
+    /**
+     * 分页查询收藏歌曲 left join song和singer
+     * 参数接收SelectStatementProvider
+     * 客户端传进来的参数直接在service层做字段的处理。
+     */
+    List<CollectSongDto> selectWithLeftJoinProvider(SelectStatementProvider selectStatement);
+
+
+
+
+
+
+
+
+
+
+
 }
