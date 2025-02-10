@@ -3,6 +3,7 @@ package io.gitee.pkmer.music.web.collect;
 import io.gitee.common.view.TotalView;
 import io.gitee.pkmer.convention.page.PageResponse;
 import io.gitee.pkmer.convention.result.Result;
+import io.gitee.pkmer.core.infrastructure.persistence.collect.mybatis.CollectSongDto;
 import io.gitee.pkmer.music.application.collect.CollectQuery;
 import io.gitee.pkmer.music.application.collect.CollectView;
 import io.swagger.v3.oas.annotations.Operation;
@@ -11,6 +12,8 @@ import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * <p>
@@ -74,5 +77,9 @@ public interface CollectApi {
     })
     @PostMapping("/song/{id}")
     Result<Void> collectSong(@PathVariable Long id);
+
+
+    @PostMapping("/test")
+    Result<List<CollectSongDto>> test(@RequestBody CollectQuery query);
 
 }

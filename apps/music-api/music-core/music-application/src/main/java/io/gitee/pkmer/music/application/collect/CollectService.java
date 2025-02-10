@@ -3,9 +3,8 @@ package io.gitee.pkmer.music.application.collect;
 import io.gitee.common.util.TotalPagesHelper;
 import io.gitee.common.view.TotalView;
 import io.gitee.pkmer.convention.page.PageResponse;
+import io.gitee.pkmer.core.infrastructure.persistence.collect.mybatis.*;
 import io.gitee.pkmer.core.infrastructure.persistence.collect.mybatis.Collect;
-import io.gitee.pkmer.core.infrastructure.persistence.collect.mybatis.CollectDynamicMapper;
-import io.gitee.pkmer.core.infrastructure.persistence.collect.mybatis.CollectDynamicSqlSupport;
 import io.gitee.pkmer.core.infrastructure.persistence.song.mybatis.Song;
 import io.gitee.pkmer.core.infrastructure.persistence.song.mybatis.SongDynamicMapper;
 import io.gitee.pkmer.core.infrastructure.persistence.song.mybatis.SongDynamicSqlSupport;
@@ -27,6 +26,7 @@ import java.util.stream.Collectors;
 
 import static org.mybatis.dynamic.sql.SqlBuilder.*;
 import static io.gitee.pkmer.core.infrastructure.persistence.collect.mybatis.CollectDynamicSqlSupport.*;
+import static  io.gitee.pkmer.core.infrastructure.persistence.song.mybatis.SongDynamicSqlSupport.song;
 /**
  * DDD CQSR 查询分离
  * <p>
@@ -44,7 +44,37 @@ public class CollectService {
 
     private final CollectDynamicMapper collectDynamicMapper;
     private final SongDynamicMapper songDynamicMapper;
+    private final CollectPageMapper collectPageMapper;
+
     private final SongService songService;
+
+
+    public List<CollectSongDto> pageQueryWithSongName(CollectQuery query){
+
+         try{
+
+             SelectStatementProvider selectProvider = select(
+                     collect.id,collect.type,collect.songId,collect.createTime,collect.userId,
+                     song.name.as("song_name")
+             )
+                     .from(collect)
+                     .leftJoin(SongDynamicSqlSupport.song)
+                     .on(SongDynamicSqlSupport.id, equalTo(collect.songId))
+                     .limit(1)
+                     .offset(2)
+                     .build()
+                     .render(RenderingStrategies.MYBATIS3);
+             List<CollectSongDto> collects = collectPageMapper.selectWithLeftJoin(selectProvider);
+
+             System.out.println(collects);
+             return null;
+         }catch(Exception r){
+             System.out.println(r.getMessage());
+             throw r;
+         }
+
+    }
+
 
     /**
      * 分页查询收藏

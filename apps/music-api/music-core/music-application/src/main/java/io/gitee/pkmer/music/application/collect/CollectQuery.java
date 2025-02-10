@@ -20,4 +20,7 @@ import lombok.EqualsAndHashCode;
 public class CollectQuery extends PageQuery {
     @Schema(description = "用户id")
     private Long userId;
+
+    @Schema(description = "歌曲名称")
+    private String songName;
 }

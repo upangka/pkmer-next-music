@@ -4,11 +4,14 @@ import io.gitee.common.view.TotalView;
 import io.gitee.pkmer.convention.controller.BaseController;
 import io.gitee.pkmer.convention.page.PageResponse;
 import io.gitee.pkmer.convention.result.Result;
+import io.gitee.pkmer.core.infrastructure.persistence.collect.mybatis.CollectSongDto;
 import io.gitee.pkmer.ddd.shared.dispatch.CmdDispatcher;
 import io.gitee.pkmer.music.application.collect.*;
 import io.gitee.pkmer.security.context.AppContextHolder;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.DispatcherServlet;
+
+import java.util.List;
 
 /**
  * <p>
@@ -84,6 +87,11 @@ public class CollectController extends BaseController implements CollectApi {
                 .setSongId(id);
         cmdDispatcher.dispatch(cmd);
         return success();
+    }
+
+    @Override
+    public Result<List<CollectSongDto>> test(CollectQuery query) {
+        return success(service.pageQueryWithSongName(query));
     }
 
     private Long getCurrentUserId(){
