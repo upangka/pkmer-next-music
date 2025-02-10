@@ -1,5 +1,7 @@
 package io.gitee.pkmer.music.application.collect;
 
+import io.gitee.common.util.TotalPagesHelper;
+import io.gitee.common.view.TotalView;
 import io.gitee.pkmer.convention.page.PageResponse;
 import io.gitee.pkmer.core.infrastructure.persistence.collect.mybatis.Collect;
 import io.gitee.pkmer.core.infrastructure.persistence.collect.mybatis.CollectDynamicMapper;
@@ -43,24 +45,47 @@ public class CollectService {
     private final CollectDynamicMapper collectDynamicMapper;
     private final SongDynamicMapper songDynamicMapper;
     private final SongService songService;
+
+    /**
+     * 分页查询收藏
+     * @param query
+     * @return
+     */
     public PageResponse<CollectView> pageQuery(CollectQuery query) {
 
-        WhereApplier whereApplier = where(CollectDynamicSqlSupport.userId, isEqualTo(query.getUserId())).toWhereApplier();
+        WhereApplier whereApplier = buildWhereApplier(query);
 
         List<Collect> collects = collectDynamicMapper.select(c -> c.applyWhere(whereApplier)
                 .orderBy(CollectDynamicSqlSupport.createTime));
 
-        long total = collectDynamicMapper.count(c -> c.applyWhere(whereApplier));
+        int total = (int)collectDynamicMapper.count(c -> c.applyWhere(whereApplier));
 
         List<CollectView> views = toViews(collects);
-
+        int totalPages = TotalPagesHelper.calcTotalPages(total, query.getPageSize());
         return PageResponse.<CollectView>builder()
-                .total((int) total)
-                .totalPages((int) total / query.getPageSize() + 1)
+                .total(total)
+                .totalPages(totalPages)
                 .currentPageNo(query.getPageNo())
                 .list(views)
                 .build();
 
+    }
+
+
+    public TotalView getPageTotal(CollectQuery query){
+        WhereApplier whereApplier = buildWhereApplier(query);
+        int total = (int)collectDynamicMapper.count(c -> c.applyWhere(whereApplier));
+
+        int totalPages = TotalPagesHelper.calcTotalPages(total, query.getPageSize());
+
+        return TotalView.builder()
+                .total(total)
+                .totalPages(totalPages)
+                .build();
+    }
+
+    private WhereApplier buildWhereApplier(CollectQuery query){
+        return where(CollectDynamicSqlSupport.userId, isEqualTo(query.getUserId())).toWhereApplier();
     }
 
 

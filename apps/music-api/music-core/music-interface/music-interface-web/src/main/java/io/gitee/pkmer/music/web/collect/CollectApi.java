@@ -1,5 +1,6 @@
 package io.gitee.pkmer.music.web.collect;
 
+import io.gitee.common.view.TotalView;
 import io.gitee.pkmer.convention.page.PageResponse;
 import io.gitee.pkmer.convention.result.Result;
 import io.gitee.pkmer.music.application.collect.CollectQuery;
@@ -27,8 +28,14 @@ public interface CollectApi {
 
 
     @Operation(summary = "分页查询收藏")
-    @GetMapping
-    Result<PageResponse<CollectView>> pageQuery(CollectQuery query);
+    @GetMapping("/page")
+    Result<PageResponse<CollectView>> pageQuery(@RequestBody
+                                                CollectQuery query);
+
+    @Operation(summary = "获取收藏总数")
+    @GetMapping("/page/total")
+    Result<TotalView> getPageTotal(@RequestBody
+                                   CollectQuery query);
 
     @Operation(summary = "查询是否收藏歌曲")
     @Parameters({

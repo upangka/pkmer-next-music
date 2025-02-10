@@ -1,5 +1,6 @@
 package io.gitee.pkmer.music.web.collect;
 
+import io.gitee.common.view.TotalView;
 import io.gitee.pkmer.convention.controller.BaseController;
 import io.gitee.pkmer.convention.page.PageResponse;
 import io.gitee.pkmer.convention.result.Result;
@@ -24,18 +25,21 @@ public class CollectController extends BaseController implements CollectApi {
 
     private final CollectService service;
     private final CmdDispatcher cmdDispatcher;
-    private final DispatcherServlet dispatcherServlet;
 
-    public CollectController(CollectService service, CmdDispatcher cmdDispatcher, DispatcherServlet dispatcherServlet) {
+    public CollectController(CollectService service, CmdDispatcher cmdDispatcher) {
         this.service = service;
         this.cmdDispatcher = cmdDispatcher;
-        this.dispatcherServlet = dispatcherServlet;
     }
 
     @Override
     public Result<PageResponse<CollectView>> pageQuery(CollectQuery query) {
         query.setUserId(getCurrentUserId());
         return success(service.pageQuery(query));
+    }
+
+    @Override
+    public Result<TotalView> getPageTotal(CollectQuery query) {
+        return success(service.getPageTotal(query));
     }
 
     @Override

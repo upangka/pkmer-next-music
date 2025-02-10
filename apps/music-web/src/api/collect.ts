@@ -31,6 +31,8 @@ export const cancelCollectSong = (songId: string): AppResponse<unknown> => {
   return http.delete(`/collect/song/${songId}`)
 }
 
+// 导出一个函数getUserCollectSong，用于获取用户收藏的歌曲
 export const getUserCollectSong = (): AppResponse<UserCollectRes> => {
-  return http.get('/collect')
+  // 发送GET请求，获取收藏的歌曲
+  return http.get('/collect/page')
 }
