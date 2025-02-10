@@ -1,8 +1,7 @@
 'use client'
-import { Header, Asider } from '@pkmer-music/management/components'
-import { useState } from 'react'
-import AppProviders from '@pkmer-music/management/context/app-providers'
+import { Header, Asider, BreadCrumbs } from '@pkmer-music/management/components'
 import { useMenuContext } from '@pkmer-music/management/context/menuContext'
+import { useBreadCrumbContext } from '@pkmer-music/management/context/breadCrumbContext'
 import { Toaster } from '@pkmer-music/management/components/ui/toaster'
 import layoutStyle from './layout.module.scss'
 import clsx from 'clsx'
@@ -12,6 +11,7 @@ export default function DashBoardLayout({
   children: React.ReactNode
 }>) {
   const menuContext = useMenuContext()
+  const breadCrumbContext = useBreadCrumbContext()
 
   return (
     <>
@@ -24,7 +24,13 @@ export default function DashBoardLayout({
           isShow={menuContext.collapsed}
         />
         <div className={clsx(layoutStyle.content, menuContext.collapsed && layoutStyle.collapsed)}>
-          {children}
+          {/* 面包屑start */}
+          <BreadCrumbs breadCrumbs={breadCrumbContext.breadcrumbs} />
+          {/* 面包屑end */}
+
+          {/* 内容区域start */}
+          <section>{children}</section>
+          {/* 内容区域end */}
         </div>
       </main>
       {/* </AppProviders> */}

@@ -1,11 +1,6 @@
 import clsx from 'clsx'
 import Link from 'next/link'
-
-export type BreadCrumb = {
-  label: string
-  href: string
-  active?: boolean
-}
+import type { BreadCrumb } from '@pkmer-music/management/types'
 
 interface Props {
   breadCrumbs: BreadCrumb[]
