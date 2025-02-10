@@ -32,6 +32,7 @@ export async function getPageUserTotal(query: UserQuery): AppResponse<PageTotal>
   return httpService.post('/user/page/total', query)
 }
 
+// 导出一个异步函数，用于删除用户
 export async function deleteUser(id: string): AppResponse<void> {
   return httpService.delete(`/user/${id}`)
 }

@@ -42,6 +42,8 @@ app:
   auth:
     ignore-urls:
       - "/user/**"
+      - "/collect/**"
+      - "/admin/collect/**" #TODO 后端管理登录实现之后删除
 #      - "/user/signup"
       - "/doc.html"
       - "/webjars/**"

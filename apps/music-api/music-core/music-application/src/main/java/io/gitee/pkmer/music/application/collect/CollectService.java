@@ -53,7 +53,7 @@ public class CollectService {
     private final SongService songService;
 
 
-    public List<CollectSongDto> pageQueryWithSongName(CollectQuery query) {
+    public PageResponse<CollectSongDto> pageQueryWithSongName(CollectQuery query) {
         try {
             // 明确指定类型用于@Results,防止MyBatisSystemException null
             BasicColumn[] columns = List.of(
@@ -69,8 +69,8 @@ public class CollectService {
                     .on(collect.songId, equalTo(song.id))
                     .leftJoin(singer)
                     .on(song.singerId, equalTo(singer.id))
-                    .where(song.name, isLike(query.getSongName()).map(s -> "%" + s + "%"))
-                    .and(collect.type, isEqualTo((byte) 1))
+                    .where(song.name, isLikeWhenPresent(query.getSongName()).map(s -> "%" + s + "%"))
+                    .and(collect.type, isEqualTo(SongAndListType.SONG.getValue()))
                     .orderBy(collect.createTime.descending())
                     .limit(query.getPageSize())
                     .offset((long) (query.getPageNo() - 1) * query.getPageSize())
@@ -84,7 +84,14 @@ public class CollectService {
                 song.setPic(pkmerMinioProps.getUrl() + song.getPic());
                 song.setUrl(pkmerMinioProps.getUrl() + song.getUrl());
             }
-            return collects;
+
+            return PageResponse.<CollectSongDto>builder()
+                    .total(collects.size()) // todo total
+                    .totalPages(1)
+                    .currentPageNo(query.getPageNo())
+                    .list(collects)
+                    .build();
+
         } catch (Exception r) {
             System.out.println(r.getMessage());
             throw r;

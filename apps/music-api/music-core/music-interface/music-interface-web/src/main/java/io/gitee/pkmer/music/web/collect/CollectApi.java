@@ -30,10 +30,16 @@ import java.util.List;
 public interface CollectApi {
 
 
-    @Operation(summary = "分页查询收藏")
-    @GetMapping("/page")
-    Result<PageResponse<CollectView>> pageQuery(@RequestBody
+    @Operation(summary = "用户端分页查询收藏")
+    @PostMapping("/user/page")
+    Result<PageResponse<CollectView>> userPageQuery(@RequestBody
                                                 CollectQuery query);
+
+
+    @Operation(summary = "管理员端分页查询收藏")
+    @PostMapping("/admin/page")
+    Result<PageResponse<CollectSongDto>> adminPageQuery(@RequestBody CollectQuery query);
+
 
     @Operation(summary = "获取收藏总数")
     @GetMapping("/page/total")
@@ -79,7 +85,5 @@ public interface CollectApi {
     Result<Void> collectSong(@PathVariable Long id);
 
 
-    @PostMapping("/test")
-    Result<List<CollectSongDto>> test(@RequestBody CollectQuery query);
 
 }

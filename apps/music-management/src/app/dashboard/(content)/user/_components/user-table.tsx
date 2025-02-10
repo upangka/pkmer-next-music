@@ -5,6 +5,7 @@ import {
   TableBody,
   TableCell
 } from '@pkmer-music/management/components/ui/table'
+import Link from 'next/link'
 import { Avatar, AvatarFallback, AvatarImage } from '@pkmer-music/management/components/ui/avatar'
 import { Button } from '@pkmer-music/management/components/ui/button'
 import tableStyle from '@pkmer-music/management/styles/table.module.scss'
@@ -78,10 +79,20 @@ export const UserTable: React.FC<UserTableProps> = async ({ pageNo, pageSize, qu
               <TableCell className={tableStyle.tableItem}>{user.location}</TableCell>
               <TableCell className='space-x-2 border border-gray-300 p-4'>
                 <Button className='rounded-md bg-blue-500 px-4 py-1 text-white hover:bg-blue-600'>
-                  收藏
+                  <Link
+                    href={`/dashboard/user/collect?username=${user.username}&userId=${user.id}`}
+                  >
+                    收藏
+                  </Link>
                 </Button>
                 {/* 从Table的服务端组件抽离成客户端组件 */}
-                <DeleteBtn id={user.id} triggerDelete={deleteUser} />
+                <DeleteBtn
+                  id={user.id}
+                  triggerDelete={async id => {
+                    'use server'
+                    await deleteUser(id)
+                  }}
+                />
               </TableCell>
             </TableRow>
           ))}

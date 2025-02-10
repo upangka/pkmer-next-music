@@ -16,10 +16,15 @@ import {
 
 interface DeleteUserButtonProps {
   id: string
+  btnName?: string
   triggerDelete: (id: string) => Promise<void>
 }
 
-export const DeleteBtn: React.FC<DeleteUserButtonProps> = ({ id, triggerDelete }) => {
+export const DeleteBtn: React.FC<DeleteUserButtonProps> = ({
+  id,
+  triggerDelete,
+  btnName = '删除'
+}) => {
   const { toast } = useToast()
   const router = useRouter()
   const path = usePathname()
@@ -50,7 +55,7 @@ export const DeleteBtn: React.FC<DeleteUserButtonProps> = ({ id, triggerDelete }
       <Dialog>
         <DialogTrigger asChild>
           <Button variant='outline' className='bg-red-600 text-white'>
-            删除用户
+            {btnName}
           </Button>
         </DialogTrigger>
         <DialogContent className='sm:max-w-[425px]'>

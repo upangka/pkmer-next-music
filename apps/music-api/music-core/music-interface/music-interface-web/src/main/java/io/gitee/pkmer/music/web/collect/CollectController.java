@@ -35,7 +35,7 @@ public class CollectController extends BaseController implements CollectApi {
     }
 
     @Override
-    public Result<PageResponse<CollectView>> pageQuery(CollectQuery query) {
+    public Result<PageResponse<CollectView>> userPageQuery(CollectQuery query) {
         query.setUserId(getCurrentUserId());
         return success(service.pageQuery(query));
     }
@@ -90,7 +90,7 @@ public class CollectController extends BaseController implements CollectApi {
     }
 
     @Override
-    public Result<List<CollectSongDto>> test(CollectQuery query) {
+    public Result<PageResponse<CollectSongDto>> adminPageQuery(CollectQuery query) {
         return success(service.pageQueryWithSongName(query));
     }
 
