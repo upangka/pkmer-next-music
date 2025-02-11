@@ -7,6 +7,8 @@ interface Props {
 }
 
 export const BreadCrumbs: React.FC<Props> = ({ breadCrumbs }) => {
+  if (breadCrumbs.length === 0) return null
+
   return (
     <nav className='w-fit rounded-md border px-5 py-2'>
       <ol className='flex items-center justify-start'>
