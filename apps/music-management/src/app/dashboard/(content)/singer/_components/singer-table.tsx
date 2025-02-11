@@ -11,13 +11,15 @@ import tableStyle from '@pkmer-music/management/styles/table.module.scss'
 import { pageSinger, deleteSinger } from '@pkmer-music/management/actions'
 import { DeleteBtn } from '@pkmer-music/management/components'
 import clsx from 'clsx'
+import LinkBtn from './LinkButton'
+
 interface SingerTableProps {
   pageNo: number
   pageSize: number
   query: string
 }
 
-const headers = ['ID', '歌手图片', '歌手', '性别', '出生', '地区', '简介', '操作']
+const headers = ['ID', '歌手图片', '歌手', '性别', '出生', '地区', '简介', '歌曲管理', '操作']
 
 export const SingerTable: React.FC<SingerTableProps> = async ({ pageNo, pageSize, query }) => {
   const data = await pageSinger({
@@ -69,6 +71,9 @@ export const SingerTable: React.FC<SingerTableProps> = async ({ pageNo, pageSize
                 )}
               >
                 {singer.introduction}
+              </TableCell>
+              <TableCell className={tableStyle.tableItem}>
+                <LinkBtn href='/dashboard/singer/manage'>歌曲管理</LinkBtn>
               </TableCell>
               <TableCell className='space-x-2 border border-gray-300 p-4'>
                 <Button className='rounded-md bg-blue-500 px-4 py-1 text-white hover:bg-blue-600'>
