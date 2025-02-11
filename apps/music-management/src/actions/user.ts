@@ -23,7 +23,7 @@ export async function registerUser(_preState: State, formData: FormData) {
 
 export async function pageUsers(query: UserQuery): AppResponse<UserPageRes> {
   // 使用 setTimeout 来实现延迟
-  await new Promise(resolve => setTimeout(resolve, 3500)) // 延迟 5 秒
+  // await new Promise(resolve => setTimeout(resolve, 3500)) // 延迟 5 秒
 
   return httpService.post('/user/page', query)
 }
