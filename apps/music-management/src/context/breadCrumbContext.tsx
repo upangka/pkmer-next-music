@@ -20,10 +20,7 @@ export const useBreadCrumbContext = () => {
 }
 
 export const BreadCrumbProvider: React.FC<BreadCrumbProviderProps> = ({ children }) => {
-  const [breadcrumbs, setBreadcrumbs] = useState<BreadCrumb[]>([
-    { label: 'Invoices', href: '/invocation' },
-    { label: 'Create Invoice', href: '/invocation/create', active: true }
-  ])
+  const [breadcrumbs, setBreadcrumbs] = useState<BreadCrumb[]>([])
 
   return (
     <BreadCrumbContext.Provider

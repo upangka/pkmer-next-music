@@ -1,12 +1,21 @@
 import { SongTable } from './_components/songs-table'
 import { SearchHeader, PKMPagination, TableLoading } from '@pkmer-music/management/components'
 import { Suspense } from 'react'
+import { BreadcrumbClientHelp } from '@pkmer-music/management/context/breadcrumb-client-help'
 import { getSongListPageTotal } from '@pkmer-music/management/actions'
 interface Props {
   searchParams: Promise<{
     [key: string]: string | undefined
   }>
 }
+
+const breadCrumbs = [
+  {
+    label: '歌单管理',
+    href: '/dashboard/songs',
+    active: true
+  }
+]
 
 /**
  * Page服务端组件，Table服务端组件，Suspense生效
@@ -24,15 +33,17 @@ export default async function Page(props: Props) {
   const totalData = await getSongListPageTotal({ title: query, pageSize })
   console.log(totalData)
   return (
-    <div suppressHydrationWarning={true} className='w-auto rounded-lg bg-white p-6 shadow-md'>
-      <SearchHeader>歌单列表</SearchHeader>
+    <>
+      <BreadcrumbClientHelp breadcrumbs={breadCrumbs} />
+      <div suppressHydrationWarning={true} className='w-auto rounded-lg bg-white p-6 shadow-md'>
+        <SearchHeader>歌单列表</SearchHeader>
+        {/* TODO suspense的生效问题 */}
+        <Suspense key={query + pageNo + Date.now()} fallback={<TableLoading lines={pageSize} />}>
+          <SongTable pageNo={pageNo} pageSize={pageSize} query={query} />
+        </Suspense>
 
-      {/* TODO suspense的生效问题 */}
-      <Suspense key={query + pageNo + Date.now()} fallback={<TableLoading lines={pageSize} />}>
-        <SongTable pageNo={pageNo} pageSize={pageSize} query={query} />
-      </Suspense>
-
-      <PKMPagination total={totalData.totalPages} />
-    </div>
+        <PKMPagination total={totalData.totalPages} />
+      </div>
+    </>
   )
 }

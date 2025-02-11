@@ -1,6 +1,7 @@
 import { SingerTable } from './_components/singer-table'
 import { SearchHeader, PKMPagination, TableLoading } from '@pkmer-music/management/components'
 import { Suspense } from 'react'
+import { BreadcrumbClientHelp } from '@pkmer-music/management/context/breadcrumb-client-help'
 import { getSingerPageTotal } from '@pkmer-music/management/actions'
 interface Props {
   searchParams: Promise<{
@@ -8,6 +9,13 @@ interface Props {
   }>
 }
 
+const breadCrumbs = [
+  {
+    label: '歌手管理',
+    href: '/dashboard/singer',
+    active: true
+  }
+]
 /**
  * Page服务端组件，Table服务端组件，Suspense生效
  * 分页客户端组件能够接收服务端组件Page传递的属性。
@@ -24,15 +32,19 @@ export default async function Page(props: Props) {
   const totalData = await getSingerPageTotal({ name: query, pageSize })
 
   return (
-    <div suppressHydrationWarning={true} className='w-auto rounded-lg bg-white p-6 shadow-md'>
-      <SearchHeader>歌手列表</SearchHeader>
+    <>
+      <BreadcrumbClientHelp breadcrumbs={breadCrumbs} />
 
-      {/* TODO suspense的生效问题 */}
-      <Suspense key={query + pageNo + Date.now()} fallback={<TableLoading lines={pageSize} />}>
-        <SingerTable pageNo={pageNo} pageSize={pageSize} query={query} />
-      </Suspense>
+      <div suppressHydrationWarning={true} className='w-auto rounded-lg bg-white p-6 shadow-md'>
+        <SearchHeader>歌手列表</SearchHeader>
 
-      <PKMPagination total={totalData.totalPages} />
-    </div>
+        {/* TODO suspense的生效问题 */}
+        <Suspense key={query + pageNo + Date.now()} fallback={<TableLoading lines={pageSize} />}>
+          <SingerTable pageNo={pageNo} pageSize={pageSize} query={query} />
+        </Suspense>
+
+        <PKMPagination total={totalData.totalPages} />
+      </div>
+    </>
   )
 }
