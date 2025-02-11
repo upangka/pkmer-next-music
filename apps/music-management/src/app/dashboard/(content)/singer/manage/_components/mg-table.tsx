@@ -12,7 +12,7 @@ interface MgTableProps {
   query: string
 }
 
-const headers = ['ID', '歌手图片', '歌名', '专辑', '歌词', '资源更新', '评论', '操作']
+const headers = ['ID', '歌曲图片', '歌名', '专辑', '资源更新', '评论', '操作']
 
 export const MgTable: React.FC<MgTableProps> = ({ pageNo, pageSize, query }) => {
   return (
