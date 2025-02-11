@@ -1,3 +1,5 @@
+'use client'
+import { use } from 'react'
 import {
   Table,
   TableHeader,
@@ -10,19 +12,14 @@ import clsx from 'clsx'
 import tableStyle from '@pkmer-music/management/styles/table.module.scss'
 import { DeleteBtn } from '@pkmer-music/management/components'
 import { pageSongList, deleteSongList } from '@pkmer-music/management/actions/songlist'
+import type { SongListQueryRes } from '@pkmer-music/management/types'
 const headers = ['ID', '歌单图片', '标题', '简介', '风格', '内容', '评论', '操作']
 
 interface SongListTableProps {
-  pageNo: number
-  pageSize: number
-  query: string
+  pageData: Promise<SongListQueryRes>
 }
-export const SongTable: React.FC<SongListTableProps> = async ({ pageNo, pageSize, query }) => {
-  const data = await pageSongList({
-    pageNo: pageNo,
-    pageSize: pageSize,
-    title: query
-  })
+export const SongTable: React.FC<SongListTableProps> = ({ pageData }) => {
+  const data = use(pageData)
 
   return (
     <Table className='w-full'>
