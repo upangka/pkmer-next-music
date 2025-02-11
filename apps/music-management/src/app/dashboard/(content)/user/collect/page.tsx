@@ -1,12 +1,26 @@
 import CollectTable from './_components/collect-table'
 import { SearchHeader, PKMPagination, TableLoading } from '@pkmer-music/management/components'
 import { Suspense } from 'react'
+import { BreadcrumbClientHelp } from '@pkmer-music/management/context/breadcrumb-client-help'
+
 import { getPageUserTotal } from '@pkmer-music/management/actions'
 interface Props {
   searchParams: Promise<{
     [key: string]: string | undefined
   }>
 }
+
+const breadCrumbs = [
+  {
+    label: '用户管理',
+    href: '/dashboard/user'
+  },
+  {
+    label: '收藏管理',
+    href: '/dashboard/user/collect',
+    active: true
+  }
+]
 
 /**
  * Page服务端组件，Table服务端组件，Suspense生效
@@ -31,15 +45,19 @@ export default async function Page(props: Props) {
   const totalData = await getPageUserTotal({ username: query, pageNo, pageSize })
 
   return (
-    <div suppressHydrationWarning={true} className='w-auto rounded-lg bg-white p-6 shadow-md'>
-      <SearchHeader>{username}收藏列表</SearchHeader>
+    <>
+      <BreadcrumbClientHelp breadcrumbs={breadCrumbs} />
 
-      {/* TODO suspense的生效问题 */}
-      <Suspense key={query + pageNo + Date.now()} fallback={<TableLoading lines={pageSize} />}>
-        <CollectTable userId={userId} pageNo={pageNo} pageSize={pageSize} query={query} />
-      </Suspense>
+      <div suppressHydrationWarning={true} className='w-auto rounded-lg bg-white p-6 shadow-md'>
+        <SearchHeader>{username}收藏列表</SearchHeader>
 
-      <PKMPagination total={totalData.totalPages} />
-    </div>
+        {/* TODO suspense的生效问题 */}
+        <Suspense key={query + pageNo + Date.now()} fallback={<TableLoading lines={pageSize} />}>
+          <CollectTable userId={userId} pageNo={pageNo} pageSize={pageSize} query={query} />
+        </Suspense>
+
+        <PKMPagination total={totalData.totalPages} />
+      </div>
+    </>
   )
 }

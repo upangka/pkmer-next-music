@@ -14,7 +14,12 @@ export const BreadCrumbs: React.FC<Props> = ({ breadCrumbs }) => {
           <li key={index}>
             <Link
               href={breadcrumb.href}
-              className={clsx('text-gray-500', breadcrumb.active && 'font-bold text-gray-900')}
+              className={clsx(
+                'text-gray-500',
+                breadcrumb.active &&
+                  'pointer-events-none cursor-not-allowed font-bold text-gray-900'
+              )}
+              style={breadcrumb.active ? { cursor: 'not-allowed' } : {}}
             >
               {breadcrumb.label}
             </Link>
