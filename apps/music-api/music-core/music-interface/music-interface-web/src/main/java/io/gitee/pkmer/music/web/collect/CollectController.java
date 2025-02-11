@@ -89,10 +89,7 @@ public class CollectController extends BaseController implements CollectApi {
         return success();
     }
 
-    @Override
-    public Result<PageResponse<CollectSongDto>> adminPageQuery(CollectQuery query) {
-        return success(service.pageQueryWithSongName(query));
-    }
+
 
     private Long getCurrentUserId(){
         return AppContextHolder.userContextHolder.getUser().getId();

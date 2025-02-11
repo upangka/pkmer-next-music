@@ -2,7 +2,7 @@ import type { PageBase, PageQueryRes } from '@pkmer-music/management/types'
 
 export type CollectQuery = PageBase & {
   userId: string
-  name?: string
+  songName?: string
 }
 
 export interface CollectSongDto {

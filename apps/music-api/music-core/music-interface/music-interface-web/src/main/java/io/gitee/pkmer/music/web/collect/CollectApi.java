@@ -36,10 +36,6 @@ public interface CollectApi {
                                                 CollectQuery query);
 
 
-    @Operation(summary = "管理员端分页查询收藏")
-    @PostMapping("/admin/page")
-    Result<PageResponse<CollectSongDto>> adminPageQuery(@RequestBody CollectQuery query);
-
 
     @Operation(summary = "获取收藏总数")
     @GetMapping("/page/total")

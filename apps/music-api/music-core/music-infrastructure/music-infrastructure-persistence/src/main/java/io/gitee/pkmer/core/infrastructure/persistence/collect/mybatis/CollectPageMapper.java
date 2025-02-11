@@ -9,7 +9,7 @@ import java.util.List;
 @Mapper
 public interface CollectPageMapper {
 
-    @SelectProvider(type = CollectPageProvider.class, method = "selectWithLeftJoinProvider")
+    @SelectProvider(type = CollectPageProvider.class, method = "pageQueryCollectJoinSongAndSinger")
     @Results(id="CollectSongResult", value = {
             @Result(column="id", property="id", jdbcType= JdbcType.BIGINT, id=true),
             @Result(column="user_id", property="userId", jdbcType=JdbcType.BIGINT),
@@ -29,8 +29,10 @@ public interface CollectPageMapper {
      * 参数接收SelectStatementProvider
      * 客户端传进来的参数直接在service层做字段的处理。
      */
-    List<CollectSongDto> selectWithLeftJoinProvider(SelectStatementProvider selectStatement);
+    List<CollectSongDto> pageQueryCollectJoinSongAndSinger(SelectStatementProvider selectStatement);
 
+    @SelectProvider(type = CollectPageProvider.class, method = "getCollectPageTotalJoinSongAndSinger")
+    int getCollectPageTotalJoinSongAndSinger(SelectStatementProvider selectStatementProvider);
 
 
 

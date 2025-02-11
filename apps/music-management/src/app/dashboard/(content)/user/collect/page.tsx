@@ -3,7 +3,7 @@ import { SearchHeader, PKMPagination, TableLoading } from '@pkmer-music/manageme
 import { Suspense } from 'react'
 import { BreadcrumbClientHelp } from '@pkmer-music/management/context/breadcrumb-client-help'
 
-import { getPageUserTotal } from '@pkmer-music/management/actions'
+import { getPageCollectTotal } from '@pkmer-music/management/actions'
 interface Props {
   searchParams: Promise<{
     [key: string]: string | undefined
@@ -42,7 +42,12 @@ export default async function Page(props: Props) {
     throw new Error('用户不存在')
   }
 
-  const totalData = await getPageUserTotal({ username: query, pageNo, pageSize })
+  const totalData = await getPageCollectTotal({
+    songName: query,
+    userId,
+    pageNo,
+    pageSize
+  })
 
   return (
     <>

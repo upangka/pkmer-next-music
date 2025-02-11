@@ -22,7 +22,7 @@ const CollectTable: React.FC<CollectTableProps> = async props => {
   const data = await pageCollects({
     pageNo: props.pageNo,
     pageSize: props.pageSize,
-    name: props.query,
+    songName: props.query,
     userId: props.userId
   })
 
@@ -39,31 +39,42 @@ const CollectTable: React.FC<CollectTableProps> = async props => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data.list.map(collect => (
-            <TableRow key={collect.id} className='hover:bg-gray-50'>
-              <TableCell className={tableStyle.tableItem}>{collect.id}</TableCell>
-              <TableCell className={tableStyle.tableItem}>
-                {/* Avatar,AvatarFallback,AvatarImage */}
-                <Avatar>
-                  <AvatarImage src={collect.song.pic} alt={collect.song.name} />
-                  <AvatarFallback>{collect.song.name}</AvatarFallback>
-                </Avatar>
-              </TableCell>
-              <TableCell className={tableStyle.tableItem}>{collect.song.singerName}</TableCell>
-              <TableCell className={tableStyle.tableItem}>{collect.song.name}</TableCell>
-              <TableCell className={tableStyle.tableItem}>{collect.song.introduction}</TableCell>
-              <TableCell className='space-x-2 border border-gray-300 p-4'>
-                {/* 从Table的服务端组件抽离成客户端组件 */}
-                <DeleteBtn
-                  id={collect.song.id}
-                  triggerDelete={async function (songId: string) {
-                    'use server'
-                    deleteCollect(songId, props.userId)
-                  }}
-                />
+          {data.list.length ? (
+            data.list.map(collect => (
+              <TableRow key={collect.id} className='hover:bg-gray-50'>
+                <TableCell className={tableStyle.tableItem}>{collect.id}</TableCell>
+                <TableCell className={tableStyle.tableItem}>
+                  {/* Avatar,AvatarFallback,AvatarImage */}
+                  <Avatar>
+                    <AvatarImage src={collect.song.pic} alt={collect.song.name} />
+                    <AvatarFallback>{collect.song.name}</AvatarFallback>
+                  </Avatar>
+                </TableCell>
+                <TableCell className={tableStyle.tableItem}>{collect.song.singerName}</TableCell>
+                <TableCell className={tableStyle.tableItem}>{collect.song.name}</TableCell>
+                <TableCell className={tableStyle.tableItem}>{collect.song.introduction}</TableCell>
+                <TableCell className='space-x-2 border border-gray-300 p-4'>
+                  {/* 从Table的服务端组件抽离成客户端组件 */}
+                  <DeleteBtn
+                    id={collect.song.id}
+                    triggerDelete={async function (songId: string) {
+                      'use server'
+                      deleteCollect(songId, props.userId)
+                    }}
+                  />
+                </TableCell>
+              </TableRow>
+            ))
+          ) : (
+            <TableRow>
+              <TableCell
+                colSpan={headers.length}
+                className='border border-gray-300 py-20 text-center text-2xl text-gray-500'
+              >
+                Empty
               </TableCell>
             </TableRow>
-          ))}
+          )}
         </TableBody>
       </Table>
     </>

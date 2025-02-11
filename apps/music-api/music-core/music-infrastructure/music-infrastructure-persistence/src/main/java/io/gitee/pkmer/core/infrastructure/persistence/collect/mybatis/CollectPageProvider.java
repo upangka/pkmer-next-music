@@ -8,8 +8,15 @@ public class CollectPageProvider {
     /**
      * 分页查询收藏歌曲 left join song和singer
      */
-    public String selectWithLeftJoinProvider(SelectStatementProvider selectStatement) {
+    public String pageQueryCollectJoinSongAndSinger(SelectStatementProvider selectStatement) {
         return selectStatement.getSelectStatement();
     }
 
+
+    /**
+     * 分页查询收藏歌曲总数 left join song和singer
+     */
+    public String getCollectPageTotalJoinSongAndSinger(SelectStatementProvider selectStatementProvider) {
+        return selectStatementProvider.getSelectStatement();
+    }
 }
