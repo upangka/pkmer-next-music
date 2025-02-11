@@ -2,7 +2,7 @@ import { MgTable } from './_components/mg-table'
 import { SearchHeader, PKMPagination, TableLoading } from '@pkmer-music/management/components'
 import { Suspense } from 'react'
 import { BreadcrumbClientHelp } from '@pkmer-music/management/context/breadcrumb-client-help'
-import { getSongPageQueryTotal } from '@pkmer-music/management/actions'
+import { getSongPageQueryTotal, pageQuerySong } from '@pkmer-music/management/actions'
 
 interface Props {
   searchParams: Promise<{
@@ -39,12 +39,15 @@ export default async function Page(props: Props) {
     throw new Error('singerId is required')
   }
 
-  const totalData = await getSongPageQueryTotal({
-    singerId: singerId,
-    name: query,
+  const params = {
     pageNo,
-    pageSize
-  })
+    pageSize,
+    name: query,
+    singerId
+  }
+  const totalData = await getSongPageQueryTotal(params)
+
+  const data = pageQuerySong(params)
 
   return (
     <>
@@ -55,7 +58,7 @@ export default async function Page(props: Props) {
 
         {/*  suspense的生效问题 */}
         <Suspense key={query + pageNo + Date.now()} fallback={<TableLoading lines={pageSize} />}>
-          <MgTable singerId={singerId} pageNo={pageNo} pageSize={pageSize} query={query} />
+          <MgTable pageData={data} />
         </Suspense>
 
         <PKMPagination total={totalData.totalPages} />

@@ -1,3 +1,5 @@
+'use client'
+import { use } from 'react'
 import {
   Table,
   TableHeader,
@@ -7,27 +9,17 @@ import {
 } from '@pkmer-music/management/components/ui/table'
 import { Avatar, AvatarFallback, AvatarImage } from '@pkmer-music/management/components/ui/avatar'
 
-import { pageQuerySong } from '@pkmer-music/management/actions'
 import tableStyle from '@pkmer-music/management/styles/table.module.scss'
+import type { SongQueryRes } from '@pkmer-music/management/types'
+
 interface MgTableProps {
-  pageNo: number
-  pageSize: number
-  query: string
-  singerId: string
+  pageData: Promise<SongQueryRes>
 }
 
 const headers = ['ID', '歌曲图片', '歌名', '专辑', '资源更新', '评论', '操作']
 
-export const MgTable: React.FC<MgTableProps> = async ({ pageNo, pageSize, query, singerId }) => {
-  const data = await pageQuerySong({
-    pageNo,
-    pageSize,
-    name: query,
-    singerId
-  })
-
-  console.log(data)
-
+export const MgTable: React.FC<MgTableProps> = ({ pageData }) => {
+  const data = use(pageData)
   return (
     <>
       <Table className='w-full border-collapse border border-gray-300'>

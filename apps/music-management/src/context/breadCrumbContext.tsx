@@ -1,5 +1,5 @@
 import type { BreadCrumb } from '@pkmer-music/management/types'
-import { createContext, useState, useContext } from 'react'
+import { createContext, useState, useContext, use } from 'react'
 interface BreadCrumbProviderProps {
   children: React.ReactNode
 }
@@ -12,7 +12,7 @@ interface BreadCrumbContextProps {
 export const BreadCrumbContext = createContext<BreadCrumbContextProps | undefined>(undefined)
 
 export const useBreadCrumbContext = () => {
-  const context = useContext(BreadCrumbContext)
+  const context = use(BreadCrumbContext)
   if (!context) {
     throw new Error('useBreadCrumbContext must be used within a BreadCrumbProvider')
   }
