@@ -1,3 +1,5 @@
+'use client'
+import { use, useState } from 'react'
 import {
   Table,
   TableHeader,
@@ -12,10 +14,13 @@ import tableStyle from '@pkmer-music/management/styles/table.module.scss'
 import { pageUsers } from '@pkmer-music/management/actions'
 import { deleteUser } from '@pkmer-music/management/actions'
 import { DeleteBtn } from '@pkmer-music/management/components'
+import type { UserPageRes } from '@pkmer-music/management/types'
+
 interface UserTableProps {
-  pageNo: number
-  pageSize: number
-  query: string
+  // pageNo: number
+  // pageSize: number
+  // query: string
+  pageRes: Promise<UserPageRes>
 }
 
 const headers = [
@@ -31,12 +36,9 @@ const headers = [
   '操作'
 ]
 
-export const UserTable: React.FC<UserTableProps> = async ({ pageNo, pageSize, query }) => {
-  const data = await pageUsers({
-    pageNo: pageNo,
-    pageSize: pageSize,
-    username: query
-  })
+export const UserTable: React.FC<UserTableProps> = ({ pageRes }) => {
+  const [checkList, setCheckList] = useState<string[]>([])
+  const data = use(pageRes)
 
   function handleSex(sex?: string) {
     if (sex === 'FEMALE') {
@@ -89,7 +91,7 @@ export const UserTable: React.FC<UserTableProps> = async ({ pageNo, pageSize, qu
                 <DeleteBtn
                   id={user.id}
                   triggerDelete={async id => {
-                    'use server'
+                    // 'use server'
                     await deleteUser(id)
                   }}
                 />

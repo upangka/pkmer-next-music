@@ -3,6 +3,7 @@ import { SearchHeader, PKMPagination, TableLoading } from '@pkmer-music/manageme
 import { Suspense } from 'react'
 import { BreadcrumbClientHelp } from '@pkmer-music/management/context/breadcrumb-client-help'
 import { getPageUserTotal } from '@pkmer-music/management/actions'
+import { pageUsers } from '@pkmer-music/management/actions'
 
 interface Props {
   searchParams: Promise<{
@@ -31,6 +32,12 @@ export default async function Page(props: Props) {
   const pageNo = +(searchParams?.pageNo || 1)
   const pageSize = +(searchParams?.pageSize || 5)
 
+  const data = pageUsers({
+    pageNo: pageNo,
+    pageSize: pageSize,
+    username: query
+  })
+
   const totalData = await getPageUserTotal({ username: query, pageNo, pageSize })
 
   return (
@@ -42,7 +49,8 @@ export default async function Page(props: Props) {
 
         {/*  suspense的生效问题 */}
         <Suspense key={query + pageNo + Date.now()} fallback={<TableLoading lines={pageSize} />}>
-          <UserTable pageNo={pageNo} pageSize={pageSize} query={query} />
+          {/* UserTable是一个客户端组件了，传递了一个server action返回的Promise数据 */}
+          <UserTable pageRes={data} />
         </Suspense>
 
         <PKMPagination total={totalData.totalPages} />

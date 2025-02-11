@@ -7,6 +7,7 @@ import { Button } from '@pkmer-music/management/components/ui/button'
  * @returns
  */
 export default function Page() {
+  // 客户端组件使用server action
   return (
     <>
       <Button

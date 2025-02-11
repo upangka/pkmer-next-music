@@ -16,5 +16,5 @@ export const getSongDetail = (id: string): AppResponse<SongDetail> => {
 }
 
 export const getAllSong = (data: GetAllSongParams = {}): AppResponse<PageQuerySingerRes> => {
-  return http.get('/singer/query', data)
+  return http.get('/singer/page', data)
 }
