@@ -20,7 +20,7 @@ const useMenuContext = () => {
 }
 
 const MenuProvider: React.FC<MenuProviderProps> = ({ children }) => {
-  const [collapsed, setCollapsed] = useState(true)
+  const [collapsed, setCollapsed] = useState(false)
 
   function changeCollapsed(status: boolean) {
     setCollapsed(status)
