@@ -73,7 +73,7 @@ export const SingerTable: React.FC<SingerTableProps> = async ({ pageNo, pageSize
                 {singer.introduction}
               </TableCell>
               <TableCell className={tableStyle.tableItem}>
-                <LinkBtn href='/dashboard/singer/manage'>歌曲管理</LinkBtn>
+                <LinkBtn href={`/dashboard/singer/manage?singerId=${singer.id}`}>歌曲管理</LinkBtn>
               </TableCell>
               <TableCell className='space-x-2 border border-gray-300 p-4'>
                 <Button className='rounded-md bg-blue-500 px-4 py-1 text-white hover:bg-blue-600'>
