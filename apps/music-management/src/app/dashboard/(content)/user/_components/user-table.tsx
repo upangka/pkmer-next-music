@@ -11,15 +11,11 @@ import Link from 'next/link'
 import { Avatar, AvatarFallback, AvatarImage } from '@pkmer-music/management/components/ui/avatar'
 import { Button } from '@pkmer-music/management/components/ui/button'
 import tableStyle from '@pkmer-music/management/styles/table.module.scss'
-import { pageUsers } from '@pkmer-music/management/actions'
 import { deleteUser } from '@pkmer-music/management/actions'
 import { DeleteBtn } from '@pkmer-music/management/components'
 import type { UserPageRes } from '@pkmer-music/management/types'
 
 interface UserTableProps {
-  // pageNo: number
-  // pageSize: number
-  // query: string
   pageRes: Promise<UserPageRes>
 }
 

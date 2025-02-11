@@ -1,3 +1,5 @@
+'use client'
+import { use } from 'react'
 import {
   Table,
   TableHeader,
@@ -12,22 +14,16 @@ import { pageSinger, deleteSinger } from '@pkmer-music/management/actions'
 import { DeleteBtn } from '@pkmer-music/management/components'
 import clsx from 'clsx'
 import LinkBtn from './LinkButton'
+import type { SingerPageQueryRes } from '@pkmer-music/management/types'
 
 interface SingerTableProps {
-  pageNo: number
-  pageSize: number
-  query: string
+  pageRes: Promise<SingerPageQueryRes>
 }
 
 const headers = ['ID', '歌手图片', '歌手', '性别', '出生', '地区', '简介', '歌曲管理', '操作']
 
-export const SingerTable: React.FC<SingerTableProps> = async ({ pageNo, pageSize, query }) => {
-  const data = await pageSinger({
-    pageNo: pageNo,
-    pageSize: pageSize,
-    name: query
-  })
-
+export const SingerTable: React.FC<SingerTableProps> = ({ pageRes }) => {
+  const data = use(pageRes)
   function handleSex(sex?: string) {
     if (sex === 'FEMALE') {
       return '女'
