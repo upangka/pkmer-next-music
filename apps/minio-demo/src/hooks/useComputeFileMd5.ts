@@ -1,11 +1,13 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import CryptoJS from 'crypto-js'
 
 export default function useComputeFileMd5() {
   const [fileMd5, setFileMd5] = useState<string>('')
+  const chunkCountRef = useRef(0) // 更明确的命名
 
   function clear() {
     setFileMd5('')
+    chunkCountRef.current = 0
   }
 
   function computeFileMd5(file: File): Promise<string> {
@@ -35,8 +37,11 @@ export default function useComputeFileMd5() {
       }
 
       function readNextChunk() {
+        if (offset >= file.size) return // 确保不会读取超出文件范围
         const sliceFile = file.slice(offset, offset + chunkSize)
         reader.readAsArrayBuffer(sliceFile)
+        console.log(`读取第${chunkCountRef.current + 1}分片成功`)
+        chunkCountRef.current++
       }
 
       readNextChunk()
