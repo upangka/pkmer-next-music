@@ -1,7 +1,7 @@
 'use client'
 import { Icon } from '@iconify-icon/react'
 import { useRef, useState } from 'react'
-import useComputeFileMd5 from '@/hooks/useComputeFileMd5'
+import useComputeFileMd5 from '@pkmer-music/management/hooks/useComputeFileMd5'
 
 export default function UploadFile() {
   const size = 60
