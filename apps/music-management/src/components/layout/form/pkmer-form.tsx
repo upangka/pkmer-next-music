@@ -1,9 +1,10 @@
 'use client'
-import { createContext, useContext, useMemo, useRef, useState } from 'react'
+import { createContext, useContext, useMemo, useRef, useState, useEffect } from 'react'
 import clsx from 'clsx'
 type PkmerFormContextType = {
   maxWidthLabel: string
   registerLabel: (width: number) => void
+  isWidthCalculated: boolean
 }
 
 const PkmerFormContext = createContext<PkmerFormContextType | undefined>(undefined)
@@ -26,11 +27,19 @@ interface PkmerFormProps {
  */
 export const PkmerForm: React.FC<PkmerFormProps> = ({ children, className }) => {
   const [potentialLabelWidthArr, setPotentialLabelWidthArr] = useState<number[]>([])
+  const [isWidthCalculated, setIsWidthCalculated] = useState(false)
 
   const maxWidthLabel = useMemo(() => {
     if (!potentialLabelWidthArr.length) return '0'
     const max = Math.max(...potentialLabelWidthArr)
     return max ? `${max}px` : ''
+  }, [potentialLabelWidthArr])
+
+  useEffect(() => {
+    if (potentialLabelWidthArr.length) {
+      console.log('我执行了吗')
+      setIsWidthCalculated(true)
+    }
   }, [potentialLabelWidthArr])
 
   function registerLabel(width: number) {
@@ -41,7 +50,8 @@ export const PkmerForm: React.FC<PkmerFormProps> = ({ children, className }) => 
     <PkmerFormContext.Provider
       value={{
         maxWidthLabel,
-        registerLabel
+        registerLabel,
+        isWidthCalculated
       }}
     >
       <form className={clsx(className, 'flex flex-col gap-4')}>{children}</form>

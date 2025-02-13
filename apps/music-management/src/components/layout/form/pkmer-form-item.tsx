@@ -1,5 +1,5 @@
 'use client'
-import { useId, useRef, useEffect } from 'react'
+import { useId, useRef, useEffect, useLayoutEffect, useState } from 'react'
 import { useFormContext } from './pkmer-form'
 import { Label } from '@pkmer-music/management/components/ui/label'
 interface PkmerFormItemProps {
@@ -8,15 +8,12 @@ interface PkmerFormItemProps {
 }
 
 export const PkmerFormItem: React.FC<PkmerFormItemProps> = ({ label, children }) => {
-  // vue ref reactive
-  const { maxWidthLabel, registerLabel } = useFormContext()
-  // vue ref
+  const { maxWidthLabel, registerLabel, isWidthCalculated } = useFormContext()
   const labelRef = useRef<HTMLLabelElement>(null)
 
   const id = useId()
 
-  //vue  onMounted watch
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (labelRef.current) {
       const el = labelRef.current
       const width = window.getComputedStyle(el).width
@@ -27,24 +24,29 @@ export const PkmerFormItem: React.FC<PkmerFormItemProps> = ({ label, children })
 
   const style: React.CSSProperties = labelRef.current
     ? {
-        marginLeft: `${Number.parseInt(maxWidthLabel, 10) - labelRef.current.offsetWidth}px`
+        marginLeft: `${Number.parseInt(maxWidthLabel, 10) - labelRef.current.offsetWidth}px`,
+        visibility: isWidthCalculated ? 'visible' : 'hidden'
       }
     : {}
 
   return (
-    <div className='flex flex-row gap-2'>
-      <div style={style}>
+    <div
+      className='flex flex-row gap-2'
+      style={{
+        visibility: isWidthCalculated ? 'visible' : 'hidden'
+      }}
+    >
+      <div className='flex' style={style}>
         <Label
           ref={labelRef}
           htmlFor={id}
-          className='inline-flex w-auto whitespace-nowrap border border-black text-right'
+          className='inline-flex w-auto flex-[0_0_auto] whitespace-nowrap text-right'
         >
           {label}
         </Label>
       </div>
 
-      {/* label wrapper end */}
-      <div id={id} className='border border-green-600'>
+      <div id={id} className='flex flex-1 border border-green-600'>
         {children}
       </div>
     </div>
