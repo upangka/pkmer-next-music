@@ -1,5 +1,5 @@
 'use client'
-import { createContext, useContext, useMemo, useRef, useState, useEffect } from 'react'
+import { createContext, useContext, useMemo, useRef, useState, useLayoutEffect } from 'react'
 import clsx from 'clsx'
 type PkmerFormContextType = {
   maxWidthLabel: string
@@ -35,9 +35,9 @@ export const PkmerForm: React.FC<PkmerFormProps> = ({ children, className }) => 
     return max ? `${max}px` : ''
   }, [potentialLabelWidthArr])
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (potentialLabelWidthArr.length) {
-      console.log('我执行了吗')
+      console.log('form表单宽度计算完成')
       setIsWidthCalculated(true)
     }
   }, [potentialLabelWidthArr])
