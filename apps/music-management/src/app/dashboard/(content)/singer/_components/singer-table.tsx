@@ -24,6 +24,7 @@ const headers = ['ID', '歌手图片', '歌手', '性别', '出生', '地区', '
 
 export const SingerTable: React.FC<SingerTableProps> = ({ pageRes }) => {
   const data = use(pageRes)
+
   function handleSex(sex?: string) {
     if (sex === 'FEMALE') {
       return '女'

@@ -3,6 +3,15 @@ import httpService from '@pkmer-music/management/service'
 import { AppResponse } from '@pkmer/libs/http'
 import type { SongQuery, SongQueryRes, PageTotal } from '@pkmer-music/management/types'
 
+type State = {
+  errors?: {}
+  message?: string
+}
+
+export async function addSong(_preState: State, formData: FormData) {
+  return {} as State
+}
+
 /**
  * 分页查询歌曲
  * @param query

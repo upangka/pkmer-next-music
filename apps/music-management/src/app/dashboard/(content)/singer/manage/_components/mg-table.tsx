@@ -1,5 +1,5 @@
 'use client'
-import { use } from 'react'
+import { use, useState } from 'react'
 import {
   Table,
   TableHeader,
@@ -8,7 +8,7 @@ import {
   TableCell
 } from '@pkmer-music/management/components/ui/table'
 import { Avatar, AvatarFallback, AvatarImage } from '@pkmer-music/management/components/ui/avatar'
-
+import { AddSong } from './add-song'
 import tableStyle from '@pkmer-music/management/styles/table.module.scss'
 import type { SongQueryRes } from '@pkmer-music/management/types'
 
@@ -20,6 +20,8 @@ const headers = ['ID', '歌曲图片', '歌名', '专辑', '资源更新', '评�
 
 export const MgTable: React.FC<MgTableProps> = ({ pageData }) => {
   const data = use(pageData)
+  const [isOpen, setIsOpen] = useState(false)
+
   return (
     <>
       <Table className='w-full border-collapse border border-gray-300'>
@@ -49,7 +51,15 @@ export const MgTable: React.FC<MgTableProps> = ({ pageData }) => {
                 <TableCell className={tableStyle.tableItem}>
                   <div className='flex flex-col items-center justify-center gap-2'>
                     <button>更新图片</button>
-                    <button>更新歌曲</button>
+                    {/* TODO 抽离dialog这种button组件start */}
+                    <button
+                      className='rounded-md px-1 py-2 hover:bg-blue-600 hover:text-white'
+                      onClick={() => setIsOpen(true)}
+                    >
+                      更新歌曲
+                    </button>
+                    <AddSong isOpen={isOpen} onOpenChange={setIsOpen} />
+                    {/* TODO 抽离dialog这种button组件end */}
                   </div>
                 </TableCell>
                 <TableCell className={tableStyle.tableItem}>
