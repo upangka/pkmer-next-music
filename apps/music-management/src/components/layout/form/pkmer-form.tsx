@@ -1,5 +1,13 @@
 'use client'
-import { createContext, useContext, useMemo, useRef, useState, useLayoutEffect } from 'react'
+import React, {
+  createContext,
+  useContext,
+  useMemo,
+  useRef,
+  useState,
+  useLayoutEffect,
+  ReactEventHandler
+} from 'react'
 import clsx from 'clsx'
 type PkmerFormContextType = {
   maxWidthLabel: string
@@ -20,12 +28,17 @@ export function useFormContext() {
 interface PkmerFormProps {
   className?: string
   children: React.ReactNode
+  onSubmit?: React.FormEventHandler<HTMLFormElement>
 }
 
 /**
  * 表单的布局
  */
-export const PkmerForm: React.FC<PkmerFormProps> = ({ children, className }) => {
+export const PkmerForm: React.FC<PkmerFormProps> = ({
+  onSubmit = () => {},
+  children,
+  className
+}) => {
   const [potentialLabelWidthArr, setPotentialLabelWidthArr] = useState<number[]>([])
   const [isWidthCalculated, setIsWidthCalculated] = useState(false)
 
@@ -54,7 +67,9 @@ export const PkmerForm: React.FC<PkmerFormProps> = ({ children, className }) => 
         isWidthCalculated
       }}
     >
-      <form className={clsx(className, 'flex flex-col gap-4')}>{children}</form>
+      <form onSubmit={onSubmit} className={clsx(className, 'flex flex-col gap-4')}>
+        {children}
+      </form>
     </PkmerFormContext.Provider>
   )
 }

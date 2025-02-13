@@ -9,6 +9,7 @@ type State = {
 }
 
 export async function addSong(_preState: State, formData: FormData) {
+  console.log(formData)
   return {} as State
 }
 

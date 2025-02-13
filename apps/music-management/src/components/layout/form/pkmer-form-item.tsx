@@ -31,7 +31,7 @@ export const PkmerFormItem: React.FC<PkmerFormItemProps> = ({ label, children })
 
   return (
     <div
-      className='flex flex-row gap-2'
+      className='flex flex-row items-center justify-center gap-2'
       style={{
         visibility: isWidthCalculated ? 'visible' : 'hidden'
       }}
@@ -46,7 +46,7 @@ export const PkmerFormItem: React.FC<PkmerFormItemProps> = ({ label, children })
         </Label>
       </div>
 
-      <div id={id} className='flex flex-1 border border-green-600'>
+      <div id={id} className='flex flex-1'>
         {children}
       </div>
     </div>
