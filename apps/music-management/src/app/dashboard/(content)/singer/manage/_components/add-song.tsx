@@ -1,15 +1,13 @@
 'use client'
-import { useState, useActionState, startTransition } from 'react'
+import { useActionState, startTransition } from 'react'
 import {
   Dialog,
   DialogContent,
   DialogHeader,
-  DialogTitle,
-  DialogTrigger
+  DialogTitle
 } from '@pkmer-music/management/components/ui/dialog'
 import { Button } from '@pkmer-music/management/components/ui/button'
 import { Input } from '@pkmer-music/management/components/ui/input'
-import { Label } from '@pkmer-music/management/components/ui/label'
 import { addSong } from '@pkmer-music/management/actions'
 import { PkmerForm, PkmerFormItem } from '@pkmer-music/management/components/'
 
@@ -31,7 +29,7 @@ export const AddSong: React.FC<AddSongProps> = ({ isOpen = false, onOpenChange }
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>更新歌曲</DialogTitle>
+          <DialogTitle className='text-center'>更新歌曲</DialogTitle>
         </DialogHeader>
         <PkmerForm onSubmit={handleFormSubmit} className='space-y-4'>
           <PkmerFormItem label='歌曲名称'>
