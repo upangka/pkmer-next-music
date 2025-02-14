@@ -8,10 +8,14 @@ import io.gitee.pkmer.music.application.song.delete.DeleteCmd;
 import io.gitee.pkmer.music.application.song.get.GetSongCmd;
 import io.gitee.pkmer.music.application.song.get.SongDetailView;
 import io.gitee.pkmer.music.application.song.update.UpdateSongCmd;
+import io.gitee.pkmer.music.utils.MultiPartFileHelper;
 import io.gitee.pkmer.security.context.AppContextHolder;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * <p>
@@ -23,10 +27,12 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2025/1/9
  * </p>
  */
+@RequiredArgsConstructor
 @RestController
+@Slf4j
 public class SongController extends BaseController implements SongApi{
-    @Setter(onMethod_ = @Autowired)
-    private CmdDispatcher cmdDispatcher;
+    private final  CmdDispatcher cmdDispatcher;
+    private final MultiPartFileHelper multiPartFileHelper;
     @Override
     public Result<Void> deleteSong(Long id) {
         cmdDispatcher.dispatch(DeleteCmd.commandOf(id));
@@ -34,8 +40,11 @@ public class SongController extends BaseController implements SongApi{
     }
 
     @Override
-    public Result<Void> updateSong(UpdateSongCmd cmd) {
-        cmdDispatcher.dispatch(cmd);
+    public Result<Void> updateSong(UpdateSongCmd cmd, MultipartFile lyricFile) {
+//        cmdDispatcher.dispatch(cmd);
+        // todo 解析出来歌词file的内容
+        String lyricContent = multiPartFileHelper.readFileContent(lyricFile);
+        log.info("读取的歌词文件内容 => {}",lyricContent);
         return success();
     }
 

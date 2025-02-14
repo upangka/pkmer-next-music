@@ -8,9 +8,24 @@ type State = {
   message?: string
 }
 
-export async function addSong(_preState: State, formData: FormData) {
-  console.log(formData)
-  return {} as State
+/**
+ * 更新歌曲信息
+ * @param _preState
+ * @param formData
+ * @returns
+ */
+export async function updateSong(_preState: State, formData: FormData) {
+  try {
+    console.log(formData)
+    await httpService.post('/song/update', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+    return {} as State
+  } catch (err) {
+    return { message: '更新歌曲信息失败' } as State
+  }
 }
 
 /**

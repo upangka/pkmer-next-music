@@ -21,30 +21,28 @@ import lombok.Value;
 @Value(staticConstructor = "commandOf")
 public class UpdateSongCmd implements Command {
     @Schema(description = "歌曲id")
-    @NotNull(message = "歌曲id不能为空")
+//    @NotNull(message = "歌曲id不能为空")
     Long id;
 
     @Schema(description = "歌手id")
-    @NotNull(message = "歌手id不能为空")
+//    @NotNull(message = "歌手id不能为空")
     Long singerId;
 
     @Schema(description = "歌曲名称")
-    @NotBlank(message = "歌曲名称不能为空")
+//    @NotBlank(message = "歌曲名称不能为空")
     String name;
 
-    @Schema(description = "歌曲简介")
-    @NotBlank(message = "歌曲简介不能为空")
+    @Schema(description = "歌曲专辑")
+//    @NotBlank(message = "歌曲专辑不能为空")
     String introduction;
 
     @Schema(description = "歌曲封面")
-    @NotBlank(message = "歌曲封面不能为空")
     String pic;
 
     @Schema(description = "歌曲地址")
-    @NotBlank(message = "歌曲地址不能为空")
+//    @NotBlank(message = "歌曲地址不能为空")
     String url;
 
     @Schema(description = "歌词")
-    @NotBlank(message = "歌词不能为空")
     String lyric;
 }

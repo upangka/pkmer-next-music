@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * <p>
@@ -33,9 +34,16 @@ public interface SongApi {
     Result<Void> deleteSong(@PathVariable("id") Long id);
 
 
+    /**
+     * 更新歌曲，这里歌曲文件，直接走minio大文件分片上传。
+     * @param cmd
+     * @param lyricFile
+     * @return
+     */
     @Operation(summary = "更新歌曲")
     @PostMapping("/update")
-    Result<Void> updateSong(@Valid @RequestBody  UpdateSongCmd cmd);
+    Result<Void> updateSong(@ModelAttribute UpdateSongCmd cmd,
+                            @RequestParam("lyricFile")MultipartFile lyricFile);
 
     @Operation(summary = "收藏歌曲")
     @Parameters({
