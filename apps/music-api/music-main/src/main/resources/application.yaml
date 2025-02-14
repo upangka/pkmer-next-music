@@ -22,7 +22,7 @@ pkmer:
     access-key: root
     secret-key: Root.123456
     url: http://localhost:9000
-    default-chunk-size: 3MB
+    default-chunk-size: 10MB
     expires: 12h
 
 

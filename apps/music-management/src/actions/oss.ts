@@ -11,3 +11,13 @@ import type { BigFileInitReq, FileInitView } from '@pkmer-music/management/types
 export async function init(req: BigFileInitReq): AppResponse<FileInitView> {
   return httpService.post('/oss/bigfile/init', req)
 }
+
+/**
+ * 通知后端合并分片信息
+ * @param fileMd5
+ * @param parts
+ * @returns
+ */
+export async function mergeParts(fileMd5: string, parts: string[]): AppResponse<string> {
+  return httpService.post(`/oss/bigfile/merge?fileMd5=${fileMd5}`, parts)
+}

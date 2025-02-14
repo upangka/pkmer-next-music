@@ -190,7 +190,9 @@ public class MusicFileController extends BaseController implements MinioBigFileO
 
 
     private String getUserId(){
-        return AppContextHolder.userContextHolder.getUser().getId().toString();
+        return "1";
+
+//        return AppContextHolder.userContextHolder.getUser().getId().toString();
     }
 }
 

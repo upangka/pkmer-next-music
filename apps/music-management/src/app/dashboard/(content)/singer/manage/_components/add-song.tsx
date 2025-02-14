@@ -8,9 +8,10 @@ import {
 } from '@pkmer-music/management/components/ui/dialog'
 import { Button } from '@pkmer-music/management/components/ui/button'
 import { Input } from '@pkmer-music/management/components/ui/input'
-import { updateSong, init } from '@pkmer-music/management/actions'
+import { updateSong, init, mergeParts } from '@pkmer-music/management/actions'
 import { PkmerForm, PkmerFormItem } from '@pkmer-music/management/components/'
 import useComputeFileMd5 from '@pkmer-music/management/hooks/useComputeFileMd5'
+import { Part } from '@pkmer-music/management/types'
 interface AddSongProps {
   isOpen: boolean
   onOpenChange: (isOpen: boolean) => void //
@@ -63,6 +64,69 @@ export const AddSong: React.FC<AddSongProps> = ({ isOpen = false, onOpenChange }
     })
 
     console.log('文件分片信息计算结果', data)
+    const parts = data.parts
+    await uploadFileParts(parts, file)
+
+    const etags = parts.map(part => part.etag)
+
+    await merge(md5, etags)
+  }
+
+  /**
+   * 分片上传
+   * @param parts
+   * @param file
+   */
+  async function uploadFileParts(parts: Part[], file: File) {
+    console.log('开始分片上传')
+    // 控制并发数量
+    let currentLimit = 5
+    let count = 0
+    let successCount = 0
+    let errorCount = 0
+
+    while (count < parts.length) {
+      const currentBatch = parts.slice(count, count + currentLimit)
+      const requests = currentBatch.map(async (part, index) => {
+        const chunckFile = file.slice(part.shardingStart, part.shardingEnd)
+        try {
+          const r = await fetch(part.uploadUrl, {
+            method: 'put',
+            body: chunckFile
+          })
+          console.log(r)
+          return r
+        } catch (err) {
+          console.error(err)
+          return err as any
+        }
+      })
+
+      const results = await Promise.allSettled(requests)
+
+      results.map(r => {
+        if (r.status === 'fulfilled') {
+          console.log('成功上传', ++successCount)
+        } else if (r.status === 'rejected') {
+          console.log('成功上传', ++errorCount)
+        }
+      })
+      count += currentLimit
+    }
+
+    console.log(`一共${parts.length}个分片,成功上传${successCount},上传失败${errorCount}个`)
+  }
+
+  /**
+   * 通知后端合并分片
+   * @param fileMd5
+   */
+  async function merge(fileMd5: string, etags: string[]) {
+    console.log('通知后端合并分片')
+
+    const url = await mergeParts(fileMd5, etags)
+
+    console.log('生成的预访问链接', url)
   }
 
   return (
