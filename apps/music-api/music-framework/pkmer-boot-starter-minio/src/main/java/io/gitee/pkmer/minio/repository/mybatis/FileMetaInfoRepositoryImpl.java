@@ -26,7 +26,7 @@ public class FileMetaInfoRepositoryImpl implements FileMetaInfoRepository {
         fileMetadataInfoMapper.insert(fileMetadataInfo);
         // todo 检查id是否生成
         log.info("检查id是否生成 {}", fileMetadataInfo.getId());
-        fileMetadataInfo.setId(fileMetadataInfo.getId());
+        fileMetaInfoDto.setId(fileMetadataInfo.getId());
     }
 
     @Override

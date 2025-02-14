@@ -8,7 +8,7 @@ import {
 } from '@pkmer-music/management/components/ui/dialog'
 import { Button } from '@pkmer-music/management/components/ui/button'
 import { Input } from '@pkmer-music/management/components/ui/input'
-import { updateSong } from '@pkmer-music/management/actions'
+import { updateSong, init } from '@pkmer-music/management/actions'
 import { PkmerForm, PkmerFormItem } from '@pkmer-music/management/components/'
 import useComputeFileMd5 from '@pkmer-music/management/hooks/useComputeFileMd5'
 interface AddSongProps {
@@ -28,16 +28,9 @@ interface AddSongProps {
 export const AddSong: React.FC<AddSongProps> = ({ isOpen = false, onOpenChange }) => {
   const [_state, formAction] = useActionState(updateSong, {})
   // 标记文件的分片是否计算完成
-  const { fileMd5, computeFileMd5, isComputeFileFinished, clear } = useComputeFileMd5()
+  const { computeFileMd5 } = useComputeFileMd5()
   // 上传文件的url
   const upFileRef = useRef('')
-
-  useEffect(() => {
-    // 检测到文件的md5值计算完成交给后端处理分片
-    if (isComputeFileFinished) {
-      console.log('可以上传文件的分片了')
-    }
-  }, [isComputeFileFinished])
 
   function handleFormSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -51,11 +44,25 @@ export const AddSong: React.FC<AddSongProps> = ({ isOpen = false, onOpenChange }
 
   async function handleUploadFile(e: React.ChangeEvent<HTMLInputElement>) {
     if (e.target.files) {
-      clear()
       const file = e.target.files[0]
       const md5 = await computeFileMd5(file)
-      console.log('file-md5: ', md5)
+      await initFileSharePart(file, md5)
     }
+  }
+
+  /**
+   * 请求后端初始化文件的分片信息
+   * @param file
+   * @param md5
+   */
+  async function initFileSharePart(file: File, md5: string) {
+    const data = await init({
+      fileMd5: md5,
+      fullFileName: file.name,
+      fileSize: file.size
+    })
+
+    console.log('文件分片信息计算结果', data)
   }
 
   return (
@@ -93,7 +100,6 @@ export const AddSong: React.FC<AddSongProps> = ({ isOpen = false, onOpenChange }
           </PkmerFormItem>
           <div>
             <Button type='submit'>提交</Button>
-            {fileMd5}
           </div>
         </PkmerForm>
       </DialogContent>

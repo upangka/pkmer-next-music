@@ -251,8 +251,9 @@ public class MinioEngineService {
      * 将FileInitView对象持久化到数据库中
      */
     private void persistFileMetaInfo(FileInitView fileInitView) {
-        Long userId = AppContextHolder.userContextHolder.getUser().getId();
-
+//        Long userId = AppContextHolder.userContextHolder.getUser().getId();
+        // TODO 登录完成之后，处理用户id
+        Long userId = 1L;
         FileMetaInfoDto dto = toFileMetaInfoDto(fileInitView);
         addShardingInitFileMetaInfo(dto, userId);
 
