@@ -512,7 +512,7 @@ public class MinioEngineService {
         metaInfo.setIsFinished(isFinished);
         metaInfo.setUpdateTime(LocalDateTime.now());
         metaInfo.setEtag(etag);
-        fileMetaInfoRepository.save(metaInfo);
+        fileMetaInfoRepository.update(metaInfo);
     }
 
     /**
