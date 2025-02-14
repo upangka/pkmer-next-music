@@ -17,6 +17,9 @@ export default function Page() {
         <PkmerFormItem label='符串我是很长的字符串我是很长的字符串我是很长的字符串'>
           <Input type='password' placeholder='请输入密码' />
         </PkmerFormItem>
+        <PkmerFormItem label='I Love React'>
+          <Input type='password' placeholder='请输入密码' />
+        </PkmerFormItem>
       </PkmerForm>
     </>
   )

@@ -1,6 +1,7 @@
 package io.gitee.pkmer.minio.service;
 
 import io.gitee.pkmer.minio.common.StorageBucketEnums;
+import io.gitee.pkmer.minio.dto.MergeFileResult;
 import io.gitee.pkmer.minio.utils.CommonUtil;
 import io.gitee.pkmer.minio.utils.FileUtil;
 import io.gitee.pkmer.minio.utils.MimeTypeUtil;
@@ -311,10 +312,13 @@ public class MinioEngineService {
         String bucketName = getBucketName(fileName);
         String fileKey = UUIDUtil.getUUID();
         String mimeType = MimeTypeUtil.getMimeType(fileName);
-        String objectName = CommonUtil.getObjectName(fileMd5);
+        // 优化文件名路径+文件名，不包括bucketName 如：2025/02/黄昏 (女声版)(DJ歌者达达版) - Kag Chuu.flac
+//        String objectName = CommonUtil.getObjectName(fileMd5);
+        String objectName = CommonUtil.getObjectName(fileName);
         String filePath = CommonUtil.getPathByDate();
 
         minioAdapter.createBucket(bucketName);
+        // 上传多文件的id
         String uploadId = minioAdapter.createMultipartUpload(bucketName, objectName, mimeType);
 
         /**
@@ -447,11 +451,12 @@ public class MinioEngineService {
      * @param userId 用户ID
      * @return 合并后的文件访问URL
      */
-    public String mergeFile(String fileMd5, List<String> partMd5List,String userId) {
+    public MergeFileResult mergeFile(String fileMd5, List<String> partMd5List, String userId) {
 
         // 1. 获取文件元信息
         FileMetaInfoDto metaInfo = fileMetaInfoRepository.loadByMd5(fileMd5,userId);
-
+        // 注意因为接下来会拿所有上传分片的信息，所以这里objectName要和创建分片的时候一样。
+        String objectName = metaInfo.getBucketPath() + "/" + metaInfo.getFileName();
         try {
             // 2. 验证分片数量
             if (partMd5List.size() != metaInfo.getPartNumber()) {
@@ -461,7 +466,8 @@ public class MinioEngineService {
             // 3. 获取已上传的分片信息
             List<PartSummary> uploadedParts = minioAdapter.listParts(
                     metaInfo.getBucket(),
-                    CommonUtil.getObjectName(metaInfo.getFileMd5()),
+                    objectName,
+//                    CommonUtil.getObjectName(metaInfo.getFileMd5()),
                     metaInfo.getUploadId(),
                     metaInfo.getPartNumber()
             );
@@ -474,7 +480,8 @@ public class MinioEngineService {
             // 5. 合并分片
             String etag = minioAdapter.completeMultipartUpload(
                     metaInfo.getBucket(),
-                    CommonUtil.getObjectName(metaInfo.getFileMd5()),
+                    objectName,
+                    // CommonUtil.getObjectName(metaInfo.getFileMd5()), // todo 用bucket objectname 替换
                     metaInfo.getUploadId(),
                     uploadedParts
             );
@@ -482,17 +489,26 @@ public class MinioEngineService {
             // 6. 更新文件状态
             updateFileMetaInfo(metaInfo, etag,true);
 
+
+
             // 7. 生成文件访问URL
-            return minioAdapter.getPresignedObjectUrl(
+            String presignedObjectUrl = minioAdapter.getPresignedObjectUrl(
                     metaInfo.getBucket(),
-                    CommonUtil.getObjectName(metaInfo.getFileMd5())
+                    objectName
+                    //CommonUtil.getObjectName(metaInfo.getFileMd5())
             );
+
+            return MergeFileResult.builder()
+                    .ossPath("/"+metaInfo.getBucket() + "/" + objectName)
+                    .presignedObjectUrl(presignedObjectUrl)
+                    .build();
 
         } catch (Exception e) {
             // 合并失败时中止上传
             minioAdapter.abortMultipartUpload(
                     metaInfo.getBucket(),
-                    CommonUtil.getObjectName(metaInfo.getFileMd5()),
+                    objectName,
+                    //CommonUtil.getObjectName(metaInfo.getFileMd5()),
                     metaInfo.getUploadId()
             );
             throw new RuntimeException("Failed to merge file parts", e);

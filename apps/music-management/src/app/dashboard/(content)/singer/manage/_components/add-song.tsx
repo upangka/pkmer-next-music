@@ -46,6 +46,8 @@ export const AddSong: React.FC<AddSongProps> = ({ isOpen = false, onOpenChange }
   async function handleUploadFile(e: React.ChangeEvent<HTMLInputElement>) {
     if (e.target.files) {
       const file = e.target.files[0]
+
+      // TODO 如果文件<10MB，则直接上传，否则走分片上传
       const md5 = await computeFileMd5(file)
       await initFileSharePart(file, md5)
     }

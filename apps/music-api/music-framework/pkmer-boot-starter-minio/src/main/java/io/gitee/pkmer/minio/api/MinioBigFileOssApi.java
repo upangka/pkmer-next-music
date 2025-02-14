@@ -2,6 +2,7 @@ package io.gitee.pkmer.minio.api;
 
 
 import io.gitee.pkmer.convention.result.Result;
+import io.gitee.pkmer.minio.dto.MergeFileResult;
 import io.gitee.pkmer.minio.service.FileInitView;
 import io.gitee.pkmer.minio.service.ShardingView;
 import io.swagger.v3.oas.annotations.Operation;
@@ -39,7 +40,7 @@ public interface MinioBigFileOssApi extends MinioBasicOssApi {
 
     @Operation(summary = "合并文件")
     @PostMapping("/bigfile/merge")
-    Result<String> merge(
+    Result<MergeFileResult> merge(
             @RequestParam("fileMd5") String fileMd5,
             @RequestBody List<String> partMd5List);
 

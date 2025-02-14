@@ -6,6 +6,7 @@ import io.gitee.pkmer.convention.result.Result;
 import io.gitee.pkmer.minio.api.BigFileInitReq;
 import io.gitee.pkmer.minio.api.MinioBigFileOssApi;
 import io.gitee.pkmer.minio.api.PreShardingReq;
+import io.gitee.pkmer.minio.dto.MergeFileResult;
 import io.gitee.pkmer.minio.s3.PkmerMinioClientAdapter;
 import io.gitee.pkmer.minio.service.FileInitView;
 import io.gitee.pkmer.minio.service.MinioAdapter;
@@ -149,14 +150,14 @@ public class MusicFileController extends BaseController implements MinioBigFileO
     }
 
 
-    public Result<String> merge(@RequestParam("fileMd5") String fileMd5,
+    public Result<MergeFileResult> merge(@RequestParam("fileMd5") String fileMd5,
                                 @RequestBody List<String> partMd5List) {
         try {
-            String fileUrl = minioEngineService.mergeFile(
+            MergeFileResult mergeFileResult = minioEngineService.mergeFile(
                     fileMd5,
                     partMd5List,
                     getUserId());
-            return success(fileUrl);
+            return success(mergeFileResult);
         } catch (Exception e) {
             log.error("Failed to merge file parts", e);
             throw new RuntimeException(e);

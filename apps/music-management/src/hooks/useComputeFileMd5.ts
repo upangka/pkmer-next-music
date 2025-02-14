@@ -14,7 +14,7 @@ export default function useComputeFileMd5() {
   function computeFileMd5(file: File): Promise<string> {
     const reader = new FileReader()
     const md5 = CryptoJS.algo.MD5.create()
-    const chunkSize = 10 * 1024 * 1024 // 2MB
+    const chunkSize = 10 * 1024 * 1024 // 10MB
     let offset = 0
 
     return new Promise((resolve, reject) => {
