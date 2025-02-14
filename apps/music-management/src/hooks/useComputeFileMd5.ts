@@ -2,6 +2,7 @@ import { useState, useRef } from 'react'
 import CryptoJS from 'crypto-js'
 
 export default function useComputeFileMd5() {
+  const [isComputeFileFinished, setIsComputeFileFinished] = useState(false)
   const [fileMd5, setFileMd5] = useState<string>('')
   const chunkCountRef = useRef(0) // 定义计算文件分片的数量
 
@@ -28,6 +29,7 @@ export default function useComputeFileMd5() {
         } else {
           const hash = md5.finalize().toString()
           setFileMd5(hash)
+          setIsComputeFileFinished(true)
           resolve(hash)
         }
       }
@@ -38,6 +40,9 @@ export default function useComputeFileMd5() {
 
       function readNextChunk() {
         if (offset >= file.size) return // 确保不会读取超出文件范围
+
+        // 确保即使文件大小不是块大小的整数倍，最后一块也会被正确读取。
+        // 如果文件大小不是块大小的整数倍，则读取剩余的部分。
         const sliceFile = file.slice(offset, offset + chunkSize)
         reader.readAsArrayBuffer(sliceFile)
         console.log(`读取第${chunkCountRef.current + 1}分片成功`)
@@ -48,5 +53,5 @@ export default function useComputeFileMd5() {
     })
   }
 
-  return { fileMd5, computeFileMd5, clear }
+  return { fileMd5, isComputeFileFinished, computeFileMd5, clear }
 }
