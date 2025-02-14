@@ -13,7 +13,7 @@ import java.util.List;
 public class FileInitView {
 
     @Schema(description = "文件元数据信息表的唯一标识ID")
-    private Long id;
+    private String id;
 
     @Schema(description = "文件在存储桶中的唯一键")
     private String fileKey;

@@ -16,6 +16,15 @@ interface AddSongProps {
   onOpenChange: (isOpen: boolean) => void //
 }
 
+/**
+ * 歌曲文件拆分基础流程
+ * 1. 当用户选择了文件之后，开始计算文件的md5值
+ * 2. 等待前端文件md5计算完成，立即将文件的分片信息交给后端进行处理分片计算
+ * 3. 等待后端返回分片信息，前端开始上传分片
+ * 4. 等待所有分片上传完成，前端通知后端合并分片
+ * @param param0
+ * @returns
+ */
 export const AddSong: React.FC<AddSongProps> = ({ isOpen = false, onOpenChange }) => {
   const [_state, formAction] = useActionState(updateSong, {})
   // 标记文件的分片是否计算完成

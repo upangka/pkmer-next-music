@@ -78,6 +78,7 @@ public class MinioEngineService {
      */
     private FileInitView quickUpload(String fileMd5, String fileName, Long fileSize, FileMetaInfoDto fileMetaInfoDto) {
         FileInitView view = FileInitView.builder()
+                .id(fileMetaInfoDto.getId().toString())
                 .fileKey(UUIDUtil.getUUID())
                 .fileMd5(fileMd5)
                 .fileName(fileName)
@@ -148,7 +149,7 @@ public class MinioEngineService {
     private FileInitView buildResumeDownload(FileMetaInfoDto metaInfo) {
         List<FileInitView.Part> unUploadedParts = generateUploadShardingParts(metaInfo);
         return FileInitView.builder()
-                .id(metaInfo.getId())
+                .id(metaInfo.getId().toString())
                 .fileKey(metaInfo.getFileKey())
                 .fileMd5(metaInfo.getFileMd5())
                 .fileName(metaInfo.getFileName())
@@ -256,7 +257,7 @@ public class MinioEngineService {
         addShardingInitFileMetaInfo(dto, userId);
 
         fileMetaInfoRepository.save(dto);
-        fileInitView.setId(dto.getId());
+        fileInitView.setId(dto.getId().toString());
     }
 
     /**
