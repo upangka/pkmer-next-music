@@ -30,6 +30,8 @@ export default function useComputeFileMd5() {
           const hash = md5.finalize().toString()
           setFileMd5(hash)
           setIsComputeFileFinished(true)
+          // 重新计算
+          chunkCountRef.current = 0
           resolve(hash)
         }
       }
