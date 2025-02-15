@@ -29,28 +29,51 @@ interface AddSongProps {
 export const AddSong: React.FC<AddSongProps> = ({ isOpen = false, onOpenChange }) => {
   const [_state, formAction] = useActionState(updateSong, {})
   const [uploadFilePath, setUploadFilePath] = useState('')
+  const [songFile, setSongFile] = useState<File>()
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const [total, setTotal] = useState(1)
+  const [uploaded, setUploaded] = useState(0)
   // 标记文件的分片是否计算完成
   const { computeFileMd5 } = useComputeFileMd5()
   // 上传文件的url
   const upFileRef = useRef('')
 
-  function handleFormSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleFormSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
-    startTransition(() => {
-      let formData = new FormData(e.currentTarget)
-      formData.delete('song')
-      formAction(formData)
+    // console.log('提交表单')
+    // await handleSongFile()
+    startTransition(async () => {
+      // let formData = new FormData(e.currentTarget)
+      await handleSongFile()
+      // formData.delete('song')
+      // formAction(formData)
+      // 关闭窗口
+      // onOpenChange(false)
     })
-    onOpenChange(false)
+    console.log('关闭表单')
+    setIsSubmitting(true)
   }
 
   async function handleUploadFile(e: React.ChangeEvent<HTMLInputElement>) {
     if (e.target.files) {
       const file = e.target.files[0]
-
+      setSongFile(file)
       // TODO 如果文件<10MB，则直接上传，否则走分片上传
-      const md5 = await computeFileMd5(file)
-      await initFileSharePart(file, md5)
+      // const md5 = await computeFileMd5(file)
+      // await initFileSharePart(file, md5)
+    }
+  }
+
+  /**
+   * 将歌曲文件上传到minio
+   * @param parts
+   * @param file
+   */
+  async function handleSongFile() {
+    if (songFile) {
+      const md5 = await computeFileMd5(songFile)
+      await initFileSharePart(songFile, md5)
     }
   }
 
@@ -60,6 +83,7 @@ export const AddSong: React.FC<AddSongProps> = ({ isOpen = false, onOpenChange }
    * @param md5
    */
   async function initFileSharePart(file: File, md5: string) {
+    console.log('开始请求后端计算文件分片信息')
     const data = await init({
       fileMd5: md5,
       fullFileName: file.name,
@@ -104,7 +128,7 @@ export const AddSong: React.FC<AddSongProps> = ({ isOpen = false, onOpenChange }
     let count = 0
     let successCount = 0
     let errorCount = 0
-
+    setTotal(parts.length)
     while (count < parts.length) {
       const currentBatch = parts.slice(count, count + currentLimit)
       const requests = currentBatch.map(async (part, index) => {
@@ -128,6 +152,7 @@ export const AddSong: React.FC<AddSongProps> = ({ isOpen = false, onOpenChange }
       results.map(r => {
         if (r.status === 'fulfilled') {
           console.log('成功上传', ++successCount)
+          setUploaded(prev => prev + 1)
         } else if (r.status === 'rejected') {
           console.log('成功上传', ++errorCount)
         }
