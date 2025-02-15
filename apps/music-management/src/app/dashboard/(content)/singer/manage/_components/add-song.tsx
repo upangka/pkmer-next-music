@@ -28,6 +28,7 @@ interface AddSongProps {
  */
 export const AddSong: React.FC<AddSongProps> = ({ isOpen = false, onOpenChange }) => {
   const [_state, formAction] = useActionState(updateSong, {})
+  const [uploadFilePath, setUploadFilePath] = useState('')
   // 标记文件的分片是否计算完成
   const { computeFileMd5 } = useComputeFileMd5()
   // 上传文件的url
@@ -66,12 +67,23 @@ export const AddSong: React.FC<AddSongProps> = ({ isOpen = false, onOpenChange }
     })
 
     console.log('文件分片信息计算结果', data)
-    const parts = data.parts
-    await uploadFileParts(parts, file)
 
-    const etags = parts.map(part => part.etag)
+    if (data.finished) {
+      // 秒传
+      console.log('秒传成功')
+      // 上传的oss对象的url bucket + buketPath + fileName
+      const ossUrl = '/' + data.bucket + '/' + data.bucketPath + '/' + data.fileName
+      console.log('上传的oss对象的url', ossUrl)
+      setUploadFilePath(ossUrl)
+    } else {
+      // 分片上传
+      const parts = data.parts
+      await uploadFileParts(parts, file)
 
-    await merge(md5, etags)
+      const etags = parts.map(part => part.etag)
+
+      await merge(md5, etags)
+    }
   }
 
   /**

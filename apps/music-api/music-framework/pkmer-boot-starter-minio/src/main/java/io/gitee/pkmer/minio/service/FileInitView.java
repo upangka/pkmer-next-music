@@ -1,5 +1,6 @@
 package io.gitee.pkmer.minio.service;
 
+import io.gitee.pkmer.minio.dto.MergeFileResult;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
@@ -42,7 +43,7 @@ public class FileInitView {
     @Schema(description = "切片上传任务id")
     private String uploadId;
 
-    @Schema(description = "文件是否上传完成")
+    @Schema(description = "文件是否上传完成,如果为true，代表秒传")
     private boolean isFinished;
 
     @Schema(description = "分片上传的分片数量")
@@ -53,6 +54,13 @@ public class FileInitView {
 
     @Schema(description = "文件分片列表")
     private List<Part> parts;
+
+
+    /**
+     * 秒传生成结果
+     */
+    @Schema(description = "合并文件结果,用于秒传提供给前端处理")
+    MergeFileResult mergeFileResult;
 
     @Data
     @Builder

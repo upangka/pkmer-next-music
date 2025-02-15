@@ -33,7 +33,7 @@ export interface FileInitView {
   bucket: string
   bucketPath: string
   uploadId: string
-  isFinished: boolean
+  finished: boolean
   partNumber: number
   createTime: Date
   parts: Part[]

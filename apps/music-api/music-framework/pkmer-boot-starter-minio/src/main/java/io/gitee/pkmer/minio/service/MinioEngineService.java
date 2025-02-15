@@ -2,6 +2,7 @@ package io.gitee.pkmer.minio.service;
 
 import io.gitee.pkmer.minio.common.StorageBucketEnums;
 import io.gitee.pkmer.minio.dto.MergeFileResult;
+import io.gitee.pkmer.minio.dto.ObjectNameAndOssPath;
 import io.gitee.pkmer.minio.utils.CommonUtil;
 import io.gitee.pkmer.minio.utils.FileUtil;
 import io.gitee.pkmer.minio.utils.MimeTypeUtil;
@@ -78,6 +79,26 @@ public class MinioEngineService {
      * @param fileMetaInfoDto 文件元信息
      */
     private FileInitView quickUpload(String fileMd5, String fileName, Long fileSize, FileMetaInfoDto fileMetaInfoDto) {
+
+
+        final ObjectNameAndOssPath objectNameAndOssPath = buildObjectNameAndOssPath(fileMetaInfoDto);
+        String presignedObjectUrl;
+        try {
+            // 获取预授权访问链接
+            presignedObjectUrl = minioAdapter.getPresignedObjectUrl(
+                    fileMetaInfoDto.getBucket(),
+                    objectNameAndOssPath.getObjectName());
+        } catch (Exception e) {
+            log.error("获取预签名URL失败", e);
+            throw new RuntimeException(e);
+        }
+
+        // 秒传成功之后设置预生成链接和
+        MergeFileResult mergeFileResult = MergeFileResult.builder()
+                .presignedObjectUrl(presignedObjectUrl)
+                .ossPath(objectNameAndOssPath.getOssPath())
+                .build();
+
         FileInitView view = FileInitView.builder()
                 .id(fileMetaInfoDto.getId().toString())
                 .fileKey(UUIDUtil.getUUID())
@@ -92,7 +113,8 @@ public class MinioEngineService {
                 .isFinished(fileMetaInfoDto.getIsFinished())
                 .createTime(fileMetaInfoDto.getCreateTime())
                 .fileSuffix(fileMetaInfoDto.getFileSuffix())
-                .fileMimeType(MimeTypeUtil.getMimeType(fileName))
+                .fileMimeType(fileMetaInfoDto.getFileMimeType())
+                .mergeFileResult(mergeFileResult)
                 .build();
 
         persistFileMetaInfo(view);
@@ -445,6 +467,21 @@ public class MinioEngineService {
     }
 
     /**
+     * 通过文件元数据信息meta data
+     * 构建文件对象名称
+     * @return 文件对象名称
+     */
+    private ObjectNameAndOssPath buildObjectNameAndOssPath(FileMetaInfoDto metaInfo){
+        // 注意因为接下来会拿所有上传分片的信息，所以这里objectName要和创建分片的时候一样。
+        String objectName = metaInfo.getBucketPath() + "/" + metaInfo.getFileName();
+        String ossPath = "/"+ metaInfo.getBucket()  + "/" + objectName;
+        return ObjectNameAndOssPath.builder()
+                .objectName(objectName)
+                .ossPath(ossPath)
+                .build();
+    }
+
+    /**
      * 合并分片并完成上传
      * @param fileMd5 文件MD5
      * @param partMd5List 分片MD5列表
@@ -456,7 +493,9 @@ public class MinioEngineService {
         // 1. 获取文件元信息
         FileMetaInfoDto metaInfo = fileMetaInfoRepository.loadByMd5(fileMd5,userId);
         // 注意因为接下来会拿所有上传分片的信息，所以这里objectName要和创建分片的时候一样。
-        String objectName = metaInfo.getBucketPath() + "/" + metaInfo.getFileName();
+        ObjectNameAndOssPath objectNameAndOssPath = buildObjectNameAndOssPath(metaInfo);
+
+        String objectName = objectNameAndOssPath.getObjectName();
         try {
             // 2. 验证分片数量
             if (partMd5List.size() != metaInfo.getPartNumber()) {
@@ -499,7 +538,7 @@ public class MinioEngineService {
             );
 
             return MergeFileResult.builder()
-                    .ossPath("/"+metaInfo.getBucket() + "/" + objectName)
+                    .ossPath(objectNameAndOssPath.getOssPath())
                     .presignedObjectUrl(presignedObjectUrl)
                     .build();
 
