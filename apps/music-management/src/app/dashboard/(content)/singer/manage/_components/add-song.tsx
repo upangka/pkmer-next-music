@@ -44,6 +44,8 @@ export const AddSong: React.FC<AddSongProps> = ({ isOpen = false, onOpenChange }
     console.log('提交表单')
     // await handleSongFile()
     setIsSubmitting(true)
+    // TODO 前端再切分片的时候，界面显示初始化中（准备文件中）
+    // TODO 实际的上传的时候，显示上传进度
     await handleSongFile()
     // 过渡，延迟渲染了
     // startTransition(async () => {
@@ -194,7 +196,11 @@ export const AddSong: React.FC<AddSongProps> = ({ isOpen = false, onOpenChange }
 
         {isSubmitting && <p>{(uploaded / total) * 100}%</p>}
         {!isSubmitting && (
-          <PkmerForm onSubmit={handleFormSubmit} className='space-y-4'>
+          <PkmerForm
+            key={Date.now().toLocaleString()}
+            onSubmit={handleFormSubmit}
+            className='space-y-4'
+          >
             <PkmerFormItem label='歌曲名称'>
               <Input name='name' placeholder='歌曲名称' />
             </PkmerFormItem>
