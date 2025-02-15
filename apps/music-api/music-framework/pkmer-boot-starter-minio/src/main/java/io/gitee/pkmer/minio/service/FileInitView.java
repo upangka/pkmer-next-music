@@ -49,6 +49,10 @@ public class FileInitView {
     @Schema(description = "分片上传的分片数量")
     private Integer partNumber;
 
+
+    @Schema(description = "分片etag")
+    private String etag;
+
     @Schema(description = "创建时间")
     private LocalDateTime createTime;
 

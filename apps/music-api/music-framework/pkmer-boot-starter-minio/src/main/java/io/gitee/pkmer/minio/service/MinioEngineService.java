@@ -105,6 +105,7 @@ public class MinioEngineService {
                 .fileMd5(fileMd5)
                 .fileName(fileName)
                 .fileSize(fileSize)
+                .etag(fileMetaInfoDto.getEtag())
                 .isFinished(fileMetaInfoDto.getIsFinished())
                 .partNumber(fileMetaInfoDto.getPartNumber())
                 .bucket(fileMetaInfoDto.getBucket())
@@ -296,6 +297,7 @@ public class MinioEngineService {
      */
     private static FileMetaInfoDto toFileMetaInfoDto(FileInitView fileInitView) {
         return FileMetaInfoDto.builder()
+                .etag(fileInitView.getEtag())
                 .bucket(fileInitView.getBucket())
                 .fileKey(fileInitView.getFileKey())
                 .fileMd5(fileInitView.getFileMd5())
