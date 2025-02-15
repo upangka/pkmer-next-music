@@ -130,8 +130,8 @@ public class MinioEngineService {
      */
     private FileInitView resumeUpload(List<FileMetaInfoDto> metaInfos) {
 
-        String currentUploadUserId = AppContextHolder.userContextHolder.getUser().getId().toString();
-
+//        String currentUploadUserId = AppContextHolder.userContextHolder.getUser().getId().toString();
+        String currentUploadUserId = "1";
         Optional<FileMetaInfoDto> currentUserUpload = metaInfos.stream()
                 .filter(m -> m.getCreateUser().equals(currentUploadUserId))
                 .findFirst();
@@ -194,11 +194,13 @@ public class MinioEngineService {
      * @param metaInfo 用户上传的文件的元数据信息
      * @return 已上传的分片的信息
      */
-    private List<PartSummary> findUploadedParts(FileMetaInfoDto metaInfo) {
+    private List<PartSummary> findUploadedParts(FileMetaInfoDto metaInfo,String objectName) {
+
         // 获取已上传的分片信息
        return  minioAdapter.listParts(
                 metaInfo.getBucket(),
-                CommonUtil.getObjectName(metaInfo.getFileMd5()),
+               objectName,
+//                CommonUtil.getObjectName(metaInfo.getFileMd5()),
                 metaInfo.getUploadId(),
                 metaInfo.getPartNumber()
         );
@@ -212,16 +214,21 @@ public class MinioEngineService {
      */
     private List<FileInitView.Part> generateUploadShardingParts(FileMetaInfoDto metaInfo){
 
-        List<PartSummary> uploadedParts = findUploadedParts(metaInfo);
+        ObjectNameAndOssPath objectNameAndOssPath = buildObjectNameAndOssPath(metaInfo);
+        final String objectName = objectNameAndOssPath.getObjectName();
+        List<PartSummary> uploadedParts = findUploadedParts(metaInfo,objectName);
 
         // 找到丢失的分片
         List<Integer> unUploadPartNumber = findUnuploadPartNumber(metaInfo,uploadedParts);
 
-        final String objectName = CommonUtil.getObjectName(metaInfo.getFileMd5());
+//        final String objectName = CommonUtil.getObjectName(metaInfo.getFileMd5());
+
         List<CompletableFuture<FileInitView.Part>> allFutureParts = new ArrayList<>();
         for(Integer partNumber : unUploadPartNumber){
+            log.info("处理断点续传的分片序号:{}",partNumber);
             // 分片序号以1开始
             final long start = (partNumber - 1) * bigFileHelper.getChunkSize();
+            // 为未上传的分片生成对应的上传链接
             CompletableFuture<FileInitView.Part> futurePart = getPartCompletableFuture(
                     metaInfo.getBucket(),
                     objectName,

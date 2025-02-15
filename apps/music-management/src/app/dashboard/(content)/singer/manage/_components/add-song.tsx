@@ -78,11 +78,17 @@ export const AddSong: React.FC<AddSongProps> = ({ isOpen = false, onOpenChange }
     } else {
       // 分片上传
       const parts = data.parts
-      await uploadFileParts(parts, file)
+      const upResults = await uploadFileParts(parts, file)
 
-      const etags = parts.map(part => part.etag)
-
-      await merge(md5, etags)
+      if (upResults.total === upResults.successCount) {
+        // 分片全部上传成功合并分片
+        // TODO 后端去做
+        const etags = [...Array(data.partNumber).keys()].map(_ => '')
+        // const etags = parts.map(part => part.etag)
+        await merge(md5, etags)
+      } else {
+        console.log('分片上传失败,准备测试断点续传')
+      }
     }
   }
 
@@ -108,6 +114,7 @@ export const AddSong: React.FC<AddSongProps> = ({ isOpen = false, onOpenChange }
             method: 'put',
             body: chunckFile
           })
+          console.log('分片上传', part.partNumber)
           console.log(r)
           return r
         } catch (err) {
@@ -126,9 +133,16 @@ export const AddSong: React.FC<AddSongProps> = ({ isOpen = false, onOpenChange }
         }
       })
       count += currentLimit
+      // TODO 测试断点续传
+      break
     }
 
     console.log(`一共${parts.length}个分片,成功上传${successCount},上传失败${errorCount}个`)
+    return {
+      total: parts.length,
+      successCount,
+      errorCount
+    }
   }
 
   /**
