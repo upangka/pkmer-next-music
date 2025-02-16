@@ -200,40 +200,42 @@ export const AddSong: React.FC<AddSongProps> = ({ isOpen = false, onOpenChange }
           <DialogTitle className='text-center'>更新歌曲</DialogTitle>
         </DialogHeader>
 
-        {isSubmitting && <p>{(uploaded / total) * 100}%</p>}
+        {/* {isSubmitting && <p>{(uploaded / total) * 100}%</p>}
         {!isSubmitting && (
-          <PkmerForm onSubmit={handleFormSubmit} className='space-y-4'>
-            <PkmerFormItem label='歌曲名称'>
-              <Input name='name' placeholder='歌曲名称' />
-            </PkmerFormItem>
-            <PkmerFormItem label='专辑'>
-              <Input name='introduction' placeholder='专辑' />
-            </PkmerFormItem>
+          
+        )} */}
 
-            <PkmerFormItem label='上传歌曲'>
-              <Input
-                name='song'
-                className='flex items-center justify-center !border-none'
-                type='file'
-                accept='audio/*'
-                placeholder='歌曲'
-                onChange={handleUploadFile}
-              />
-            </PkmerFormItem>
-            <PkmerFormItem label='上传歌词'>
-              <Input
-                name='lyricFile'
-                className='flex items-center justify-center'
-                type='file'
-                accept='.lrc, .txt'
-                placeholder='歌词'
-              />
-            </PkmerFormItem>
-            <div>
-              <Button type='submit'>提交</Button>
-            </div>
-          </PkmerForm>
-        )}
+        <PkmerForm onSubmit={handleFormSubmit} className='space-y-4'>
+          <PkmerFormItem label='歌曲名称'>
+            <Input name='name' placeholder='歌曲名称' />
+          </PkmerFormItem>
+          <PkmerFormItem label='专辑'>
+            <Input name='introduction' placeholder='专辑' />
+          </PkmerFormItem>
+
+          <PkmerFormItem label='上传歌曲'>
+            <Input
+              name='song'
+              className='flex items-center justify-center !border-none'
+              type='file'
+              accept='audio/*'
+              placeholder='歌曲'
+              onChange={handleUploadFile}
+            />
+          </PkmerFormItem>
+          <PkmerFormItem label='上传歌词'>
+            <Input
+              name='lyricFile'
+              className='flex items-center justify-center'
+              type='file'
+              accept='.lrc, .txt'
+              placeholder='歌词'
+            />
+          </PkmerFormItem>
+          <div>
+            <Button type='submit'>提交</Button>
+          </div>
+        </PkmerForm>
       </DialogContent>
     </Dialog>
   )

@@ -6,12 +6,19 @@ import {
   DialogFooter,
   DialogClose
 } from '@pkmer-music/management/components/ui/dialog'
+
+import { Input } from '@pkmer-music/management/components/ui/input'
 import { Button } from '@pkmer-music/management/components/ui/button'
 import { useState } from 'react'
 interface Props {}
 const MyDialog: React.FC<Props> = () => {
   const [showUpload, setShowUpload] = useState(false)
+  const [msg, setMsg] = useState('')
+  const [file, setFile] = useState<File>()
 
+  function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
+    setFile(e.target.files?.[0])
+  }
   return (
     <>
       <Dialog open={true}>
@@ -24,7 +31,10 @@ const MyDialog: React.FC<Props> = () => {
           {showUpload && <p>上传中</p>}
           {!showUpload && (
             <>
-              <p className='grid h-[500px] place-items-center'>主要内容</p>
+              <p className='grid place-items-center p-5'>主要内容</p>
+
+              <Input type='text' onChange={e => setMsg(e.target.value)} />
+              <Input type='file' onChange={handleFile} />
               <Button
                 variant='outline'
                 onClick={async () => {
