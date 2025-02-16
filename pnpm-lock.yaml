@@ -353,6 +353,9 @@ importers:
 
   packages/react:
     dependencies:
+      '@pkmer/libs':
+        specifier: workspace:*
+        version: link:../libs
       react:
         specifier: catalog:react19
         version: 19.0.0

@@ -8,6 +8,8 @@ import {
 } from '@pkmer-music/management/components/ui/dialog'
 import { Button } from '@pkmer-music/management/components/ui/button'
 import { Input } from '@pkmer-music/management/components/ui/input'
+import { UploadStatus } from '@pkmer-music-ui/react/upload-status'
+
 import { updateSong, init, mergeParts } from '@pkmer-music/management/actions'
 import { PkmerForm, PkmerFormItem } from '@pkmer-music/management/components/'
 import useComputeFileMd5 from '@pkmer-music/management/hooks/useComputeFileMd5'
@@ -205,11 +207,25 @@ export const AddSong: React.FC<AddSongProps> = ({ isOpen = false, onOpenChange }
     console.log('生成的预访问链接', url)
   }
 
+  function title() {
+    if (status === 'calcMd5') {
+      return '准备文件'
+    } else if (status === 'uploading') {
+      return '文件上传中'
+    } else if (status === 'prompt') {
+      return '上传成功'
+    } else if (status === 'init') {
+      return '更新歌曲'
+    }
+
+    return '未知TODO'
+  }
+
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle className='text-center'>更新歌曲</DialogTitle>
+          <DialogTitle className='text-center'>{title()}</DialogTitle>
         </DialogHeader>
 
         {status === 'calcMd5' && (
@@ -226,7 +242,11 @@ export const AddSong: React.FC<AddSongProps> = ({ isOpen = false, onOpenChange }
           </p>
         )}
         {status === 'uploading' && (
-          <p>{calculatePercentage(uploadStatus.uploaded, uploadStatus.total)}</p>
+          // <p>{calculatePercentage(uploadStatus.uploaded, uploadStatus.total)}</p>
+          <UploadStatus
+            showText
+            uploaded={calculatePercentage(uploadStatus.uploaded, uploadStatus.total)}
+          />
         )}
         {status === 'init' && (
           <PkmerForm onSubmit={handleFormSubmit} className='space-y-4'>

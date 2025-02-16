@@ -1,6 +1,6 @@
 'use client'
 import { useState, useRef, useEffect } from 'react'
-import { UploadStatus } from '@pkmer-music-ui/react/upload-status'
+import { UploadStatus } from '../'
 import { calculatePercentage } from '@pkmer/libs/utils'
 
 export default function Page() {

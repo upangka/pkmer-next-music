@@ -8,6 +8,9 @@
     "dev": "rollup -c -w && tsc --project tsconfig.json",
     "build": "rollup -c && tsc --project tsconfig.json"
   },
+  "dependencies": {
+    "@pkmer/libs": "workspace:*"
+  },
   "peerDependencies": {
     "react": "catalog:react19",
     "react-dom": "catalog:react19"
@@ -33,6 +36,12 @@
     "./avatar": {
       "import": {
         "types": "./dist/types/components/avatar/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    },
+    "./upload-status": {
+      "import": {
+        "types": "./dist/types/components/upload-status/index.d.ts",
         "default": "./dist/index.js"
       }
     }
