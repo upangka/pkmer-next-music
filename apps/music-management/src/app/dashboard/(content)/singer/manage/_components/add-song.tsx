@@ -17,6 +17,8 @@ interface AddSongProps {
   onOpenChange: (isOpen: boolean) => void //
 }
 
+type AddSongStatus = 'init' | 'calcMd5' | 'uploading' | 'finish'
+
 /**
  * 歌曲文件拆分基础流程
  * 1. 当用户选择了文件之后，开始计算文件的md5值
@@ -29,41 +31,38 @@ export const AddSong: React.FC<AddSongProps> = ({ isOpen = false, onOpenChange }
   const [_state, formAction] = useActionState(updateSong, {})
   const [uploadFilePath, setUploadFilePath] = useState('')
   const [songFile, setSongFile] = useState<File>()
-  const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const [total, setTotal] = useState(1)
-  const [uploaded, setUploaded] = useState(0)
-  // 标记文件的分片是否计算完成
-  const { computeFileMd5 } = useComputeFileMd5()
-  // 上传文件的url
-  const upFileRef = useRef('')
-
-  useEffect(() => {
-    console.log('add song组件挂在')
-    return () => {
-      console.log('add song组件卸载')
-    }
-  }, [])
+  // 歌曲处理状态
+  const [status, setStatus] = useState<AddSongStatus>('init')
+  // 上传状态
+  const [uploadStatus, setUploadStatus] = useState({
+    uploaded: 0,
+    total: 1
+  })
+  // 处理文件分片md5的计算，用于准备文件
+  const { totalParts, completedParts, computeFileMd5 } = useComputeFileMd5()
 
   async function handleFormSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
-    console.log('提交表单')
+
+    setStatus('calcMd5')
+
     // await handleSongFile()
-    setIsSubmitting(true)
     // TODO 前端再切分片的时候，界面显示初始化中（准备文件中）
     // TODO 实际的上传的时候，显示上传进度
-    await handleSongFile()
-    // 过渡，延迟渲染了
-    // startTransition(async () => {
-    //   // let formData = new FormData(e.currentTarget)
-    //   await handleSongFile()
-    //   // formData.delete('song')
-    //   // formAction(formData)
-    //   // 关闭窗口
-    //   // onOpenChange(false)
-    // })
-    console.log('关闭表单')
-    // setIsSubmitting(true)
+    if (songFile) {
+      const md5 = await computeFileMd5(songFile)
+      setStatus('uploading')
+      await initFileSharePart(songFile, md5)
+    }
+
+    // TODO 文件分片上传完成之后，开始上传歌曲信息
+    // let formData = new FormData(e.currentTarget)
+    // formData.delete('song')
+    // formAction(formData)
+
+    setStatus('finish')
+    onOpenChange(true)
   }
 
   function handleUploadFile(e: React.ChangeEvent<HTMLInputElement>) {
@@ -73,18 +72,6 @@ export const AddSong: React.FC<AddSongProps> = ({ isOpen = false, onOpenChange }
       // TODO 如果文件<10MB，则直接上传，否则走分片上传
       // const md5 = await computeFileMd5(file)
       // await initFileSharePart(file, md5)
-    }
-  }
-
-  /**
-   * 将歌曲文件上传到minio
-   * @param parts
-   * @param file
-   */
-  async function handleSongFile() {
-    if (songFile) {
-      const md5 = await computeFileMd5(songFile)
-      await initFileSharePart(songFile, md5)
     }
   }
 
@@ -135,11 +122,14 @@ export const AddSong: React.FC<AddSongProps> = ({ isOpen = false, onOpenChange }
   async function uploadFileParts(parts: Part[], file: File) {
     console.log('开始分片上传')
     // 控制并发数量
-    let currentLimit = 5
+    let currentLimit = 3
     let count = 0
     let successCount = 0
     let errorCount = 0
-    setTotal(parts.length)
+    setUploadStatus({
+      ...uploadStatus,
+      total: parts.length
+    })
     while (count < parts.length) {
       const currentBatch = parts.slice(count, count + currentLimit)
       const requests = currentBatch.map(async (part, index) => {
@@ -150,7 +140,6 @@ export const AddSong: React.FC<AddSongProps> = ({ isOpen = false, onOpenChange }
             body: chunckFile
           })
           console.log('分片上传', part.partNumber)
-          console.log(r)
           return r
         } catch (err) {
           console.error(err)
@@ -163,9 +152,12 @@ export const AddSong: React.FC<AddSongProps> = ({ isOpen = false, onOpenChange }
       results.map(r => {
         if (r.status === 'fulfilled') {
           console.log('成功上传', ++successCount)
-          setUploaded(prev => prev + 1)
+          setUploadStatus({
+            ...uploadStatus,
+            uploaded: uploadStatus.uploaded + 1
+          })
         } else if (r.status === 'rejected') {
-          console.log('成功上传', ++errorCount)
+          console.log('失败上传', ++errorCount)
         }
       })
       count += currentLimit
@@ -186,10 +178,7 @@ export const AddSong: React.FC<AddSongProps> = ({ isOpen = false, onOpenChange }
    * @param fileMd5
    */
   async function merge(fileMd5: string, etags: string[]) {
-    console.log('通知后端合并分片')
-
     const url = await mergeParts(fileMd5, etags)
-
     console.log('生成的预访问链接', url)
   }
 
@@ -200,8 +189,16 @@ export const AddSong: React.FC<AddSongProps> = ({ isOpen = false, onOpenChange }
           <DialogTitle className='text-center'>更新歌曲</DialogTitle>
         </DialogHeader>
 
-        {isSubmitting && <p>{(uploaded / total) * 100}%</p>}
-        {!isSubmitting && (
+        {status === 'calcMd5' && (
+          <section className='flex flex-col gap-3'>
+            <p>
+              文件初始化
+              <span>{((completedParts / totalParts) * 100).toFixed(2)}%</span>
+            </p>
+          </section>
+        )}
+        {status === 'uploading' && <p>{(uploadStatus.uploaded / uploadStatus.total) * 100}%</p>}
+        {status === 'init' && (
           <PkmerForm onSubmit={handleFormSubmit} className='space-y-4'>
             <PkmerFormItem label='歌曲名称'>
               <Input name='name' placeholder='歌曲名称' />
