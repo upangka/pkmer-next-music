@@ -1,5 +1,5 @@
-import { createContext, useContext, useState } from 'react'
-
+import { createContext, useContext, useEffect, useState, use } from 'react'
+import { getTheme } from '@pkmer-music/management/actions'
 type ThemeType = 'light' | 'dark'
 
 interface ThemeContextType {
@@ -23,6 +23,17 @@ const useThemeContext = () => {
 
 const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
   const [theme, setTheme] = useState<ThemeType>('light')
+
+  // useEffect(() => {
+  //   // api
+  //   function handleThemeChange() {
+  //     getTheme().then(theme => {
+  //       setTheme(theme)
+  //       console.log('theme provider执行', theme)
+  //     })
+  //   }
+  //   handleThemeChange()
+  // })
 
   function toggleTheme() {
     setTheme(prevTheme => (prevTheme === 'light' ? 'dark' : 'light'))
