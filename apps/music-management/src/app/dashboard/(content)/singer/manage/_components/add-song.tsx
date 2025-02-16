@@ -49,18 +49,14 @@ export const AddSong: React.FC<AddSongProps> = ({ isOpen = false, onOpenChange }
     uploaded: 0,
     total: 1
   })
-
   // 分片合并后的结果包含预览链接以及上传到数据库的数据后端已经处理好了
   const [mergeFileResult, setMergeFileResult] = useState<MergeFileResult>()
-
   // 处理文件分片md5的计算，用于准备文件
   const { totalParts, completedParts, computeFileMd5 } = useComputeFileMd5()
 
   async function handleFormSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
-
     setStatus('calcMd5')
-
     if (songFile) {
       const md5 = await computeFileMd5(songFile)
       setStatus('uploading')
@@ -71,16 +67,25 @@ export const AddSong: React.FC<AddSongProps> = ({ isOpen = false, onOpenChange }
     // let formData = new FormData(e.currentTarget)
     // formData.delete('song')
     // formAction(formData)
+    setPrompt(10)
+  }
+
+  /**
+   * 提示信息
+   * 给用户预览的时间，默认5s之后关闭
+   */
+  function setPrompt(seconds: number = 5) {
     setStatus('prompt')
-    setCloseTime(5)
+    setCloseTime(seconds)
     setInterval(() => {
       setCloseTime(prev => prev - 1)
     }, 1000)
     setTimeout(() => {
-      console.log('5秒之后关闭')
+      console.log(`${seconds}秒之后关闭`)
       setStatus('finish')
+      // 关闭窗口
       onOpenChange(false)
-    }, 5000)
+    }, seconds * 1000)
   }
 
   function handleUploadFile(e: React.ChangeEvent<HTMLInputElement>) {
