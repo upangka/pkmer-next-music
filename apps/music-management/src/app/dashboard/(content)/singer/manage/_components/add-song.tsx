@@ -17,7 +17,13 @@ interface AddSongProps {
   onOpenChange: (isOpen: boolean) => void //
 }
 
-type AddSongStatus = 'init' | 'calcMd5' | 'uploading' | 'finish'
+type AddSongStatus =
+  | 'init' // 初始状态
+  | 'calcMd5' // 计算文件 MD5
+  | 'uploading' // 上传中
+  | 'finish' // 完成
+  | 'prompt' // 提示状态（用于显示提示信息）
+  | 'error' // 错误状态（可选，用于处理异常情况）
 
 /**
  * 歌曲文件拆分基础流程
@@ -31,7 +37,7 @@ export const AddSong: React.FC<AddSongProps> = ({ isOpen = false, onOpenChange }
   const [_state, formAction] = useActionState(updateSong, {})
   const [uploadFilePath, setUploadFilePath] = useState('')
   const [songFile, setSongFile] = useState<File>()
-
+  const [closeTime, setCloseTime] = useState(0)
   // 歌曲处理状态
   const [status, setStatus] = useState<AddSongStatus>('init')
   // 上传状态
@@ -60,9 +66,16 @@ export const AddSong: React.FC<AddSongProps> = ({ isOpen = false, onOpenChange }
     // let formData = new FormData(e.currentTarget)
     // formData.delete('song')
     // formAction(formData)
-
-    setStatus('finish')
-    onOpenChange(true)
+    setStatus('prompt')
+    setCloseTime(5)
+    setInterval(() => {
+      setCloseTime(prev => prev - 1)
+    }, 1000)
+    setTimeout(() => {
+      console.log('5秒之后关闭')
+      setStatus('finish')
+      onOpenChange(false)
+    }, 5000)
   }
 
   function handleUploadFile(e: React.ChangeEvent<HTMLInputElement>) {
@@ -79,6 +92,7 @@ export const AddSong: React.FC<AddSongProps> = ({ isOpen = false, onOpenChange }
    * 请求后端初始化文件的分片信息
    * @param file
    * @param md5
+   *
    */
   async function initFileSharePart(file: File, md5: string) {
     console.log('开始请求后端计算文件分片信息')
@@ -92,6 +106,10 @@ export const AddSong: React.FC<AddSongProps> = ({ isOpen = false, onOpenChange }
 
     if (data.finished) {
       // 秒传
+      setUploadStatus({
+        uploaded: 1,
+        total: 1
+      })
       console.log('秒传成功')
       // 上传的oss对象的url bucket + buketPath + fileName
       const ossUrl = '/' + data.bucket + '/' + data.bucketPath + '/' + data.fileName
@@ -122,7 +140,7 @@ export const AddSong: React.FC<AddSongProps> = ({ isOpen = false, onOpenChange }
   async function uploadFileParts(parts: Part[], file: File) {
     console.log('开始分片上传')
     // 控制并发数量
-    let currentLimit = 3
+    let currentLimit = 2
     let count = 0
     let successCount = 0
     let errorCount = 0
@@ -152,14 +170,16 @@ export const AddSong: React.FC<AddSongProps> = ({ isOpen = false, onOpenChange }
       results.map(r => {
         if (r.status === 'fulfilled') {
           console.log('成功上传', ++successCount)
-          setUploadStatus({
-            ...uploadStatus,
-            uploaded: uploadStatus.uploaded + 1
-          })
+          setUploadStatus(prev => ({
+            ...prev,
+            uploaded: prev.uploaded + 1
+          }))
         } else if (r.status === 'rejected') {
           console.log('失败上传', ++errorCount)
         }
       })
+
+      await new Promise(resolve => setTimeout(resolve, 1000))
       count += currentLimit
       // TODO 测试断点续传
       // break
@@ -197,7 +217,14 @@ export const AddSong: React.FC<AddSongProps> = ({ isOpen = false, onOpenChange }
             </p>
           </section>
         )}
-        {status === 'uploading' && <p>{(uploadStatus.uploaded / uploadStatus.total) * 100}%</p>}
+        {status === 'prompt' && (
+          <p className='rounded-md border border-black py-2 text-center shadow-lg'>
+            <span className='text-lg text-red-600'>{closeTime}秒</span>之后关闭
+          </p>
+        )}
+        {status === 'uploading' && (
+          <p>{((uploadStatus.uploaded / uploadStatus.total) * 100).toFixed(2)}%</p>
+        )}
         {status === 'init' && (
           <PkmerForm onSubmit={handleFormSubmit} className='space-y-4'>
             <PkmerFormItem label='歌曲名称'>
