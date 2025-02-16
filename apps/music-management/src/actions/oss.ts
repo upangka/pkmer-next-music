@@ -1,7 +1,7 @@
 'use server'
 import httpService from '@pkmer-music/management/service'
 import type { AppResponse } from '@pkmer/libs/http'
-import type { BigFileInitReq, FileInitView } from '@pkmer-music/management/types'
+import type { BigFileInitReq, FileInitView, MergeFileResult } from '@pkmer-music/management/types'
 
 /**
  * 文件分片信息初始化
@@ -18,6 +18,6 @@ export async function init(req: BigFileInitReq): AppResponse<FileInitView> {
  * @param parts
  * @returns
  */
-export async function mergeParts(fileMd5: string, parts: string[]): AppResponse<string> {
+export async function mergeParts(fileMd5: string, parts: string[]): AppResponse<MergeFileResult> {
   return httpService.post(`/oss/bigfile/merge?fileMd5=${fileMd5}`, parts)
 }

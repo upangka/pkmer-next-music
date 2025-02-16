@@ -16,7 +16,7 @@ import useComputeFileMd5 from '@pkmer-music/management/hooks/useComputeFileMd5'
 import { Part } from '@pkmer-music/management/types'
 
 import { calculatePercentage } from '@pkmer/libs/utils'
-
+import type { MergeFileResult } from '@pkmer-music/management/types'
 interface AddSongProps {
   isOpen: boolean
   onOpenChange: (isOpen: boolean) => void //
@@ -40,7 +40,6 @@ type AddSongStatus =
  */
 export const AddSong: React.FC<AddSongProps> = ({ isOpen = false, onOpenChange }) => {
   const [_state, formAction] = useActionState(updateSong, {})
-  const [uploadFilePath, setUploadFilePath] = useState('')
   const [songFile, setSongFile] = useState<File>()
   const [closeTime, setCloseTime] = useState(0)
   // 歌曲处理状态
@@ -50,6 +49,10 @@ export const AddSong: React.FC<AddSongProps> = ({ isOpen = false, onOpenChange }
     uploaded: 0,
     total: 1
   })
+
+  // 分片合并后的结果包含预览链接以及上传到数据库的数据后端已经处理好了
+  const [mergeFileResult, setMergeFileResult] = useState<MergeFileResult>()
+
   // 处理文件分片md5的计算，用于准备文件
   const { totalParts, completedParts, computeFileMd5 } = useComputeFileMd5()
 
@@ -58,9 +61,6 @@ export const AddSong: React.FC<AddSongProps> = ({ isOpen = false, onOpenChange }
 
     setStatus('calcMd5')
 
-    // await handleSongFile()
-    // TODO 前端再切分片的时候，界面显示初始化中（准备文件中）
-    // TODO 实际的上传的时候，显示上传进度
     if (songFile) {
       const md5 = await computeFileMd5(songFile)
       setStatus('uploading')
@@ -88,8 +88,6 @@ export const AddSong: React.FC<AddSongProps> = ({ isOpen = false, onOpenChange }
       const file = e.target.files[0]
       setSongFile(file)
       // TODO 如果文件<10MB，则直接上传，否则走分片上传
-      // const md5 = await computeFileMd5(file)
-      // await initFileSharePart(file, md5)
     }
   }
 
@@ -116,10 +114,9 @@ export const AddSong: React.FC<AddSongProps> = ({ isOpen = false, onOpenChange }
         total: 1
       })
       console.log('秒传成功')
-      // 上传的oss对象的url bucket + buketPath + fileName
-      const ossUrl = '/' + data.bucket + '/' + data.bucketPath + '/' + data.fileName
-      console.log('上传的oss对象的url', ossUrl)
-      setUploadFilePath(ossUrl)
+      setMergeFileResult({
+        ...data.mergeFileResult
+      })
     } else {
       // 分片上传
       const parts = data.parts
@@ -183,7 +180,7 @@ export const AddSong: React.FC<AddSongProps> = ({ isOpen = false, onOpenChange }
           console.log('失败上传', ++errorCount)
         }
       })
-
+      // TODO为了演示效果，人为添加延迟
       await new Promise(resolve => setTimeout(resolve, 1000))
       count += currentLimit
       // TODO 测试断点续传
@@ -203,8 +200,11 @@ export const AddSong: React.FC<AddSongProps> = ({ isOpen = false, onOpenChange }
    * @param fileMd5
    */
   async function merge(fileMd5: string, etags: string[]) {
-    const url = await mergeParts(fileMd5, etags)
-    console.log('生成的预访问链接', url)
+    const data = await mergeParts(fileMd5, etags)
+    console.log('生成的预访问链接', data.presignedObjectUrl)
+    setMergeFileResult({
+      ...data
+    })
   }
 
   function title() {
@@ -237,9 +237,18 @@ export const AddSong: React.FC<AddSongProps> = ({ isOpen = false, onOpenChange }
           </p>
         )}
         {status === 'prompt' && (
-          <p className='rounded-md border border-black py-2 text-center shadow-lg'>
-            <span className='text-lg text-red-600'>{closeTime}秒</span>之后关闭
-          </p>
+          <div className='flex flex-col items-center justify-center gap-3 py-3'>
+            <a
+              className='w-fit rounded-lg border border-gray-500 px-2 py-1 text-sm hover:bg-blue-500 hover:text-white hover:shadow-lg'
+              href={mergeFileResult?.presignedObjectUrl}
+              target='_blank'
+            >
+              点击预览
+            </a>
+            <p>
+              <span className='text-lg text-red-600'>{closeTime}秒</span>之后关闭
+            </p>
+          </div>
         )}
         {status === 'uploading' && (
           // <p>{calculatePercentage(uploadStatus.uploaded, uploadStatus.total)}</p>

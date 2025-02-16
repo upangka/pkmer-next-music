@@ -37,6 +37,7 @@ export interface FileInitView {
   partNumber: number
   createTime: Date
   parts: Part[]
+  mergeFileResult: MergeFileResult
 }
 
 /**
@@ -50,4 +51,20 @@ export interface Part {
   shardingEnd: number
   uploaded: boolean
   etag: string
+}
+
+/**
+ * 分片上传完成并且合并完成之后的信息
+ */
+
+export interface MergeFileResult {
+  /**
+   * OSS文件路径，用于数据库存储的信息
+   */
+  ossPath: string
+
+  /**
+   * OSS文件预览路径
+   */
+  presignedObjectUrl: string
 }
