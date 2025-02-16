@@ -24,6 +24,7 @@ export const MgTable: React.FC<MgTableProps> = ({ pageData }) => {
 
   return (
     <>
+      {isOpen && <AddSong isOpen={isOpen} onOpenChange={setIsOpen} />}
       <Table className='w-full border-collapse border border-gray-300'>
         <TableHeader>
           <TableRow className='bg-gray-100'>
@@ -58,11 +59,9 @@ export const MgTable: React.FC<MgTableProps> = ({ pageData }) => {
                     >
                       更新歌曲
                     </button>
-                    <AddSong
-                      key={Date.now().toLocaleString()}
-                      isOpen={isOpen}
-                      onOpenChange={setIsOpen}
-                    />
+
+                    {/* {isOpen && <AddSong isOpen={isOpen} onOpenChange={setIsOpen} />} */}
+
                     {/* TODO 抽离dialog这种button组件end */}
                   </div>
                 </TableCell>

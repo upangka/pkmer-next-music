@@ -10,7 +10,9 @@ export default function Page() {
       {/* 修复之后：确保组件在UI Tree中处于不同的位置 */}
       {open && <TestInput open={open} action={() => setOpen(false)} />}
 
-      <TestInput key={Date.now().toLocaleString()} open={open} action={() => setOpen(false)} />
+      {/* <TestInput key={Date.now().toLocaleString()} 
+           open={open} 
+           action={() => setOpen(false)} /> */}
       <button
         className='rounded-md border border-black px-2 py-1 hover:bg-blue-600 hover:text-white'
         onClick={() => setOpen(true)}
