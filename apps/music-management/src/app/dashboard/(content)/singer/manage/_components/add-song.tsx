@@ -12,6 +12,9 @@ import { updateSong, init, mergeParts } from '@pkmer-music/management/actions'
 import { PkmerForm, PkmerFormItem } from '@pkmer-music/management/components/'
 import useComputeFileMd5 from '@pkmer-music/management/hooks/useComputeFileMd5'
 import { Part } from '@pkmer-music/management/types'
+
+import { calculatePercentage } from '@pkmer/libs/utils'
+
 interface AddSongProps {
   isOpen: boolean
   onOpenChange: (isOpen: boolean) => void //
@@ -210,12 +213,12 @@ export const AddSong: React.FC<AddSongProps> = ({ isOpen = false, onOpenChange }
         </DialogHeader>
 
         {status === 'calcMd5' && (
-          <section className='flex flex-col gap-3'>
-            <p>
-              文件初始化
-              <span>{((completedParts / totalParts) * 100).toFixed(2)}%</span>
-            </p>
-          </section>
+          <p className='border border-black py-2 text-center shadow-lg'>
+            文件初始化
+            <span className='ml-2 text-lg text-green-600'>
+              {calculatePercentage(completedParts, totalParts)}
+            </span>
+          </p>
         )}
         {status === 'prompt' && (
           <p className='rounded-md border border-black py-2 text-center shadow-lg'>
@@ -223,7 +226,7 @@ export const AddSong: React.FC<AddSongProps> = ({ isOpen = false, onOpenChange }
           </p>
         )}
         {status === 'uploading' && (
-          <p>{((uploadStatus.uploaded / uploadStatus.total) * 100).toFixed(2)}%</p>
+          <p>{calculatePercentage(uploadStatus.uploaded, uploadStatus.total)}</p>
         )}
         {status === 'init' && (
           <PkmerForm onSubmit={handleFormSubmit} className='space-y-4'>
