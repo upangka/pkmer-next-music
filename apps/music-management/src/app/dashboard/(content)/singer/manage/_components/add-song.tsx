@@ -79,10 +79,13 @@ export const AddSong: React.FC<AddSongProps> = ({ isOpen = false, onOpenChange }
       await initFileSharePart(songFile, md5)
     }
 
-    // TODO 文件分片上传完成之后，开始上传歌曲信息
-    // let formData = new FormData(e.currentTarget)
-    // formData.delete('song')
-    // formAction(formData)
+    startTransition(() => {
+      // TODO 文件分片上传完成之后，开始上传歌曲信息
+      let formData = new FormData(e.currentTarget)
+      formData.delete('song')
+      // formAction(formData)
+    })
+
     setPrompt(10)
   }
 
