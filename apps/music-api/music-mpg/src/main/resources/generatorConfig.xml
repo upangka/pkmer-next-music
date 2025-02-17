@@ -33,9 +33,9 @@
             <property name="useJSR310Types" value="true" />
         </javaTypeResolver>
 
-        <javaModelGenerator targetPackage="io.gitee.pkmer.minio.repository.mybatis" targetProject="src/main/java" />
+        <javaModelGenerator targetPackage="io.gitee.pkmer.core.infrastructure.persistence.admin.mybatis" targetProject="src/main/java" />
         <sqlMapGenerator targetPackage="mapper" targetProject="src/main/resources"/>
-        <javaClientGenerator type="XMLMAPPER" targetPackage="io.gitee.pkmer.minio.repository.mybatis" targetProject="src/main/java"/>
+        <javaClientGenerator type="XMLMAPPER" targetPackage="io.gitee.pkmer.core.infrastructure.persistence.admin.mybatis" targetProject="src/main/java"/>
 
 <!--        <table tableName="banner" mapperName="BannerDynamicMapper" />-->
 <!--        <table tableName="song_list" mapperName="SongListDynamicMapper" />-->
@@ -46,7 +46,8 @@
 <!--        <table tableName="collect" mapperName="CollectDynamicMapper" />-->
 <!--        <table tableName="rank_list" mapperName="RankDynamicMapper" />-->
 <!--        <table tableName="consumer" mapperName="ConsumerDynamicMapper" />-->
-        <table tableName="file_metadata_info" mapperName="FileMetadataInfoMapper" />
+<!--        <table tableName="file_metadata_info" mapperName="FileMetadataInfoMapper" />-->
+        <table tableName="management_admin" mapperName="AdminMapper" />
     </context>
 
 
