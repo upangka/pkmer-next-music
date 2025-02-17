@@ -3,7 +3,9 @@ import { SignJWT, jwtVerify } from 'jose'
 export const slogan = process.env.SLOGAN
 
 // 编码为 UTF-8 格式的字节数据，适合网络传输或存储
-const encodedKey = new TextEncoder().encode(process.env.JWT_SECRET)
+// const encodedKey = new TextEncoder().encode(process.env.JWT_SECRET)
+// 解码 Base64 编码的密钥并转换为 Uint8Array
+const encodedKey = Buffer.from(process.env.JWT_SECRET!, 'base64')
 
 type Payload = {
   [p in keyof any]?: string

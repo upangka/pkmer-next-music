@@ -6,7 +6,8 @@ const getServerSideHttpInstance = createHttpInstance({
   isServerSide: true,
   getTokenAsync: async function () {
     const cookieStore = await cookies()
-    return cookieStore.get('token')?.value || null
+    console.log('准备设置token', cookieStore.get('session')?.value)
+    return cookieStore.get('session')?.value || null
   }
 })
 

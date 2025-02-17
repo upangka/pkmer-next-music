@@ -44,9 +44,9 @@ app:
       - "/user/**"
       - "/admin/user/**"
       - "/collect/**"
-      - "/admin/song/**" #TODO 后端管理登录实现之后删除
-      - "/admin/collect/**" #TODO 后端管理登录实现之后删除
-      - "/oss/bigfile/**" #TODO 全部登录实现之后删除
+#      - "/admin/song/**" #TODO 后端管理登录实现之后删除
+#      - "/admin/collect/**" #TODO 后端管理登录实现之后删除
+#      - "/oss/bigfile/**" #TODO 全部登录实现之后删除
 #      - "/user/signup"
       - "/doc.html"
       - "/webjars/**"
@@ -56,4 +56,4 @@ app:
       - "/song/**"
       - "/singer/**"
       - "/songList/**"  #TODO 用户端需要登录，后端现在开发中放行
-      - "/oss/**" #TODO 用户端需要登录，后端现在开发中放行
+#      - "/oss/**" #TODO 用户端需要登录，后端现在开发中放行

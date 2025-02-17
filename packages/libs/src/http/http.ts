@@ -32,9 +32,9 @@ export function createHttpInstance(httpConfig: HttpConfig) {
 
     // 请求拦截器
     axiosInstance.interceptors.request.use(
-      config => {
+      async config => {
         // 从本地存储中获取 token
-        const token = getToken()
+        const token = await getToken()
         if (token) {
           // 如果存在 token，则将其添加到请求头中
           config.headers.Authorization = `Bear ${token}`

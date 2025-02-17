@@ -4,18 +4,18 @@ import { AppResponse } from '@pkmer/libs/http'
 import z from 'zod'
 import { redirect } from 'next/navigation'
 import { createSession } from '@pkmer-music/management/lib/session'
-
-const FormScheme = z.object({
-  username: z.string().min(1, { message: 'Username is required' }),
-  password: z.string().min(1, { message: 'Password is required' })
-})
-
 import type {
   UserQuery,
   UserPageRes,
   AdminLoginView,
   PageTotal
 } from '@pkmer-music/management/types'
+
+const FormScheme = z.object({
+  username: z.string().min(1, { message: 'Username is required' }),
+  password: z.string().min(1, { message: 'Password is required' })
+})
+
 type State = {
   errors?: {
     username?: string[] | undefined
@@ -23,6 +23,7 @@ type State = {
     email?: string[] | undefined
   }
   message?: string
+  data?: AdminLoginView
 }
 
 export async function login(_preState: State, formData: FormData): Promise<State> {
@@ -36,20 +37,19 @@ export async function login(_preState: State, formData: FormData): Promise<State
     } satisfies State
   }
 
-  console.log('看见我了吗', validateFields.data)
   try {
     const loginResult = await httpService.post<AdminLoginView>(
       '/admin/user/login',
       validateFields.data
     )
-    console.log(loginResult)
     createSession(loginResult.token)
+    return { data: loginResult } satisfies State
   } catch (e) {
     console.error(e)
     return { message: '登录失败' } satisfies State
   }
 
-  redirect('/dashboard')
+  // redirect('/dashboard')
   return {} as State
 }
 export async function registerUser(_preState: State, formData: FormData) {

@@ -1,6 +1,5 @@
 package io.gitee.pkmer.music.oss.api;
 
-import io.gitee.pkmer.base.ApplicationContextHolder;
 import io.gitee.pkmer.convention.controller.BaseController;
 import io.gitee.pkmer.convention.result.Result;
 import io.gitee.pkmer.minio.api.BigFileInitReq;
@@ -191,9 +190,7 @@ public class MusicFileController extends BaseController implements MinioBigFileO
 
 
     private String getUserId(){
-        return "1";
-
-//        return AppContextHolder.userContextHolder.getUser().getId().toString();
+        return AppContextHolder.userContextHolder.getUser().getId().toString();
     }
 }
 
