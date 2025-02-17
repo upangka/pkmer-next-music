@@ -26,7 +26,7 @@ public class UpdateSongHandler implements CommandHandler<UpdateSongCmd,Void> {
 
     @Override
     public Void execute(UpdateSongCmd cmd) {
-        SongAggregate song = songRepository.load(new SongId(cmd.getId())).orElseThrow();
+        SongAggregate song = songRepository.load(new SongId(cmd.getSongId())).orElseThrow();
         updateSong(song,cmd);
         song.toUpdate();
         songRepository.save(song);

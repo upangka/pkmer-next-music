@@ -22,7 +22,7 @@ import type { MergeFileResult } from '@pkmer-music/management/types'
 interface AddSongProps {
   isOpen: boolean
   onOpenChange: (isOpen: boolean) => void //
-  // songId: string
+  songId: string
 }
 
 type AddSongStatus =
@@ -41,7 +41,7 @@ type AddSongStatus =
  * 4. 等待所有分片上传完成，前端通知后端合并分片
  * @returns
  */
-export const AddSong: React.FC<AddSongProps> = ({ isOpen = false, onOpenChange }) => {
+export const AddSong: React.FC<AddSongProps> = ({ isOpen = false, onOpenChange, songId }) => {
   const { singerId } = useParams<{ singerId: string }>()
 
   const { showConfetti } = useConfetti(60, 6)
@@ -77,15 +77,24 @@ export const AddSong: React.FC<AddSongProps> = ({ isOpen = false, onOpenChange }
   async function handleFormSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     setStatus('calcMd5')
+    let formData = new FormData(e.currentTarget)
+
+    let data: MergeFileResult = {
+      ossPath: '',
+      presignedObjectUrl: ''
+    }
     if (songFile) {
       const md5 = await computeFileMd5(songFile)
       setStatus('uploading')
-      await initFileSharePart(songFile, md5)
+      data = (await initFileSharePart(songFile, md5))!
     }
 
     startTransition(() => {
       // TODO 文件分片上传完成之后，开始上传歌曲信息
-      let formData = new FormData(e.currentTarget)
+      formData.append('singerId', singerId)
+      formData.append('songId', songId)
+      console.log('我要看到的', data)
+      formData.append('url', data.ossPath)
       formData.delete('song')
       formAction(formData)
     })
@@ -143,9 +152,10 @@ export const AddSong: React.FC<AddSongProps> = ({ isOpen = false, onOpenChange }
         total: 1
       })
       console.log('秒传成功')
-      setMergeFileResult({
-        ...data.mergeFileResult
-      })
+      // setMergeFileResult({
+      //   ...data.mergeFileResult
+      // })
+      return data.mergeFileResult
     } else {
       // 分片上传
       const parts = data.parts
@@ -156,7 +166,7 @@ export const AddSong: React.FC<AddSongProps> = ({ isOpen = false, onOpenChange }
         // TODO 后端去做
         const etags = [...Array(data.partNumber).keys()].map(_ => '')
         // const etags = parts.map(part => part.etag)
-        await merge(md5, etags)
+        return await merge(md5, etags)
       } else {
         console.log('分片上传失败,准备测试断点续传')
       }
@@ -231,9 +241,10 @@ export const AddSong: React.FC<AddSongProps> = ({ isOpen = false, onOpenChange }
   async function merge(fileMd5: string, etags: string[]) {
     const data = await mergeParts(fileMd5, etags)
     console.log('生成的预访问链接', data.presignedObjectUrl)
-    setMergeFileResult({
-      ...data
-    })
+    // setMergeFileResult({
+    //   ...data
+    // })
+    return data
   }
 
   function title() {

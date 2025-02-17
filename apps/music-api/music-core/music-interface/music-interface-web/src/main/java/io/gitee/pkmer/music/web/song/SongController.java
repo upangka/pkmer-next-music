@@ -41,10 +41,13 @@ public class SongController extends BaseController implements SongApi{
 
     @Override
     public Result<Void> updateSong(UpdateSongCmd cmd, MultipartFile lyricFile) {
-//        cmdDispatcher.dispatch(cmd);
-        // todo 解析出来歌词file的内容
-        String lyricContent = multiPartFileHelper.readFileContent(lyricFile);
-        log.info("读取的歌词文件内容 => {}",lyricContent);
+        if(!lyricFile.isEmpty()){
+            String lyricContent = multiPartFileHelper.readFileContent(lyricFile);
+            log.info("读取的歌词文件内容 => {}",lyricContent);
+            cmd.setLyric(lyricContent);
+        }
+
+        cmdDispatcher.dispatch(cmd);
         return success();
     }
 

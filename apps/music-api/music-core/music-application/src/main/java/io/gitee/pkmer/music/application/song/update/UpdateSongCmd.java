@@ -4,6 +4,7 @@ import io.gitee.pkmer.ddd.shared.command.Command;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Value;
 
@@ -17,12 +18,11 @@ import lombok.Value;
  * @since 2025/1/10
  * </p>
  */
-@Getter
-@Value(staticConstructor = "commandOf")
+@Data
 public class UpdateSongCmd implements Command {
     @Schema(description = "歌曲id")
     @NotNull(message = "歌曲id不能为空")
-    Long id;
+    Long songId;
 
     @Schema(description = "歌手id")
     @NotNull(message = "歌手id不能为空")

@@ -6,6 +6,7 @@ import io.gitee.pkmer.music.domain.song.SongAggregate;
 import io.gitee.pkmer.music.domain.song.SongId;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
@@ -29,15 +30,28 @@ public class SongConverter {
 
         // 用set方法来赋值
         Song song = new Song();
+        song.setId(aggregateRoot.getId().value());
         song.setSingerId(aggregateRoot.getSingerId().value());
-        song.setName(aggregateRoot.getName());
-        song.setIntroduction(aggregateRoot.getIntroduction());
-        song.setCreateTime(aggregateRoot.getCreateTime());
-        song.setUpdateTime(aggregateRoot.getUpdateTime());
-        song.setPic(aggregateRoot.getPic());
-        song.setUrl(aggregateRoot.getUrl());
-        song.setLyric(aggregateRoot.getLyric());
+        if(!isNullOrEmpty(aggregateRoot.getName())){
+            song.setName(aggregateRoot.getName());
+        }
 
+        if(!isNullOrEmpty(aggregateRoot.getIntroduction())){
+            song.setIntroduction(aggregateRoot.getIntroduction());
+        }
+
+        if(!isNullOrEmpty(aggregateRoot.getPic())){
+            song.setPic(aggregateRoot.getPic());
+        }
+
+        if(!isNullOrEmpty(aggregateRoot.getUrl())){
+            song.setUrl(aggregateRoot.getUrl());
+        }
+
+        if(!isNullOrEmpty(aggregateRoot.getLyric())){
+            song.setLyric(aggregateRoot.getLyric());
+        }
+        song.setUpdateTime(LocalDateTime.now());
         return song;
     }
 
@@ -75,5 +89,10 @@ public class SongConverter {
         return songAggregates.stream()
                 .map(this::covertFrom)
                 .toList();
+    }
+
+
+    public static boolean isNullOrEmpty(String str) {
+        return str == null || str.isEmpty();
     }
 }
