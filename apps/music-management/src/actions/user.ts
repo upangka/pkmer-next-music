@@ -52,8 +52,15 @@ export async function login(_preState: State, formData: FormData): Promise<State
   // redirect('/dashboard')
   return {} as State
 }
+
+/**
+ * 注册
+ * @param _preState
+ * @param formData
+ * @returns
+ */
 export async function registerUser(_preState: State, formData: FormData) {
-  return {} as State
+  return { message: '注册功能暂未开放' } as State
 }
 
 export async function pageUsers(query: UserQuery): AppResponse<UserPageRes> {

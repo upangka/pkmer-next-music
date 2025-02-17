@@ -115,7 +115,20 @@ export const LoginForm: React.FC = () => {
 }
 
 export const SignUpForm: React.FC = () => {
+  const { toast } = useToast()
   const [state, formActive] = useActionState(registerUser, {})
+
+  useEffect(() => {
+    if (state.message) {
+      toast({
+        variant: 'destructive',
+        title: '注册失败😭',
+        description: `${state.message}`,
+        action: <ToastAction altText='Try again'>Try again</ToastAction>
+      })
+    }
+  }, [state])
+
   return (
     <>
       <form action={formActive} className='space-y-4 rounded-lg bg-gray-100 p-10'>
