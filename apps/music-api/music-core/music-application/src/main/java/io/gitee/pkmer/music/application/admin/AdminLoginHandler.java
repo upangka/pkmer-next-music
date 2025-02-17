@@ -23,12 +23,12 @@ public class AdminLoginHandler implements CommandHandler<AdminLoginCmd,AdminLogi
 
         ManagementAdmin adminUser = adminMapper.selectOne(c ->
                 c.where(name, isEqualTo(cmd.getUsername()))
-                        .and(password, isEqualTo(cmd.getPassword()))
         ).orElseThrow(() -> new RuntimeException("用户名或密码错误"));
 
 
         if(userGateway.checkPassword(cmd.getPassword(), adminUser.getPassword())){
-            String token = userGateway.generateJWT(adminUser.getId(), null,adminUser.getName());
+            // admin登录没有提供email，这里用空字符串代替，不能使用null
+            String token = userGateway.generateJWT(adminUser.getId(), "",adminUser.getName());
             log.info("{} 登录的token {}",adminUser.getName(),token);
 
             return new AdminLoginView()
