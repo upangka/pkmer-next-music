@@ -20,11 +20,12 @@ type State = {
   errors?: {
     username?: string[] | undefined
     password?: string[] | undefined
+    email?: string[] | undefined
   }
   message?: string
 }
 
-export async function login(_preState: State, formData: FormData) {
+export async function login(_preState: State, formData: FormData): Promise<State> {
   const rawFormData = Object.fromEntries(formData)
 
   const validateFields = FormScheme.safeParse(rawFormData)

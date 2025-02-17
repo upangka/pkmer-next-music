@@ -1,10 +1,28 @@
 'use client'
 import { LockClosedIcon, AtSymbolIcon, UserIcon } from '@heroicons/react/24/solid'
 import style from './form.module.scss'
+import { useToast } from '@pkmer-music/management/hooks/use-toast'
+import { ToastAction } from '@pkmer-music/management/components/ui/toast'
+
 import { registerUser, login } from '@pkmer-music/management/actions'
-import { useActionState, startTransition } from 'react'
+import { useActionState, startTransition, useEffect } from 'react'
 export const LoginForm: React.FC = () => {
   const [state, formAction] = useActionState(login, {})
+  const { toast } = useToast()
+
+  console.log(state)
+  useEffect(() => {
+    console.log('执行了吗')
+    if (state.message) {
+      console.log('xxxx')
+      toast({
+        variant: 'destructive',
+        title: '登录失败',
+        description: '请检查您的用户名和密码',
+        action: <ToastAction altText='Try again'>Try again</ToastAction>
+      })
+    }
+  }, [state])
 
   function handleFormSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()

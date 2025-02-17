@@ -47,6 +47,10 @@ export function createHttpInstance(httpConfig: HttpConfig) {
     // 响应拦截器
     axiosInstance.interceptors.response.use(
       (response: AxiosResponse) => {
+        // 如果 code 为 5000，抛出错误
+        if (response.data.status == 5000) {
+          return Promise.reject(new Error(response.data.msg))
+        }
         return response
       }, // 直接返回响应数据
       error => Promise.reject(error) // 响应错误时，直接返回错误信息
