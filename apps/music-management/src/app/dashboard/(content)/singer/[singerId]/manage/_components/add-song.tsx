@@ -11,6 +11,7 @@ import { Input } from '@pkmer-music/management/components/ui/input'
 import { UploadStatus } from '@pkmer-music-ui/react/upload-status'
 import useConfetti from '@pkmer-music/management/hooks/use-confetti'
 
+import { useParams } from 'next/navigation'
 import { updateSong, init, mergeParts } from '@pkmer-music/management/actions'
 import { PkmerForm, PkmerFormItem } from '@pkmer-music/management/components/'
 import useComputeFileMd5 from '@pkmer-music/management/hooks/useComputeFileMd5'
@@ -21,6 +22,7 @@ import type { MergeFileResult } from '@pkmer-music/management/types'
 interface AddSongProps {
   isOpen: boolean
   onOpenChange: (isOpen: boolean) => void //
+  // songId: string
 }
 
 type AddSongStatus =
@@ -40,6 +42,8 @@ type AddSongStatus =
  * @returns
  */
 export const AddSong: React.FC<AddSongProps> = ({ isOpen = false, onOpenChange }) => {
+  const { singerId } = useParams<{ singerId: string }>()
+
   const { showConfetti } = useConfetti(60, 6)
   const [_state, formAction] = useActionState(updateSong, {})
   const [songFile, setSongFile] = useState<File>()
@@ -83,7 +87,7 @@ export const AddSong: React.FC<AddSongProps> = ({ isOpen = false, onOpenChange }
       // TODO 文件分片上传完成之后，开始上传歌曲信息
       let formData = new FormData(e.currentTarget)
       formData.delete('song')
-      // formAction(formData)
+      formAction(formData)
     })
 
     setPrompt(10)

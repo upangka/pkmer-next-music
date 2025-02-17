@@ -5,6 +5,7 @@ import { BreadcrumbClientHelp } from '@pkmer-music/management/context/breadcrumb
 import { getSongPageQueryTotal, pageQuerySong } from '@pkmer-music/management/actions'
 
 interface Props {
+  params: Promise<{ singerId: string }>
   searchParams: Promise<{
     [key: string]: string | undefined
   }>
@@ -34,7 +35,7 @@ export default async function Page(props: Props) {
   const query = searchParams?.query || ''
   const pageNo = +(searchParams?.pageNo || 1)
   const pageSize = +(searchParams?.pageSize || 5)
-  const singerId = searchParams?.singerId
+  const singerId = (await props.params)?.singerId
   if (!singerId) {
     throw new Error('singerId is required')
   }

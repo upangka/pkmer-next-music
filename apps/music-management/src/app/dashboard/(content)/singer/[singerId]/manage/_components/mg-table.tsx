@@ -21,11 +21,11 @@ const headers = ['ID', '歌曲图片', '歌名', '专辑', '资源更新', '评�
 export const MgTable: React.FC<MgTableProps> = ({ pageData }) => {
   const data = use(pageData)
   const [isOpen, setIsOpen] = useState(false)
+  const [currentSong, setCurrentSong] = useState('')
 
   return (
     <>
       {isOpen && <AddSong isOpen={isOpen} onOpenChange={setIsOpen} />}
-      {/* <AddSong isOpen={isOpen} onOpenChange={setIsOpen} /> */}
       <Table className='w-full border-collapse border border-gray-300'>
         <TableHeader>
           <TableRow className='bg-gray-100'>
