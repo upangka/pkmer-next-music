@@ -2,7 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
 import { verifySessionToken } from '@pkmer-music/management/lib/jwt'
 import { deleteSession } from '@pkmer-music/management/lib/session'
-const publicPaths = ['/login']
+// 放行的页面
+const publicPaths = ['/login', '/test/confetti']
 
 export default async function middleware(request: NextRequest) {
   const isPublicPath = publicPaths.includes(request.nextUrl.pathname)
