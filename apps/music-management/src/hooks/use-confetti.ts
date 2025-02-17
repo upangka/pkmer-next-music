@@ -36,7 +36,7 @@ export default function useConfetti(particleCount = 50, numberOfGroups = 5) {
   /**
    * 展示
    */
-  function show() {
+  function showConfetti() {
     const randomCoords = getRandomCoordinatesOfWindowsCenter(numberOfGroups) // 获取3个随机坐标
     randomCoords.forEach(({ x, y }) => {
       setTimeout(() => {
@@ -54,6 +54,6 @@ export default function useConfetti(particleCount = 50, numberOfGroups = 5) {
   }
 
   return {
-    show
+    showConfetti
   }
 }

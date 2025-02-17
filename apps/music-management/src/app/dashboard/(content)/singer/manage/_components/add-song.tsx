@@ -9,6 +9,7 @@ import {
 import { Button } from '@pkmer-music/management/components/ui/button'
 import { Input } from '@pkmer-music/management/components/ui/input'
 import { UploadStatus } from '@pkmer-music-ui/react/upload-status'
+import useConfetti from '@pkmer-music/management/hooks/use-confetti'
 
 import { updateSong, init, mergeParts } from '@pkmer-music/management/actions'
 import { PkmerForm, PkmerFormItem } from '@pkmer-music/management/components/'
@@ -39,6 +40,7 @@ type AddSongStatus =
  * @returns
  */
 export const AddSong: React.FC<AddSongProps> = ({ isOpen = false, onOpenChange }) => {
+  const { showConfetti } = useConfetti(60, 6)
   const [_state, formAction] = useActionState(updateSong, {})
   const [songFile, setSongFile] = useState<File>()
   const [closeTime, setCloseTime] = useState(0)
@@ -75,6 +77,7 @@ export const AddSong: React.FC<AddSongProps> = ({ isOpen = false, onOpenChange }
    * 给用户预览的时间，默认5s之后关闭
    */
   function setPrompt(seconds: number = 5) {
+    showConfetti()
     setStatus('prompt')
     setCloseTime(seconds)
     setInterval(() => {
