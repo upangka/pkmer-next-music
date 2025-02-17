@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
 import { verifySessionToken } from '@pkmer-music/management/lib/jwt'
-
+import { deleteSession } from '@pkmer-music/management/lib/session'
 const publicPaths = ['/login']
 
 export default async function middleware(request: NextRequest) {
@@ -17,9 +17,10 @@ export default async function middleware(request: NextRequest) {
         // 如果用户已经登录，再次访问登录页面，直接调到首页
         return NextResponse.redirect(new URL('/dashboard', request.nextUrl))
       }
-
       return NextResponse.next()
     } catch (e) {
+      // token无效，删除session
+      await deleteSession()
       return NextResponse.redirect(new URL('/login', request.nextUrl))
     }
   } else {

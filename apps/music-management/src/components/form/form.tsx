@@ -104,7 +104,7 @@ export const LoginForm: React.FC = () => {
             style={{
               backgroundColor: style.mainColor
             }}
-            className='rounded-md border px-5 py-1 text-base text-white'
+            className='rounded-md border px-5 py-1 text-base text-white hover:scale-110'
           >
             提交
           </button>
