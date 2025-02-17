@@ -2,7 +2,9 @@
 import { useState } from 'react'
 import { LoginForm, SignUpForm, RectCheckbox } from '@pkmer-music/management/components/form'
 import style from './page.module.scss'
+
 export default function Page() {
+  // 处理登录和注册的状态切换
   const [isChecked, setChecked] = useState(true)
   const isLogin = isChecked
   const isSignUp = !isChecked

@@ -24,9 +24,15 @@ export const LoginForm: React.FC = () => {
         >
           登录
         </h1>
+        {/* username start */}
         <div>
-          <div className='relative' aria-describedby='email-error'>
-            <input type='text' name='email' placeholder='Your Email' className={style.Input} />
+          <div className='relative' aria-describedby='username-error'>
+            <input
+              type='text'
+              name='username'
+              placeholder='Your UserName'
+              className={style.Input}
+            />
             <AtSymbolIcon
               style={{
                 color: style.mainColor
@@ -34,16 +40,16 @@ export const LoginForm: React.FC = () => {
               className='absolute left-1 top-1/2 h-5 w-5 -translate-y-1/2'
             />
           </div>
-          <div id='email-error' aria-atomic='true' aria-live='polite'>
-            {state.errors?.email &&
-              state.errors.email.map(error => (
+          <div id='username-error' aria-atomic='true' aria-live='polite'>
+            {state.errors?.username &&
+              state.errors.username.map(error => (
                 <p key={error} className='mt-1 text-sm text-red-500'>
                   {error}
                 </p>
               ))}
           </div>
         </div>
-        {/* email end */}
+        {/* username end */}
 
         {/* password start */}
         <div>

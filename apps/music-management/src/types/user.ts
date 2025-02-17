@@ -19,3 +19,13 @@ export interface UserDetail {
 }
 
 export type UserPageRes = PageQueryRes<UserDetail>
+
+/**
+ * admin用户登录的返回类型
+ */
+export interface AdminLoginView {
+  token: string // token
+  id: string // 用户id
+  username: string // 用户名
+  avatar: string // 头像
+}
