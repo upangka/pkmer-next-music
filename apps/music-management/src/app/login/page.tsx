@@ -1,13 +1,26 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { LoginForm, SignUpForm, RectCheckbox } from '@pkmer-music/management/components/form'
 import style from './page.module.scss'
-
+import { useToast } from '@pkmer-music/management/hooks/use-toast'
+import { ToastAction } from '@pkmer-music/management/components/ui/toast'
 export default function Page() {
+  const { toast } = useToast()
   // 处理登录和注册的状态切换
   const [isChecked, setChecked] = useState(true)
   const isLogin = isChecked
   const isSignUp = !isChecked
+
+  useEffect(() => {
+    if (!isChecked) {
+      toast({
+        variant: 'destructive',
+        title: '注册功能暂未开放',
+        description: '注册功能暂未开放',
+        action: <ToastAction altText='Try again'>Try again</ToastAction>
+      })
+    }
+  }, [isChecked])
 
   function handleOnChange(checked: boolean) {
     console.log(checked)
