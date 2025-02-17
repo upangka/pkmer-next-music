@@ -56,6 +56,20 @@ export const AddSong: React.FC<AddSongProps> = ({ isOpen = false, onOpenChange }
   // 处理文件分片md5的计算，用于准备文件
   const { totalParts, completedParts, computeFileMd5 } = useComputeFileMd5()
 
+  const intervalRef = useRef<number | null>(null)
+  const timeoutRef = useRef<number | null>(null)
+
+  useEffect(() => {
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current)
+      }
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current)
+      }
+    }
+  }, [])
+
   async function handleFormSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     setStatus('calcMd5')
@@ -77,13 +91,13 @@ export const AddSong: React.FC<AddSongProps> = ({ isOpen = false, onOpenChange }
    * 给用户预览的时间，默认5s之后关闭
    */
   function setPrompt(seconds: number = 5) {
-    showConfetti()
     setStatus('prompt')
     setCloseTime(seconds)
-    setInterval(() => {
+    showConfetti() // 添加撒花
+    intervalRef.current = window.setInterval(() => {
       setCloseTime(prev => prev - 1)
     }, 1000)
-    setTimeout(() => {
+    timeoutRef.current = window.setTimeout(() => {
       console.log(`${seconds}秒之后关闭`)
       setStatus('finish')
       // 关闭窗口
