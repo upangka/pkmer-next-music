@@ -42,6 +42,7 @@ app:
   auth:
     ignore-urls:
       - "/user/**"
+      - "/admin/user/**"
       - "/collect/**"
       - "/admin/song/**" #TODO 后端管理登录实现之后删除
       - "/admin/collect/**" #TODO 后端管理登录实现之后删除

@@ -7,6 +7,7 @@ import io.gitee.pkmer.security.password.AppPasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 /**
+ * user网关防腐层，用于统一处理用户的token
  * <p>
  *
  * @author <a href="mailto:3149374525@qq.com">pkmer</a>
