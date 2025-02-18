@@ -35,7 +35,9 @@ public class SingerConverter {
         Singer singer = new Singer();
         singer.setName(singerAggrerate.getName());
         singer.setSex(singerAggrerate.getSex().getValue());
-        singer.setPic(singerAggrerate.getPic());
+        if(singerAggrerate.getPic() != null){
+            singer.setPic(singerAggrerate.getPic());
+        }
         singer.setBirth(singerAggrerate.getBirth());
         singer.setLocation(singerAggrerate.getLocation());
         singer.setIntroduction(singerAggrerate.getIntroduction());

@@ -1,7 +1,7 @@
 'use server'
 import httpService from '@pkmer-music/management/service'
 import { AppResponse } from '@pkmer/libs/http'
-import type { Sex, PageTotal, SingerPageQueryRes } from '@pkmer-music/management/types'
+import type { Sex, PageTotal, SingerPageQueryRes, SingerBase } from '@pkmer-music/management/types'
 export async function deleteSinger(id: string): AppResponse<void> {
   return httpService.delete(`/singer/${id}`)
 }
@@ -21,4 +21,13 @@ export async function getSingerPageTotal(query: {
   pageSize?: number
 }): AppResponse<PageTotal> {
   return httpService.get('/singer/page/total', query)
+}
+
+/**
+ * 新加歌手
+ * @param singer 歌手信息
+ * @returns
+ */
+export async function addSinger(singer: SingerBase): AppResponse<void> {
+  return httpService.post('/singer/add', singer)
 }

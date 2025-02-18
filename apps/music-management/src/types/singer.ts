@@ -27,7 +27,7 @@ export type Singer = Prettify<
     /**
      * todo 兼容之前写的代码歌手性别
      */
-    sex: number
+    sex: string
   }
 >
 

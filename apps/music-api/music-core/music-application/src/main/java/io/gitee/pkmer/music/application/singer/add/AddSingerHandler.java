@@ -34,12 +34,12 @@ public class AddSingerHandler implements CommandHandler<AddSingerCmd,Void> {
     }
 
     public SingerAggrerate buildSingerAggretate(AddSingerCmd cmd){
-
         return SingerAggrerate.builder()
                 .name(cmd.getName())
                 .sex(cmd.getSex())
                 .pic(cmd.getPic())
-                .birth(cmd.getBirth())
+                .birth(cmd.getBirth().atStartOfDay())
+                .introduction(cmd.getIntroduction())
                 .location(cmd.getLocation())
                 .songs(List.of())
                 .build();

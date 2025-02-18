@@ -8,7 +8,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import org.springframework.util.Assert;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
@@ -34,12 +36,11 @@ public class AddSingerCmd implements Command {
     private Sex sex;
 
     @Schema(description = "歌手图片")
-    @NotBlank(message = "歌手图片不能为空")
     private String pic;
 
     @Schema(description = "歌手生日")
     @NotNull(message = "歌手生日不能为空")
-    private LocalDateTime birth;
+    private LocalDate birth;
 
     @Schema(description = "歌手地区")
     @NotBlank(message = "歌手地区不能为空")
@@ -48,4 +49,5 @@ public class AddSingerCmd implements Command {
     @Schema(description = "歌手简介")
     @NotBlank(message = "歌手简介不能为空")
     private String introduction;
+
 }

@@ -3,15 +3,22 @@ import { useId, useRef, useEffect, useLayoutEffect, useState } from 'react'
 import { useFormContext } from './pkmer-form'
 import { Label } from '@pkmer-music/management/components/ui/label'
 interface PkmerFormItemProps {
+  id?: string
   label: string
   children: React.ReactNode
+  errorPrompt?: React.ReactNode
 }
 
-export const PkmerFormItem: React.FC<PkmerFormItemProps> = ({ label, children }) => {
+export const PkmerFormItem: React.FC<PkmerFormItemProps> = ({
+  id,
+  label,
+  children,
+  errorPrompt
+}) => {
   const { maxWidthLabel, registerLabel, isWidthCalculated } = useFormContext()
   const labelRef = useRef<HTMLLabelElement>(null)
 
-  const id = useId()
+  const itemId = useId()
 
   useLayoutEffect(() => {
     if (labelRef.current) {
@@ -30,25 +37,38 @@ export const PkmerFormItem: React.FC<PkmerFormItemProps> = ({ label, children })
     : {}
 
   return (
-    <div
-      className='flex flex-row items-center justify-center gap-2'
-      style={{
-        visibility: isWidthCalculated ? 'visible' : 'hidden'
-      }}
-    >
-      <div className='flex' style={style}>
-        <Label
-          ref={labelRef}
-          htmlFor={id}
-          className='inline-flex w-auto flex-[0_0_auto] whitespace-nowrap text-right'
-        >
-          {label}
-        </Label>
-      </div>
+    <div>
+      <div
+        id={id}
+        className='flex flex-row items-center justify-center gap-2'
+        style={{
+          visibility: isWidthCalculated ? 'visible' : 'hidden'
+        }}
+      >
+        <div className='flex' style={style}>
+          <Label
+            ref={labelRef}
+            htmlFor={itemId}
+            className='inline-flex w-auto flex-[0_0_auto] whitespace-nowrap text-right'
+          >
+            {label}
+          </Label>
+        </div>
 
-      <div id={id} className='flex flex-1'>
-        {children}
+        <div id={itemId} className='flex flex-1'>
+          {children}
+        </div>
       </div>
+      {/* error start */}
+      <div
+        id={id}
+        style={{
+          marginLeft: `${Number.parseInt(maxWidthLabel, 10) + 8}px`
+        }}
+      >
+        {errorPrompt}
+      </div>
+      {/* error end */}
     </div>
   )
 }

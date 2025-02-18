@@ -45,7 +45,7 @@ public interface SingerApi {
     @DeleteMapping("/{id}")
     Result<Void> deleteSinger(@PathVariable("id") Long id);
 
-    @Operation(summary = "添加歌手")
+    @Operation(summary = "更新歌手")
     @PostMapping("/update")
     Result<Void> updateSinger(@Valid @RequestBody
                               UpdateSingerCmd cmd);
