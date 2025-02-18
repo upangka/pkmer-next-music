@@ -64,6 +64,7 @@ public class GetSingerDetailHandler implements CommandHandler<GetSingerDetailCmd
     }
 
     private String addMinioServer(String pic) {
+        // TODO 生成预访问链接
         return minioProps.getUrl() + pic;
     }
 }

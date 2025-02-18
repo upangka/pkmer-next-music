@@ -8,15 +8,6 @@ export default function Page() {
     console.log('观察2', e.currentTarget)
   }
 
-  function handleSubmit1(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault()
-    console.log('观察1', e) // dom
-
-    Promise.resolve(e.currentTarget).then(() => {
-      console.log('观察2', e.currentTarget)
-    })
-  }
-
   return (
     <form onSubmit={handleSubmit}>
       <button type='submit'>提交</button>

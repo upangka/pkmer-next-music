@@ -56,7 +56,10 @@ export const AddSong: React.FC<AddSongProps> = ({ isOpen = false, onOpenChange, 
     total: 1
   })
   // 分片合并后的结果包含预览链接以及上传到数据库的数据后端已经处理好了
-  const [mergeFileResult, setMergeFileResult] = useState<MergeFileResult>()
+  const [mergeFileResult, setMergeFileResult] = useState<MergeFileResult>({
+    ossPath: '',
+    presignedObjectUrl: ''
+  })
   // 处理文件分片md5的计算，用于准备文件
   const { totalParts, completedParts, computeFileMd5 } = useComputeFileMd5()
 
@@ -79,22 +82,19 @@ export const AddSong: React.FC<AddSongProps> = ({ isOpen = false, onOpenChange, 
     setStatus('calcMd5')
     let formData = new FormData(e.currentTarget)
 
-    let data: MergeFileResult = {
-      ossPath: '',
-      presignedObjectUrl: ''
-    }
     if (songFile) {
       const md5 = await computeFileMd5(songFile)
       setStatus('uploading')
-      data = (await initFileSharePart(songFile, md5))!
+      await initFileSharePart(songFile, md5)
     }
 
     startTransition(() => {
       // TODO 文件分片上传完成之后，开始上传歌曲信息
       formData.append('singerId', singerId)
       formData.append('songId', songId)
-      console.log('我要看到的', data)
-      formData.append('url', data.ossPath)
+      if (mergeFileResult.ossPath) {
+        formData.append('url', mergeFileResult.ossPath)
+      }
       formData.delete('song')
       formAction(formData)
     })
@@ -152,10 +152,9 @@ export const AddSong: React.FC<AddSongProps> = ({ isOpen = false, onOpenChange, 
         total: 1
       })
       console.log('秒传成功')
-      // setMergeFileResult({
-      //   ...data.mergeFileResult
-      // })
-      return data.mergeFileResult
+      setMergeFileResult({
+        ...data.mergeFileResult
+      })
     } else {
       // 分片上传
       const parts = data.parts
@@ -163,10 +162,10 @@ export const AddSong: React.FC<AddSongProps> = ({ isOpen = false, onOpenChange, 
 
       if (upResults.total === upResults.successCount) {
         // 分片全部上传成功合并分片
-        // TODO 后端去做
+        // 这里主要是处理所有合并的分片数量，满足后端需要合成的数量校验。
         const etags = [...Array(data.partNumber).keys()].map(_ => '')
         // const etags = parts.map(part => part.etag)
-        return await merge(md5, etags)
+        await merge(md5, etags)
       } else {
         console.log('分片上传失败,准备测试断点续传')
       }
@@ -241,10 +240,9 @@ export const AddSong: React.FC<AddSongProps> = ({ isOpen = false, onOpenChange, 
   async function merge(fileMd5: string, etags: string[]) {
     const data = await mergeParts(fileMd5, etags)
     console.log('生成的预访问链接', data.presignedObjectUrl)
-    // setMergeFileResult({
-    //   ...data
-    // })
-    return data
+    setMergeFileResult({
+      ...data
+    })
   }
 
   function title() {
