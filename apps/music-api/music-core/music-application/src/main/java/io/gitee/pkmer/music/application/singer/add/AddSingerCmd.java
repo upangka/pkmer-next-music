@@ -1,6 +1,9 @@
 package io.gitee.pkmer.music.application.singer.add;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import io.gitee.pkmer.ddd.shared.command.Command;
+import io.gitee.pkmer.music.domain.singer.Sex;
+import io.gitee.pkmer.music.domain.singer.SexDeserializer;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -27,7 +30,8 @@ public class AddSingerCmd implements Command {
 
     @Schema(description = "歌手性别")
     @NotNull(message = "歌手性别不能为空")
-    private Byte sex;
+    @JsonDeserialize(using = SexDeserializer.class)
+    private Sex sex;
 
     @Schema(description = "歌手图片")
     @NotBlank(message = "歌手图片不能为空")

@@ -1,5 +1,5 @@
 import type { PageQueryRes, Sex } from './base'
-
+import type { Prettify } from './type-util'
 export interface SongView {
   /** 歌曲id */
   id: string
@@ -17,30 +17,51 @@ export interface SongView {
   link: string
 }
 
-export interface Singer {
-  /** 歌手id */
-  id: string
+export type Singer = Prettify<
+  Omit<SingerBase, 'sex'> & {
+    /** 歌手id */
+    id: string
 
-  /** 歌手名称 */
+    /** 歌手歌曲 */
+    songs: SongView[]
+    /**
+     * todo 兼容之前写的代码歌手性别
+     */
+    sex: number
+  }
+>
+
+/**
+ * 歌手基础信息
+ */
+export interface SingerBase {
+  /**
+   * 歌手名称
+   */
   name: string
-
-  /** 歌手性别 */
-  sex: Sex // Enum example for gender
-
-  /** 歌手图片 */
+  /**
+   * 歌手性别
+   */
+  sex: Sex
+  /**
+   * 歌手图片
+   */
   pic: string
 
-  /** 歌手生日 */
-  birth: string // ISO 8601 string format for LocalDateTime
+  /**
+   * 歌手生日
+   */
+  birth: string
 
-  /** 歌手地区 */
+  /**
+   * 歌手地区
+   */
   location: string
 
-  /** 歌手介绍 */
+  /**
+   * 歌手简介
+   */
   introduction: string
-
-  /** 歌手歌曲 */
-  songs: SongView[]
 }
 
 export type SingerPageQueryRes = PageQueryRes<Singer>

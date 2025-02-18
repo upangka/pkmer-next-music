@@ -15,4 +15,10 @@ export type PageTotal = {
   totalPages: number
 }
 
-export type Sex = 'FEMALE' | 'FEMALE' | 'UNKNOWN' | undefined
+export enum SexEnum {
+  FEMALE = 0,
+  MALE = 1,
+  UNKNOWN = 2
+}
+
+export type Sex = SexEnum.FEMALE | SexEnum.MALE | SexEnum.UNKNOWN | undefined

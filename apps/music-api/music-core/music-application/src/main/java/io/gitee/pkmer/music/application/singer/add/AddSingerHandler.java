@@ -37,7 +37,7 @@ public class AddSingerHandler implements CommandHandler<AddSingerCmd,Void> {
 
         return SingerAggrerate.builder()
                 .name(cmd.getName())
-                .sex(Sex.valueOf(cmd.getSex()))
+                .sex(cmd.getSex())
                 .pic(cmd.getPic())
                 .birth(cmd.getBirth())
                 .location(cmd.getLocation())

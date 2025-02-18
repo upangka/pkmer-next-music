@@ -1,5 +1,6 @@
 'use client'
 import { useState } from 'react'
+import { useImmer } from 'use-immer'
 import { format } from 'date-fns'
 import { PkmerForm, PkmerFormItem } from '@pkmer-music/management/components'
 
@@ -13,16 +14,28 @@ import {
   PopoverContent,
   PopoverTrigger
 } from '@pkmer-music/management/components/ui/popover'
-
+import { Input } from '@pkmer-music/management/components/ui/input'
 import { PkmerDialog } from './pkmer-dialog'
-
+import { SexEnum, type SingerBase } from '@pkmer-music/management/types'
 interface AddSingerProps {}
 export const AddSinger: React.FC<AddSingerProps> = props => {
   const [date, setDate] = useState<Date>()
-
+  const [singer, setSinger] = useImmer<SingerBase>({
+    name: '',
+    sex: SexEnum.UNKNOWN,
+    pic: '',
+    birth: '',
+    location: '',
+    introduction: ''
+  })
   return (
     <PkmerDialog title='添加歌手'>
       <PkmerForm>
+        {/* 姓名start */}
+        <PkmerFormItem label='姓名'>
+          <Input placeholder='请输入姓名' />
+        </PkmerFormItem>
+        {/* 姓名end */}
         {/* 生日start */}
         <PkmerFormItem label='生日'>
           <Popover>
