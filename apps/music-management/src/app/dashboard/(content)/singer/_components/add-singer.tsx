@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useImmer } from 'use-immer'
 import { format } from 'date-fns'
 import { PkmerForm, PkmerFormItem } from '@pkmer-music/management/components'
@@ -16,6 +16,16 @@ import {
 } from '@pkmer-music/management/components/ui/popover'
 import { Input } from '@pkmer-music/management/components/ui/input'
 import { Label } from '@pkmer-music/management/components/ui/label'
+import { Textarea } from '@pkmer-music/management/components/ui/textarea'
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue
+} from '@pkmer-music/management/components/ui/select'
 import { RadioGroup, RadioGroupItem } from '@pkmer-music/management/components/ui/radio-group'
 
 import { PkmerDialog } from './pkmer-dialog'
@@ -23,18 +33,31 @@ import { SexEnum, type SingerBase } from '@pkmer-music/management/types'
 import { AREA } from '@pkmer/libs/constants'
 
 interface AddSingerProps {}
+// 默认的歌手信息
+const defaultSingerInfo: SingerBase = {
+  name: '',
+  sex: SexEnum.UNKNOWN,
+  pic: '',
+  birth: '',
+  location: '',
+  introduction: ''
+}
 export const AddSinger: React.FC<AddSingerProps> = props => {
-  const [singer, setSinger] = useImmer<SingerBase>({
-    name: '',
-    sex: SexEnum.UNKNOWN,
-    pic: '',
-    birth: '',
-    location: '',
-    introduction: ''
-  })
+  const [isOpen, setIsOpen] = useState(false)
+  const [singer, setSinger] = useImmer<SingerBase>(defaultSingerInfo)
+
+  useEffect(() => {
+    // 由于这里是通过css来隐藏dialog的，组件并没有真正的卸载，
+    // 所以每当关闭的时候需要将歌手的信息重置
+    if (!isOpen) {
+      setSinger(defaultSingerInfo)
+    }
+  }, [isOpen])
+
+  function handleFormSubmit() {}
   return (
-    <PkmerDialog title='添加歌手'>
-      <PkmerForm className='gap-7'>
+    <PkmerDialog isOpen={isOpen} onOpenChange={setIsOpen} title='添加歌手'>
+      <PkmerForm onSubmit={handleFormSubmit} className='gap-7'>
         {/* 姓名start */}
         <PkmerFormItem label='姓名'>
           <Input
@@ -74,6 +97,33 @@ export const AddSinger: React.FC<AddSingerProps> = props => {
           </RadioGroup>
         </PkmerFormItem>
         {/* 性别end */}
+        {/* 地区start */}
+        <PkmerFormItem label='地区'>
+          <Select
+            onValueChange={value =>
+              setSinger(draft => {
+                draft.location = value
+              })
+            }
+            defaultValue={AREA.find(area => area.value === singer.location)?.value}
+          >
+            <SelectTrigger className='w-[180px]'>
+              <SelectValue placeholder='选择地区' />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>地区</SelectLabel>
+                {AREA.map(area => (
+                  <SelectItem key={area.value} value={area.value}>
+                    {area.label}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </PkmerFormItem>
+        {/* 地区end */}
+
         {/* 生日start */}
         <PkmerFormItem label='生日'>
           <Popover>
@@ -81,7 +131,7 @@ export const AddSinger: React.FC<AddSingerProps> = props => {
               <Button
                 variant={'outline'}
                 className={cn(
-                  'w-full justify-start text-left font-normal',
+                  'w-[180px] justify-start text-left font-normal',
                   !singer.birth && 'text-muted-foreground'
                 )}
               >
@@ -107,6 +157,26 @@ export const AddSinger: React.FC<AddSingerProps> = props => {
           </Popover>
         </PkmerFormItem>
         {/* 生日end */}
+
+        {/* 简介start */}
+        <PkmerFormItem label='简介'>
+          <Textarea
+            placeholder='请输入简介'
+            value={singer.introduction}
+            onChange={e =>
+              setSinger(draft => {
+                draft.introduction = e.target.value
+              })
+            }
+          />
+        </PkmerFormItem>
+        {/* 简介end */}
+
+        <div>
+          <Button type='submit' className='w-full'>
+            提交
+          </Button>
+        </div>
       </PkmerForm>
     </PkmerDialog>
   )
