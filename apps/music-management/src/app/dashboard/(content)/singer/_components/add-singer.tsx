@@ -80,9 +80,7 @@ export const AddSinger: React.FC<AddSingerProps> = props => {
     // 所以每当关闭的时候需要将歌手的信息重置
     if (!isOpen) {
       isSubmitRef.current && refreshPage()
-      // reset data
-      setSinger(defaultSingerInfo)
-      isSubmitRef.current = false
+      resetStatus()
     }
   }, [isOpen])
 
@@ -100,12 +98,20 @@ export const AddSinger: React.FC<AddSingerProps> = props => {
     }
   }, [singer]) // 监听表单数据变化,当表单数据变化时，重新校验表单
 
+  function resetStatus() {
+    // reset data
+    setSinger(defaultSingerInfo)
+    isSubmitRef.current = false
+    setValidFormStatus({})
+  }
+
   async function handleFormSubmit(e: React.SyntheticEvent) {
     e.preventDefault()
     // 表单校验
     const validateFields = FormScheme.safeParse(singer)
     if (!validateFields.success) {
       toast({
+        variant: 'destructive',
         title: '表单验证失败',
         description: '请仔细检查未填写的数据'
       })

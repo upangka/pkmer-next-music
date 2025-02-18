@@ -2,17 +2,20 @@
 import { useId, useRef, useEffect, useLayoutEffect, useState } from 'react'
 import { useFormContext } from './pkmer-form'
 import { Label } from '@pkmer-music/management/components/ui/label'
+import clsx from 'clsx'
 interface PkmerFormItemProps {
   id?: string
   label: string
   children: React.ReactNode
-  errorPrompt?: React.ReactNode
+  labelGap?: number // 标签与输入框的间距,间距，方便统一错误提示的距离
+  errorPrompt?: React.ReactNode // 错误提示
 }
 
 export const PkmerFormItem: React.FC<PkmerFormItemProps> = ({
   id,
   label,
   children,
+  labelGap = 8,
   errorPrompt
 }) => {
   const { maxWidthLabel, registerLabel, isWidthCalculated } = useFormContext()
@@ -40,9 +43,10 @@ export const PkmerFormItem: React.FC<PkmerFormItemProps> = ({
     <div>
       <div
         id={id}
-        className='flex flex-row items-center justify-center gap-2'
+        className={clsx('flex flex-row items-center justify-center')}
         style={{
-          visibility: isWidthCalculated ? 'visible' : 'hidden'
+          visibility: isWidthCalculated ? 'visible' : 'hidden',
+          gap: `${labelGap}px`
         }}
       >
         <div className='flex' style={style}>
@@ -63,7 +67,7 @@ export const PkmerFormItem: React.FC<PkmerFormItemProps> = ({
       <div
         id={id}
         style={{
-          marginLeft: `${Number.parseInt(maxWidthLabel, 10) + 8}px`
+          marginLeft: `${Number.parseInt(maxWidthLabel, 10) + labelGap}px`
         }}
       >
         {errorPrompt}
