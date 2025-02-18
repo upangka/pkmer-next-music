@@ -4,7 +4,7 @@ import { Suspense } from 'react'
 import { BreadcrumbClientHelp } from '@pkmer-music/management/context/breadcrumb-client-help'
 import { getSingerPageTotal } from '@pkmer-music/management/actions'
 import { pageSinger } from '@pkmer-music/management/actions'
-
+import { AddSinger } from './_components/add-singer'
 interface Props {
   searchParams: Promise<{
     [key: string]: string | undefined
@@ -44,8 +44,10 @@ export default async function Page(props: Props) {
       <BreadcrumbClientHelp breadcrumbs={breadCrumbs} />
 
       <div suppressHydrationWarning={true} className='w-auto rounded-lg bg-white p-6 shadow-md'>
-        <SearchHeader>歌手列表</SearchHeader>
-
+        <section className='mb-6 flex flex-row items-center justify-start gap-5'>
+          <SearchHeader>歌手列表</SearchHeader>
+          <AddSinger />
+        </section>
         {/*  suspense的生效问题 */}
         <Suspense key={query + pageNo + Date.now()} fallback={<TableLoading lines={pageSize} />}>
           <SingerTable pageRes={data} />
